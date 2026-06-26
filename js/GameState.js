@@ -9,17 +9,15 @@ class GameState {
     }
 
     save() {
-        // Veriyi basit bir şekilde kaydediyoruz
         localStorage.setItem('glitch_quantum_save', JSON.stringify(this.data));
     }
 
     load() {
         const saved = localStorage.getItem('glitch_quantum_save');
-        return saved ? JSON.parse(saved) : null;
-    }
-
-    updateStats(newStats) {
-        this.data.stats = { ...this.data.stats, ...newStats };
-        this.save();
+        try {
+            return saved ? JSON.parse(saved) : null;
+        } catch (e) {
+            return null;
+        }
     }
 }
