@@ -1,15 +1,18 @@
 ---
 ---
-body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; margin: 0; }
-#game-container { position: relative; height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 50px; }
+body { background: #000; color: #0f0; font-family: monospace; }
+.char { font-size: 50px; transition: 0.3s; }
 
-/* Sabit Karakterimiz */
-#player { font-size: 50px; position: absolute; left: 100px; }
+/* Hasar Alma Efekti */
+.hit { transform: scale(1.2) rotate(10deg); filter: invert(1); }
 
-/* Kayan Düşman */
-#enemy { font-size: 50px; animation: float 2s infinite alternate; }
+/* Mermi Efekti */
+#projectile { 
+    display: none; position: absolute; left: 150px; font-size: 30px; 
+}
+.fire { animation: shoot 0.5s linear; }
 
-/* Saldırı Butonu */
-#attack-btn { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); padding: 20px; background: #000; border: 2px solid #ff00ff; color: #ff00ff; cursor: pointer; }
-
-@keyframes float { from { transform: translateY(0); } to { transform: translateY(-50px); } }
+@keyframes shoot {
+    from { left: 150px; }
+    to { left: 80%; }
+}
