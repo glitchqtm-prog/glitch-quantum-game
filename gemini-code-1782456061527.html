@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Glitch Quantum</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Glitch Quantum</h1>
+        <p>GQT Puanı: <span id="score">0</span></p>
+        <button id="clicker">Sistemi Çatlat (GQT Topla)</button>
+    </div>
+    <script>
+        let score = 0;
+        document.getElementById('clicker').addEventListener('click', () => {
+            score++;
+            document.getElementById('score').innerText = score;
+        });
+    </script>
+</body>
+</html>
