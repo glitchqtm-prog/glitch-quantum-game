@@ -1,25 +1,32 @@
-<div id="game-container">
-    <div id="scrolling-bg"> <div id="player">👤</div>
-        <div id="enemy">👾</div>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Glitch Quantum: Infinite</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="scrolling-scene">
+            <div id="player">👤</div>
+            <div id="enemy">👾</div>
+        </div>
+        <div id="ui">
+            <p>Enerji (GQT): <span id="energy">100</span></p>
+            <button id="attack-btn">SALDIR & İLERLE</button>
+        </div>
     </div>
-    <div id="ui">
-        <p>Enerji (GQT): <span id="energy">100</span></p>
-        <button id="attack-btn">Saldır & İlerle</button>
-    </div>
-</div>
-
-<script>
-    let energy = 100;
-    const btn = document.getElementById('attack-btn');
-    
-    btn.addEventListener('click', () => {
-        if (energy > 0) {
-            energy -= 5;
-            document.getElementById('energy').innerText = energy;
-            // Düşmanı öldür ve yenisini getir (basit animasyon tetikleyici)
-            console.log("İlerleniyor...");
-        } else {
-            alert("Enerji bitti! Quantum kutusu açmak için görevleri tamamla.");
-        }
-    });
-</script>
+    <script>
+        let energy = 100;
+        document.getElementById('attack-btn').addEventListener('click', () => {
+            if (energy > 0) {
+                energy -= 5;
+                document.getElementById('energy').innerText = energy;
+                alert("Düşman yok edildi, ilerleniyor...");
+            } else {
+                alert("Enerji bitti! Görevleri yap, Quantum Kutusu kazan.");
+            }
+        });
+    </script>
+</body>
+</html>
