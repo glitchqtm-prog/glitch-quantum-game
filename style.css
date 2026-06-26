@@ -1,6 +1,0 @@
----
----
-body { background: #000; color: #0f0; font-family: monospace; text-align: center; }
-#battle-area { display: flex; justify-content: space-around; margin-top: 100px; }
-.char { font-size: 80px; transition: 0.2s; }
-.attack-anim { transform: scale(1.5); }
