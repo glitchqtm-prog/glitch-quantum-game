@@ -2,41 +2,13 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Glitch Quantum: Battle</title>
+    <title>Glitch Quantum</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <div id="enemy" class="char">👾 ANOMALİ</div> <div id="projectile">🟦</div>
-        <div id="player" class="char">👤 HUNTER</div> <button id="attack-btn">VERİ FIRLAT</button>
-        <div id="stats">HP: <span id="php">100</span> | Düşman HP: <span id="ehp">100</span></div>
-    </div>
-
-    <script>
-        let php = 100, ehp = 100;
-        document.getElementById('attack-btn').addEventListener('click', () => {
-            const projectile = document.getElementById('projectile');
-            
-            // Atış animasyonunu tetikle
-            projectile.classList.add('fire');
-            
-            // Hasar verme
-            ehp -= 10;
-            document.getElementById('ehp').innerText = ehp;
-            document.getElementById('enemy').classList.add('hit');
-            setTimeout(() => document.getElementById('enemy').classList.remove('hit'), 500);
-
-            // 1 saniye sonra karşı saldırı
-            setTimeout(() => {
-                php -= 5;
-                document.getElementById('php').innerText = php;
-                document.getElementById('player').classList.add('hit');
-                setTimeout(() => document.getElementById('player').classList.remove('hit'), 500);
-            }, 1000);
-
-            // Mermiyi sıfırla
-            setTimeout(() => projectile.classList.remove('fire'), 500);
-        });
-    </script>
+    <div id="game-container"></div>
+    <script src="js/GameState.js"></script>
+    <script src="js/CombatEngine.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
