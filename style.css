@@ -1,18 +1,6 @@
 ---
 ---
-/* Mermi (Sağdan Sola Atış) */
-#projectile { 
-    position: absolute; 
-    right: 150px; /* Karakterin olduğu sağ taraf */
-    font-size: 30px; 
-    opacity: 0;
-}
-
-.fire { 
-    animation: shoot 0.6s linear forwards; 
-}
-
-@keyframes shoot {
-    0% { opacity: 1; right: 150px; }
-    100% { opacity: 1; right: 80%; } /* Sağa yakın noktadan sola doğru uçar */
-}
+body { background: #000; color: #0f0; font-family: monospace; text-align: center; }
+#battle-area { display: flex; justify-content: space-around; margin-top: 100px; }
+.char { font-size: 80px; transition: 0.2s; }
+.attack-anim { transform: scale(1.5); }
