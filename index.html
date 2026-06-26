@@ -2,29 +2,38 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Glitch Quantum: Infinite</title>
+    <title>Glitch Quantum: Battle</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <div id="scrolling-scene">
-            <div id="player">👤</div>
-            <div id="enemy">👾</div>
-        </div>
-        <div id="ui">
-            <p>Enerji (GQT): <span id="energy">100</span></p>
-            <button id="attack-btn">SALDIR & İLERLE</button>
+        <div id="player">🕵️‍♂️ HUNTER</div>
+        
+        <div id="enemy">👾 ANOMALİ</div>
+
+        <button id="attack-btn">VERİ BLOKU FIRLAT</button>
+
+        <div id="stats">
+            <p>Enerji: <span id="energy">100</span> | Düşman HP: <span id="hp">100</span></p>
         </div>
     </div>
+
     <script>
-        let energy = 100;
+        let hp = 100, energy = 100;
         document.getElementById('attack-btn').addEventListener('click', () => {
             if (energy > 0) {
-                energy -= 5;
+                // Görsel: Basit bir animasyon efekti için arka planı kısa süreli titretebiliriz
+                hp -= 10;
+                energy -= 2;
+                document.getElementById('hp').innerText = hp;
                 document.getElementById('energy').innerText = energy;
-                alert("Düşman yok edildi, ilerleniyor...");
+                
+                if (hp <= 0) {
+                    alert("Anomali temizlendi! Yeni veri bloğu elde edildi.");
+                    hp = 100;
+                }
             } else {
-                alert("Enerji bitti! Görevleri yap, Quantum Kutusu kazan.");
+                alert("Enerji kritik! Quantum kutusu aç.");
             }
         });
     </script>
