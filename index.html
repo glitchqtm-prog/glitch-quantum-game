@@ -678,20 +678,11 @@ function spawnEnemy() {
     const w = gs.wave;
     const ti = Math.min(Math.floor((w - 1) / 3), ENEMY_TYPES.length - 1);
     const typeI = Math.floor(Math.random() * (ti + 1));
-    const isBossWave = (w % 10 === 0);
-    let st;
-    if (isBossWave && !enemies.some(e => e.isBoss)) {
-        st = waveBossStats(w, gs.shipLvl);
-        st.typeIdx = typeI;
-        st.color = st.col = '#ffd700';
-        st.name = '⭐ WAVE BOSS';
-    } else {
-        st = enemyStats(w, typeI, gs.shipLvl);
-    }
+    const st = enemyStats(w, typeI, gs.shipLvl);
     
-    // Düşmanlar ekranın SAĞINDA (genişlik + 100) başlar
-    const startX = CW() + 100 + Math.random() * 200; 
-    const stopX = CW() * 0.70; // Ekranın %70'ine kadar gelsinler
+    // Düşmanları sağ taraftan başlatıyoruz
+    const startX = CW() + 100;
+    const stopX = CW() * 0.70; 
     const y = CH() * 0.15 + Math.random() * CH() * 0.70;
     
     enemies.push({
@@ -705,7 +696,6 @@ function spawnEnemy() {
         shootT: rnd(1.0, 2.0)
     });
 }
-  
 function autoAtk(dt){
   aaTimer-=dt;if(aaTimer>0)return;
   const cs=cStats();aaTimer=1/cs.spd;
