@@ -1,37 +1,25 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Glitch Quantum</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="game-container">
-        <h1>Glitch Hunter vs Corruption</h1>
-        <div id="battle-field">
-            <div id="player" class="char">👤 Hunter</div>
-            <button id="attack-btn">SALDIR</button>
-            <div id="enemy" class="char">👾 Glitch</div>
-        </div>
-        <div id="stats">
-            <p>Seviye: <span id="level">1</span> | GQT: <span id="score">0</span></p>
-            <p>Düşman HP: <span id="hp">100</span>/100</p>
-        </div>
+<div id="game-container">
+    <div id="scrolling-bg"> <div id="player">👤</div>
+        <div id="enemy">👾</div>
     </div>
-    <script>
-        let score = 0, level = 1, hp = 100;
-        document.getElementById('attack-btn').addEventListener('click', () => {
-            hp -= 10;
-            if (hp <= 0) {
-                score += 50;
-                hp = 100 + (level * 20);
-                level++;
-                alert("Sistem temizlendi!");
-            }
-            document.getElementById('hp').innerText = hp;
-            document.getElementById('score').innerText = score;
-            document.getElementById('level').innerText = level;
-        });
-    </script>
-</body>
-</html>
+    <div id="ui">
+        <p>Enerji (GQT): <span id="energy">100</span></p>
+        <button id="attack-btn">Saldır & İlerle</button>
+    </div>
+</div>
+
+<script>
+    let energy = 100;
+    const btn = document.getElementById('attack-btn');
+    
+    btn.addEventListener('click', () => {
+        if (energy > 0) {
+            energy -= 5;
+            document.getElementById('energy').innerText = energy;
+            // Düşmanı öldür ve yenisini getir (basit animasyon tetikleyici)
+            console.log("İlerleniyor...");
+        } else {
+            alert("Enerji bitti! Quantum kutusu açmak için görevleri tamamla.");
+        }
+    });
+</script>
