@@ -2,30 +2,39 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Glitch Quantum: Hunter</title>
+    <title>Glitch Quantum: Battle</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
         <h1>Glitch Hunter Modu</h1>
         <div id="stats">
-            <p>Seviye: <span id="level">1</span></p>
-            <p>GQT Puanı: <span id="score">0</span></p>
+            <p>Seviye: <span id="level">1</span> | Puan: <span id="score">0</span></p>
+            <p>Düşman HP: <span id="hp">100</span>/100</p>
         </div>
-        <div id="battle-area">
-            <p>Düşman: <strong>System Corruption</strong></p>
-            <button id="attack-btn">Saldır (Glitch'i Avla)</button>
-        </div>
+        <button id="attack-btn">SALDIR (GLITCH'İ AVLA)</button>
     </div>
+
     <script>
-        let score = 0;
-        let level = 1;
-        document.getElementById('attack-btn').addEventListener('click', () => {
-            score += 10;
-            if(score >= level * 50) {
+        let score = 0, level = 1, hp = 100;
+        const btn = document.getElementById('attack-btn');
+
+        btn.addEventListener('click', () => {
+            // Kritik Vuruş (%20 şans)
+            let damage = Math.random() < 0.2 ? 25 : 5;
+            hp -= damage;
+            
+            // Görsel efekt
+            document.body.style.backgroundColor = "#220022";
+            setTimeout(() => document.body.style.backgroundColor = "#050505", 100);
+
+            if (hp <= 0) {
+                score += 50 * level;
                 level++;
-                alert("Seviye Atladın! Yeni Seviye: " + level);
+                hp = 100 + (level * 20);
+                alert("Yaratık yok edildi! Yeni sistem seviyesi: " + level);
             }
+            document.getElementById('hp').innerText = hp;
             document.getElementById('score').innerText = score;
             document.getElementById('level').innerText = level;
         });
