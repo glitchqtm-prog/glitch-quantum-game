@@ -7,34 +7,34 @@
 </head>
 <body>
     <div id="game-container">
-        <div id="player">🕵️‍♂️ HUNTER</div>
-        
-        <div id="enemy">👾 ANOMALİ</div>
+        <div id="player" class="char">👤 HUNTER</div>
+        <div id="projectile">🟦</div> <div id="enemy" class="char">👾 ANOMALİ</div>
 
-        <button id="attack-btn">VERİ BLOKU FIRLAT</button>
-
-        <div id="stats">
-            <p>Enerji: <span id="energy">100</span> | Düşman HP: <span id="hp">100</span></p>
-        </div>
+        <button id="attack-btn">VERİ FIRLAT</button>
+        <div id="stats">HP: <span id="php">100</span> | Düşman HP: <span id="ehp">100</span></div>
     </div>
 
     <script>
-        let hp = 100, energy = 100;
+        let php = 100, ehp = 100;
         document.getElementById('attack-btn').addEventListener('click', () => {
-            if (energy > 0) {
-                // Görsel: Basit bir animasyon efekti için arka planı kısa süreli titretebiliriz
-                hp -= 10;
-                energy -= 2;
-                document.getElementById('hp').innerText = hp;
-                document.getElementById('energy').innerText = energy;
-                
-                if (hp <= 0) {
-                    alert("Anomali temizlendi! Yeni veri bloğu elde edildi.");
-                    hp = 100;
-                }
-            } else {
-                alert("Enerji kritik! Quantum kutusu aç.");
-            }
+            // 1. Oyuncu Saldırı Animasyonu
+            const projectile = document.getElementById('projectile');
+            projectile.style.display = 'block';
+            projectile.classList.add('fire');
+
+            // 2. Hasar Hesaplama
+            ehp -= 10;
+            document.getElementById('ehp').innerText = ehp;
+            document.getElementById('enemy').classList.add('hit');
+            setTimeout(() => document.getElementById('enemy').classList.remove('hit'), 500);
+
+            // 3. Karşı Saldırı (1 saniye sonra)
+            setTimeout(() => {
+                php -= 5;
+                document.getElementById('php').innerText = php;
+                document.getElementById('player').classList.add('hit');
+                setTimeout(() => document.getElementById('player').classList.remove('hit'), 500);
+            }, 1000);
         });
     </script>
 </body>
