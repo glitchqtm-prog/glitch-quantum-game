@@ -1,18 +1,19 @@
 ---
 ---
 body { background: #000; color: #0f0; font-family: monospace; }
-.char { font-size: 50px; transition: 0.3s; }
+#game-container { position: relative; height: 100vh; display: flex; align-items: center; justify-content: space-around; padding: 50px; }
 
-/* Hasar Alma Efekti */
+/* Karakterler */
+.char { font-size: 50px; transition: 0.3s; }
 .hit { transform: scale(1.2) rotate(10deg); filter: invert(1); }
 
-/* Mermi Efekti */
+/* Mermi (Sağdan Sola Atış) */
 #projectile { 
-    display: none; position: absolute; left: 150px; font-size: 30px; 
+    position: absolute; right: 150px; font-size: 30px; opacity: 0;
 }
 .fire { animation: shoot 0.5s linear; }
 
 @keyframes shoot {
-    from { left: 150px; }
-    to { left: 80%; }
+    0% { opacity: 1; right: 150px; }
+    100% { opacity: 1; right: 80%; }
 }
