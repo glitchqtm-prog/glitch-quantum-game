@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLITCH QUANTUM</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
+  :root {
+    --bg:        #05060f;
+    --bg2:       #080c1a;
+    --panel:     #0b1025cc;
+    --border:    #1a2a5e;
+    --cyan:      #00f5ff;
+    --magenta:   #ff00aa;
+    --gold:      #ffd700;
+    --green:     #00ff88;
+    --red:       #ff3355;
+    --text:      #c8d8ff;
+    --dim:       #5060a0;
+    --glow-c:    0 0 8px #00f5ff88, 0 0 24px #00f5ff33;
+    --glow-m:    0 0 8px #ff00aa88, 0 0 24px #ff00aa33;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ───── HEADER ───── */
+  #header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 16px;
+    border-bottom: 1px solid var(--border);
+    background: #060918;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  #logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900; font-size: 18px;
+    color: var(--cyan);
+    text-shadow: var(--glow-c);
+    letter-spacing: 4px;
+  }
+  #logo span { color: var(--magenta); text-shadow: var(--glow-m); }
+  #hud-stats {
+    display: flex; gap: 20px; font-size: 11px;
+  }
+  .hud-item label { color: var(--dim); }
+  .hud-item span  { color: var(--cyan); font-weight: bold; }
+
+  /* ───── MAIN AREA ───── */
+  #main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ───── GAME CANVAS ZONE ───── */
+  #canvas-zone {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg2);
+  }
+  canvas { display: block; }
+
+  /* ───── RIGHT SIDEBAR ───── */
+  #sidebar {
+    width: 260px;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* ───── TABS ───── */
+  #tab-bar {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .tab-btn {
+    flex: 1; padding: 7px 2px;
+    background: none; border: none;
+    color: var(--dim); font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; cursor: pointer; letter-spacing: 1px;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+  }
+  .tab-btn.active {
+    color: var(--cyan);
+    border-bottom-color: var(--cyan);
+    text-shadow: var(--glow-c);
+  }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  /* ───── TAB PANELS ───── */
+  .tab-panel { display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 10px; }
+  .tab-panel.active { display: flex; }
+
+  /* scrollbar */
+  .tab-panel::-webkit-scrollbar { width: 4px; }
+  .tab-panel::-webkit-scrollbar-track { background: transparent; }
+  .tab-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ───── SECTION LABEL ───── */
+  .sec-label {
+    font-size: 9px; letter-spacing: 2px; color: var(--dim);
+    text-transform: uppercase; margin: 8px 0 4px;
+    border-bottom: 1px solid var(--border); padding-bottom: 3px;
+  }
+
+  /* ───── STAT BARS ───── */
+  .stat-row { display: flex; align-items: center; margin-bottom: 5px; gap: 6px; font-size: 11px; }
+  .stat-row .lbl { width: 80px; color: var(--dim); }
+  .stat-bar-bg {
+    flex: 1; height: 6px; background: #111827; border-radius: 3px; overflow: hidden;
+  }
+  .stat-bar-fill { height: 100%; border-radius: 3px; transition: width .4s; }
+  .bar-hp   { background: linear-gradient(90deg, #ff3355, #ff6680); box-shadow: 0 0 6px #ff335566; }
+  .bar-gqt  { background: linear-gradient(90deg, #00f5ff, #00aaff); box-shadow: 0 0 6px #00f5ff66; }
+  .bar-xp   { background: linear-gradient(90deg, #ffd700, #ffaa00); box-shadow: 0 0 6px #ffd70066; }
+  .stat-val { width: 50px; text-align: right; font-size: 10px; color: var(--text); }
+
+  /* ───── SKILL BUTTONS ───── */
+  #skill-bar {
+    position: absolute;
+    bottom: 8px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 8px;
+    z-index: 5;
+  }
+  .skill-btn {
+    width: 54px; height: 54px;
+    background: #080c1acc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .2s;
+    overflow: hidden;
+  }
+  .skill-btn:hover { border-color: var(--cyan); }
+  .skill-btn .s-icon { font-size: 20px; line-height: 1; }
+  .skill-btn .s-name { font-size: 8px; color: var(--dim); margin-top: 2px; }
+  .skill-btn .s-cd {
+    position: absolute; inset: 0;
+    background: #00000099;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: bold; color: var(--cyan);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+  .skill-btn.glitch-mode { border-color: var(--magenta); }
+  .skill-btn.glitch-mode .s-icon { filter: drop-shadow(0 0 4px var(--magenta)); }
+
+  /* ───── INVENTORY GRID ───── */
+  #inv-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 4px;
+  }
+  .inv-slot {
+    aspect-ratio: 1;
+    background: #0b1025;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .2s;
+  }
+  .inv-slot:hover { border-color: var(--cyan); }
+  .inv-slot.empty { opacity: .3; }
+  .inv-slot .rarity-dot {
+    position: absolute; bottom: 2px; right: 2px;
+    width: 5px; height: 5px; border-radius: 50%;
+  }
+  .r-common    { background: #aaa; }
+  .r-uncommon  { background: #00cc55; box-shadow: 0 0 4px #00cc55; }
+  .r-rare      { background: #4488ff; box-shadow: 0 0 4px #4488ff; }
+  .r-epic      { background: #aa44ff; box-shadow: 0 0 4px #aa44ff; }
+  .r-legendary { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+
+  /* ───── QUEST LIST ───── */
+  .quest-item {
+    background: #0b1025;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+  .quest-item .q-title { color: var(--cyan); margin-bottom: 4px; font-size: 12px; }
+  .quest-item .q-prog { color: var(--dim); margin-bottom: 4px; }
+  .q-bar-bg  { height: 4px; background: #111827; border-radius: 2px; overflow: hidden; }
+  .q-bar-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width .4s; box-shadow: 0 0 4px var(--green); }
+  .quest-item .q-reward { color: var(--gold); margin-top: 4px; font-size: 10px; }
+
+  /* ───── BOX PANEL ───── */
+  #box-panel { display: flex; flex-direction: column; gap: 8px; }
+  .box-item {
+    background: #0b1025;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .box-icon { font-size: 28px; }
+  .box-info { flex: 1; }
+  .box-info .b-name { font-size: 12px; color: var(--text); }
+  .box-info .b-count { font-size: 10px; color: var(--dim); }
+  .box-open-btn {
+    background: linear-gradient(135deg, #1a2a5e, #0b1025);
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    transition: all .2s;
+  }
+  .box-open-btn:hover { background: var(--cyan); color: var(--bg); }
+  .box-open-btn:disabled { opacity: .3; cursor: default; }
+
+  /* ───── LOG ───── */
+  #combat-log {
+    position: absolute;
+    top: 8px; left: 8px;
+    width: 220px;
+    max-height: 140px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .log-line {
+    font-size: 10px;
+    line-height: 1.5;
+    animation: logFade 6s forwards;
+    white-space: nowrap;
+  }
+  @keyframes logFade { 0%{opacity:1} 70%{opacity:1} 100%{opacity:0} }
+
+  /* ───── WAVE BADGE ───── */
+  #wave-badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: #08101ecc;
+    border: 1px solid var(--magenta);
+    padding: 5px 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px; color: var(--magenta);
+    text-shadow: var(--glow-m);
+    border-radius: 4px;
+    z-index: 4;
+  }
+
+  /* ───── TOOLTIP ───── */
+  #tooltip {
+    position: fixed;
+    background: #050810ee;
+    border: 1px solid var(--cyan);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 200px;
+    display: none;
+  }
+  #tooltip .tt-name { font-size: 13px; margin-bottom: 4px; }
+  #tooltip .tt-tier { font-size: 10px; color: var(--dim); }
+  #tooltip .tt-affix { color: var(--green); font-size: 10px; margin-top: 3px; }
+
+  /* ───── LOOT POPUP ───── */
+  #loot-popup {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) scale(.8);
+    background: #05080fee;
+    border: 2px solid var(--magenta);
+    border-radius: 10px;
+    padding: 20px 28px;
+    text-align: center;
+    z-index: 20;
+    display: none;
+    box-shadow: var(--glow-m);
+    animation: popIn .3s forwards;
+  }
+  @keyframes popIn { to { transform: translate(-50%,-50%) scale(1); } }
+  #loot-popup .lp-icon { font-size: 48px; margin-bottom: 6px; }
+  #loot-popup .lp-rarity { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; }
+  #loot-popup .lp-name { font-size: 16px; font-family: 'Orbitron', sans-serif; margin: 4px 0; }
+  #loot-popup .lp-stats { font-size: 11px; color: var(--text); margin-bottom: 4px; }
+  #loot-popup .lp-affix { font-size: 11px; color: var(--green); }
+  #loot-popup .lp-close {
+    margin-top: 12px;
+    background: var(--magenta);
+    border: none; color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    padding: 6px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    letter-spacing: 2px;
+  }
+
+  /* ───── IDLE BADGE ───── */
+  #idle-badge {
+    position: absolute;
+    bottom: 70px; right: 8px;
+    background: #0b1025cc;
+    border: 1px solid var(--green);
+    padding: 4px 10px;
+    font-size: 9px; color: var(--green);
+    border-radius: 4px; z-index: 4;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div id="logo">GLITCH<span>QUANTUM</span></div>
+  <div id="hud-stats">
+    <div class="hud-item"><label>LVL </label><span id="h-lvl">1</span></div>
+    <div class="hud-item"><label>GQT </label><span id="h-gqt">0</span></div>
+    <div class="hud-item"><label>KILL </label><span id="h-kills">0</span></div>
+    <div class="hud-item"><label>WAVE </label><span id="h-wave">1</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- CANVAS ZONE -->
+  <div id="canvas-zone">
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Skill Bar -->
+    <div id="skill-bar">
+      <div class="skill-btn" id="sk0" onclick="GQ.useSkill(0)">
+        <div class="s-icon">⚡</div>
+        <div class="s-name">PULSE</div>
+        <div class="s-cd" id="sk0-cd" style="display:none">0</div>
+      </div>
+      <div class="skill-btn" id="sk1" onclick="GQ.useSkill(1)">
+        <div class="s-icon">🌀</div>
+        <div class="s-name">VORTEX</div>
+        <div class="s-cd" id="sk1-cd" style="display:none">0</div>
+      </div>
+      <div class="skill-btn" id="sk2" onclick="GQ.useSkill(2)">
+        <div class="s-icon">💥</div>
+        <div class="s-name">NOVA</div>
+        <div class="s-cd" id="sk2-cd" style="display:none">0</div>
+      </div>
+      <div class="skill-btn" id="sk3" onclick="GQ.useSkill(3)">
+        <div class="s-icon">🔮</div>
+        <div class="s-name">GLITCH</div>
+        <div class="s-cd" id="sk3-cd" style="display:none">0</div>
+      </div>
+    </div>
+
+    <!-- Combat Log -->
+    <div id="combat-log"></div>
+
+    <!-- Wave Badge -->
+    <div id="wave-badge">WAVE <span id="wb-num">1</span></div>
+
+    <!-- Loot Popup -->
+    <div id="loot-popup">
+      <div class="lp-icon" id="lp-icon">⚔️</div>
+      <div class="lp-rarity" id="lp-rarity">COMMON</div>
+      <div class="lp-name" id="lp-name">Iron Sword</div>
+      <div class="lp-stats" id="lp-stats">+12 STR</div>
+      <div class="lp-affix" id="lp-affix">+5% Crit Chance</div>
+      <button class="lp-close" onclick="GQ.closeLoot()">DEVAM ET</button>
+    </div>
+
+    <!-- Idle Badge -->
+    <div id="idle-badge">💤 IDLE KAZANIM AKTİF</div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div id="tab-bar">
+      <button class="tab-btn active" onclick="GQ.switchTab('stats')">STAT</button>
+      <button class="tab-btn" onclick="GQ.switchTab('inv')">ENVANTER</button>
+      <button class="tab-btn" onclick="GQ.switchTab('quests')">GÖREV</button>
+      <button class="tab-btn" onclick="GQ.switchTab('boxes')">KUTU</button>
+    </div>
+
+    <!-- STATS PANEL -->
+    <div class="tab-panel active" id="panel-stats">
+      <div class="sec-label">Hayat & Kaynaklar</div>
+      <div class="stat-row">
+        <span class="lbl">HP</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-hp" id="bar-hp" style="width:100%"></div></div>
+        <span class="stat-val" id="val-hp">100/100</span>
+      </div>
+      <div class="stat-row">
+        <span class="lbl">GQT ENERJİ</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-gqt" id="bar-gqt" style="width:0%"></div></div>
+        <span class="stat-val" id="val-gqt">0/100</span>
+      </div>
+      <div class="stat-row">
+        <span class="lbl">XP</span>
+        <div class="stat-bar-bg"><div class="stat-bar-fill bar-xp" id="bar-xp" style="width:0%"></div></div>
+        <span class="stat-val" id="val-xp">0/100</span>
+      </div>
+
+      <div class="sec-label">Birincil İstatistikler</div>
+      <div id="primary-stats" style="font-size:11px; display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+        <div>💪 STR: <span id="s-str" style="color:var(--cyan)">10</span></div>
+        <div>🏃 AGI: <span id="s-agi" style="color:var(--cyan)">10</span></div>
+        <div>🧠 INT: <span id="s-int" style="color:var(--cyan)">10</span></div>
+        <div>🍀 LCK: <span id="s-lck" style="color:var(--cyan)">5</span></div>
+      </div>
+
+      <div class="sec-label">Savaş İstatistikleri</div>
+      <div style="font-size:11px; display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+        <div>⚔️ ATK: <span id="s-atk" style="color:var(--magenta)">15</span></div>
+        <div>🛡️ DEF: <span id="s-def" style="color:var(--magenta)">5</span></div>
+        <div>💨 SPD: <span id="s-spd" style="color:var(--magenta)">1.0</span>/s</div>
+        <div>🎯 CRIT: <span id="s-crit" style="color:var(--magenta)">5</span>%</div>
+      </div>
+
+      <div class="sec-label">Yetenek Ağacı</div>
+      <div style="font-size:10px; color:var(--dim);">Lvl 10'da yetenek GLITCH moduna yükseltilebilir.</div>
+      <div id="skill-upgrade-zone" style="margin-top:6px; display:flex; flex-direction:column; gap:4px;"></div>
+    </div>
+
+    <!-- INVENTORY PANEL -->
+    <div class="tab-panel" id="panel-inv">
+      <div class="sec-label">Ekipman Slotları (20)</div>
+      <div id="inv-grid"></div>
+    </div>
+
+    <!-- QUESTS PANEL -->
+    <div class="tab-panel" id="panel-quests">
+      <div class="sec-label">Günlük Görevler</div>
+      <div id="quest-list"></div>
+    </div>
+
+    <!-- BOXES PANEL -->
+    <div class="tab-panel" id="panel-boxes">
+      <div class="sec-label">Kuantum Kutular</div>
+      <div id="box-panel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOOLTIP -->
+<div id="tooltip">
+  <div class="tt-name" id="tt-name"></div>
+  <div class="tt-tier" id="tt-tier"></div>
+  <div id="tt-stats"></div>
+  <div class="tt-affix" id="tt-affix"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+//  GLITCH QUANTUM — Core Engine
+// ════════════════════════════════════════════════
+
+const GQ = (() => {
+
+  // ── CONFIG ──────────────────────────────────────
+  const CFG = {
+    CANVAS_W: 0, CANVAS_H: 0,
+    PLAYER_X: 120,
+    SKILLS: [
+      { name:'PULSE',  icon:'⚡', cd:3,  cost:10, dmgMult:1.5, glitchMult:2.5 },
+      { name:'VORTEX', icon:'🌀', cd:6,  cost:20, dmgMult:2.0, glitchMult:3.5 },
+      { name:'NOVA',   icon:'💥', cd:10, cost:30, dmgMult:3.0, glitchMult:5.0 },
+      { name:'GLITCH', icon:'🔮', cd:15, cost:40, dmgMult:4.0, glitchMult:7.0 },
+    ],
+    RARITIES: ['common','uncommon','rare','epic','legendary'],
+    RARITY_WEIGHTS: [50, 30, 15, 4, 1],
+    RARITY_COLORS: { common:'#aaa', uncommon:'#00cc55', rare:'#4488ff', epic:'#aa44ff', legendary:'#ffd700' },
+    AFFIXES: [
+      '+5% Kritik Hasar','Canlandırma Anında +10 HP','Saldırı Hızı +8%',
+      '+12 Güç','Şans +3','+15% GQT Kazanımı','Düşman Yavaşlatma %10',
+      '+20 Zekâ','Crit Şansı +7%','Savunma +5',
+    ],
+    ITEM_TYPES: ['⚔️','🗡️','🛡️','🔱','🪖','💍','🧿','🪬','🗺️','💠'],
+    ITEM_NAMES: ['Kuantum Kılıcı','Glitch Kalkanı','Veri Zırhı','Anomali Büyüsü',
+      'Entropi Halkası','Sinyal Tokmağı','Katmansal Tılsım','Bozuk Yay','Faz Bıçağı','Vorteks Gem'],
+    ENEMY_TYPES: [
+      { name:'Anomali',  icon:'👾', hp:30,  xp:5,  gqt:2,  color:'#ff3355' },
+      { name:'Glitchör', icon:'🤖', hp:60,  xp:10, gqt:4,  color:'#ff00aa' },
+      { name:'Voidar',   icon:'👁️', hp:120, xp:20, gqt:8,  color:'#aa44ff' },
+      { name:'Nexus',    icon:'💀', hp:300, xp:50, gqt:20, color:'#ffd700' },
+    ],
+    BOX_TYPES: [
+      { name:'Common Kutu',   icon:'📦', color:'#aaa',    rarity_boost:0   },
+      { name:'Rare Kutu',     icon:'💎', color:'#4488ff', rarity_boost:5   },
+      { name:'Premium Sandık',icon:'🏆', color:'#ffd700', rarity_boost:15  },
+    ],
+  };
+
+  // ── STATE ENGINE ────────────────────────────────
+  const STATE_KEY = 'gq_save_v1';
+
+  let gs; // game state
+
+  function defaultState() {
+    return {
+      player: {
+        level: 1, xp: 0, xpNext: 100,
+        hp: 100, maxHp: 100,
+        gqt: 0, maxGqt: 100,
+        stats: { str:10, agi:10, int:10, lck:5 },
+        kills: 0,
+        glitchSkills: [],     // skill indices upgraded to glitch
+        skillCooldowns: [0,0,0,0],
+      },
+      inventory: new Array(20).fill(null),
+      boxes: { 0:3, 1:1, 2:0 },
+      quests: [
+        { id:0, title:'Anomali Avcısı', desc:'50 düşman yok et', goal:50, progress:0, reward:'gqt', rewardAmt:50, done:false },
+        { id:1, title:'Kutular Açılsın', desc:'3 kutu aç', goal:3, progress:0, reward:'box', rewardAmt:1, done:false },
+        { id:2, title:'Seviye Atla', desc:'Seviye 5 ol', goal:5, progress:0, reward:'gqt', rewardAmt:100, done:false },
+      ],
+      wave: 1,
+      lastSave: Date.now(),
+      lastOnline: Date.now(),
+    };
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STATE_KEY, btoa(JSON.stringify(gs))); } catch(e){}
+  }
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STATE_KEY);
+      if (raw) { gs = JSON.parse(atob(raw)); return; }
+    } catch(e){}
+    gs = defaultState();
+  }
+
+  // ── IDLE REWARD CALCULATOR ───────────────────────
+  function calcIdleRewards() {
+    const now = Date.now();
+    const awayMs = now - gs.lastOnline;
+    const awaySec = Math.min(awayMs / 1000, 3600); // max 1hr cap
+    if (awaySec < 30) return null;
+    const gqtEarned = Math.floor(awaySec * 0.05);
+    const boxesEarned = Math.floor(awaySec / 120);
+    gs.player.gqt = Math.min(gs.player.maxGqt, gs.player.gqt + gqtEarned);
+    gs.boxes[0] = (gs.boxes[0]||0) + boxesEarned;
+    gs.lastOnline = now;
+    return { gqt: gqtEarned, boxes: boxesEarned, secs: Math.floor(awaySec) };
+  }
+
+  // ── RNG ENGINE ──────────────────────────────────
+  function rollRarity(boost=0) {
+    const weights = CFG.RARITY_WEIGHTS.map((w,i) => i >= 2 ? w + boost : Math.max(1, w - boost/2));
+    const total = weights.reduce((a,b)=>a+b,0);
+    let r = Math.random() * total;
+    for (let i=0; i<weights.length; i++) { r -= weights[i]; if (r <= 0) return CFG.RARITIES[i]; }
+    return 'common';
+  }
+  function rollItem(rarityBoost=0) {
+    const rarity = rollRarity(rarityBoost);
+    const tierMap = { common:1, uncommon:3, rare:5, epic:8, legendary:10 };
+    const tier = tierMap[rarity] + Math.floor(Math.random()*2);
+    const idx = Math.floor(Math.random()*CFG.ITEM_NAMES.length);
+    const affixCount = rarity === 'legendary' ? 3 : rarity === 'epic' ? 2 : rarity === 'rare' ? 1 : 0;
+    const affixes = [];
+    const pool = [...CFG.AFFIXES];
+    for (let i=0; i<affixCount; i++) {
+      const ai = Math.floor(Math.random()*pool.length);
+      affixes.push(pool.splice(ai,1)[0]);
+    }
+    return {
+      name: CFG.ITEM_NAMES[idx],
+      icon: CFG.ITEM_TYPES[idx],
+      rarity, tier,
+      statBonus: { str: Math.floor(Math.random()*tier*3), agi: Math.floor(Math.random()*tier*2) },
+      affixes,
+    };
+  }
+
+  // ── COMBAT ENGINE ───────────────────────────────
+  let enemies = [];
+  let particles = [];
+  let bgStars = [];
+  let bgX = 0;
+  let lastFrameTime = 0;
+  let autoAttackTimer = 0;
+  let playerY = 0;
+
+  function initBg() {
+    bgStars = Array.from({length:80}, () => ({
+      x: Math.random() * CFG.CANVAS_W,
+      y: Math.random() * CFG.CANVAS_H * 0.7,
+      spd: 0.3 + Math.random()*1.2,
+      r: 0.5 + Math.random()*1.5,
+      a: 0.3 + Math.random()*0.7,
+    }));
+  }
+
+  function spawnEnemy() {
+    const wave = gs.wave;
+    const typeIdx = Math.min(Math.floor((wave-1)/3), CFG.ENEMY_TYPES.length-1);
+    const type = CFG.ENEMY_TYPES[Math.floor(Math.random()*(typeIdx+1))];
+    const hpScale = 1 + (wave-1)*0.15;
+    enemies.push({
+      type: type.name,
+      icon: type.icon,
+      color: type.color,
+      x: CFG.CANVAS_W + 40 + Math.random()*80,
+      y: playerY + (Math.random()-0.5)*30,
+      hp: Math.ceil(type.hp * hpScale),
+      maxHp: Math.ceil(type.hp * hpScale),
+      xp: type.xp,
+      gqt: type.gqt,
+      spd: 60 + Math.random()*30,
+      dmg: Math.ceil(3 + wave*0.5),
+      hitFlash: 0,
+      dead: false,
+    });
+  }
+
+  function spawnWave() {
+    const count = 3 + gs.wave;
+    enemies = [];
+    for (let i=0; i<count; i++) {
+      setTimeout(() => spawnEnemy(), i * (800 - Math.min(gs.wave*20, 500)));
+    }
+    addLog(`🌊 Dalga ${gs.wave} başladı! ${count} düşman geliyor.`, '#ff00aa');
+  }
+
+  // Derive combat stats from base stats + equipment
+  function combatStats() {
+    const p = gs.player;
+    let bonus = { str:0, agi:0, int:0, lck:0, critChance:0 };
+    p.inventory?.forEach(item => {
+      if (item) {
+        bonus.str += item.statBonus?.str || 0;
+        bonus.agi += item.statBonus?.agi || 0;
+      }
+    });
+    const str  = p.stats.str + bonus.str;
+    const agi  = p.stats.agi + bonus.agi;
+    const lck  = p.stats.lck;
+    return {
+      atk:  10 + str * 1.5,
+      def:  3  + str * 0.3,
+      spd:  0.5 + agi * 0.05,
+      crit: 5  + lck * 0.5,
+    };
+  }
+
+  function dealDamage(enemy, dmg, isCrit=false) {
+    enemy.hp -= dmg;
+    enemy.hitFlash = 0.3;
+    spawnDmgParticle(enemy.x, enemy.y, dmg, isCrit);
+    if (enemy.hp <= 0 && !enemy.dead) killEnemy(enemy);
+  }
+
+  function killEnemy(e) {
+    e.dead = true;
+    gs.player.xp += e.xp;
+    gs.player.gqt = Math.min(gs.player.maxGqt, gs.player.gqt + e.gqt);
+    gs.player.kills++;
+    addLog(`💀 ${e.type} yok edildi! +${e.xp}XP +${e.gqt}GQT`, e.color);
+    updateQuestProgress(0, 1);
+    checkXpLevelUp();
+    // Drop chance
+    const lck = gs.player.stats.lck;
+    if (Math.random() < 0.05 + lck * 0.003) {
+      const item = rollItem(0);
+      addItemToInventory(item);
+    }
+    spawnDeathParticles(e.x, e.y, e.color);
+  }
+
+  function checkXpLevelUp() {
+    while (gs.player.xp >= gs.player.xpNext) {
+      gs.player.xp -= gs.player.xpNext;
+      gs.player.level++;
+      gs.player.xpNext = Math.ceil(100 * Math.pow(1.3, gs.player.level-1));
+      gs.player.maxHp += 10;
+      gs.player.hp = gs.player.maxHp;
+      gs.player.maxGqt += 5;
+      gs.player.stats.str += 1;
+      gs.player.stats.agi += 1;
+      gs.player.stats.int += 1;
+      if (gs.player.level % 5 === 0) gs.player.stats.lck += 1;
+      addLog(`✨ SEVİYE ATLADI! Lvl ${gs.player.level}`, '#ffd700');
+      updateQuestProgress(2, gs.player.level, true);
+    }
+  }
+
+  function autoAttack(dt) {
+    const cs = combatStats();
+    autoAttackTimer -= dt;
+    if (autoAttackTimer > 0) return;
+    autoAttackTimer = 1 / cs.spd;
+
+    // Find closest enemy
+    const alive = enemies.filter(e=>!e.dead);
+    if (!alive.length) return;
+    const target = alive.sort((a,b)=>a.x-b.x)[0];
+    if (target.x - CFG.PLAYER_X > 300) return; // out of range
+
+    const isCrit = Math.random() * 100 < cs.crit;
+    let dmg = cs.atk * (isCrit ? 2 : 1);
+    dmg = Math.ceil(dmg * (0.9 + Math.random()*0.2));
+    dealDamage(target, dmg, isCrit);
+  }
+
+  function enemyAttack(e, dt, cs) {
+    if (!e.attackTimer) e.attackTimer = 1.5 + Math.random();
+    e.attackTimer -= dt;
+    if (e.attackTimer > 0) return;
+    e.attackTimer = 1.5;
+    const dmg = Math.max(1, e.dmg - cs.def * 0.3);
+    gs.player.hp = Math.max(0, gs.player.hp - dmg);
+    spawnDmgParticle(CFG.PLAYER_X, playerY, dmg, false, true);
+    if (gs.player.hp <= 0) respawn();
+  }
+
+  function respawn() {
+    gs.player.hp = gs.player.maxHp;
+    gs.wave = Math.max(1, gs.wave - 1);
+    enemies = [];
+    addLog('💔 Yenildin! Respawn... Dalga geri alındı.', '#ff3355');
+    setTimeout(() => spawnWave(), 1500);
+  }
+
+  function useSkill(idx) {
+    const sk = CFG.SKILLS[idx];
+    const p = gs.player;
+    if (p.skillCooldowns[idx] > 0) return;
+    if (p.gqt < sk.cost) { addLog(`⚡ ${sk.name} için yeterli GQT yok!`, '#ff3355'); return; }
+    p.gqt -= sk.cost;
+    p.skillCooldowns[idx] = sk.cd;
+
+    const isGlitch = p.glitchSkills.includes(idx);
+    const mult = isGlitch ? sk.glitchMult : sk.dmgMult;
+    const cs = combatStats();
+    const alive = enemies.filter(e=>!e.dead);
+
+    alive.forEach(e => {
+      if (e.x - CFG.PLAYER_X < 400) {
+        const dmg = Math.ceil(cs.atk * mult * (0.9+Math.random()*0.2));
+        dealDamage(e, dmg, true);
+      }
+    });
+
+    addLog(`🔥 ${sk.name}${isGlitch?' [GLITCH]':''} kullanıldı! x${mult} hasar`, isGlitch?'#ff00aa':'#00f5ff');
+    if (isGlitch) triggerGlitchEffect();
+  }
+
+  // ── PARTICLE SYSTEM ─────────────────────────────
+  function spawnDmgParticle(x, y, dmg, isCrit, isPlayerHit=false) {
+    particles.push({
+      x, y: y - 20,
+      vx: (Math.random()-0.5)*40,
+      vy: -60 - Math.random()*40,
+      text: (isCrit?'CRIT! ':'') + Math.ceil(dmg),
+      color: isPlayerHit ? '#ff3355' : isCrit ? '#ffd700' : '#00f5ff',
+      life: 1.5, maxLife: 1.5,
+      size: isCrit ? 14 : 11,
+    });
+  }
+  function spawnDeathParticles(x, y, color) {
+    for (let i=0; i<8; i++) {
+      const angle = (i/8)*Math.PI*2;
+      particles.push({
+        x, y,
+        vx: Math.cos(angle)*80, vy: Math.sin(angle)*80,
+        text: '✦',
+        color, life: 0.8, maxLife: 0.8, size: 12,
+      });
+    }
+  }
+
+  // ── GLITCH SCREEN EFFECT ────────────────────────
+  let glitchTimer = 0;
+  function triggerGlitchEffect() { glitchTimer = 0.4; }
+
+  // ── INVENTORY ────────────────────────────────────
+  function addItemToInventory(item) {
+    const slot = gs.inventory.findIndex(s=>s===null);
+    if (slot === -1) { addLog('⚠️ Envanter dolu!', '#ff3355'); return; }
+    gs.inventory[slot] = item;
+    updateQuestProgress(1, 0); // quest 1: boxes opened tracked separately
+    showLootPopup(item);
+    renderInventory();
+  }
+
+  function openBox(boxIdx) {
+    if (!gs.boxes[boxIdx] || gs.boxes[boxIdx] <= 0) return;
+    gs.boxes[boxIdx]--;
+    const boost = CFG.BOX_TYPES[boxIdx].rarity_boost;
+    const item = rollItem(boost);
+    addItemToInventory(item);
+    updateQuestProgress(1, 1);
+    renderBoxes();
+    saveState();
+  }
+
+  // ── QUESTS ───────────────────────────────────────
+  function updateQuestProgress(qid, amount, setTo=false) {
+    const q = gs.quests[qid];
+    if (!q || q.done) return;
+    q.progress = setTo ? amount : Math.min(q.goal, q.progress + amount);
+    if (q.progress >= q.goal) completeQuest(qid);
+    renderQuests();
+  }
+  function completeQuest(qid) {
+    const q = gs.quests[qid];
+    if (q.done) return;
+    q.done = true;
+    if (q.reward === 'gqt') {
+      gs.player.gqt = Math.min(gs.player.maxGqt, gs.player.gqt + q.rewardAmt);
+      addLog(`🏆 GÖREV TAMAMLANDI: "${q.title}" +${q.rewardAmt} GQT`, '#ffd700');
+    } else if (q.reward === 'box') {
+      gs.boxes[1] = (gs.boxes[1]||0) + q.rewardAmt;
+      addLog(`🏆 GÖREV TAMAMLANDI: "${q.title}" +${q.rewardAmt} Rare Kutu`, '#ffd700');
+    }
+  }
+
+  // ── LOG ─────────────────────────────────────────
+  const LOG_MAX = 8;
+  function addLog(msg, color='#c8d8ff') {
+    const log = document.getElementById('combat-log');
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.style.color = color;
+    line.textContent = msg;
+    log.appendChild(line);
+    setTimeout(() => line.remove(), 6000);
+    while (log.children.length > LOG_MAX) log.removeChild(log.firstChild);
+  }
+
+  // ── LOOT POPUP ───────────────────────────────────
+  function showLootPopup(item) {
+    const color = CFG.RARITY_COLORS[item.rarity];
+    document.getElementById('lp-icon').textContent = item.icon;
+    document.getElementById('lp-rarity').textContent = item.rarity.toUpperCase();
+    document.getElementById('lp-rarity').style.color = color;
+    document.getElementById('lp-name').textContent = `${item.name} [T${item.tier}]`;
+    document.getElementById('lp-name').style.color = color;
+    document.getElementById('lp-stats').textContent = `+${item.statBonus.str} STR  +${item.statBonus.agi} AGI`;
+    document.getElementById('lp-affix').textContent = item.affixes.join('  ');
+    document.getElementById('loot-popup').style.display = 'block';
+  }
+  function closeLoot() {
+    document.getElementById('loot-popup').style.display = 'none';
+  }
+
+  // ── SKILL UPGRADES ──────────────────────────────
+  function renderSkillUpgrades() {
+    const zone = document.getElementById('skill-upgrade-zone');
+    zone.innerHTML = '';
+    CFG.SKILLS.forEach((sk, idx) => {
+      const isGlitch = gs.player.glitchSkills.includes(idx);
+      const canUpgrade = gs.player.level >= 10 && !isGlitch;
+      const div = document.createElement('div');
+      div.style.cssText = `display:flex;align-items:center;gap:6px;font-size:10px;
+        padding:5px;background:#0b1025;border:1px solid ${isGlitch?'var(--magenta)':'var(--border)'};border-radius:4px;`;
+      div.innerHTML = `<span style="font-size:16px">${sk.icon}</span>
+        <span style="flex:1;color:${isGlitch?'var(--magenta)':'var(--text)'}">${sk.name} ${isGlitch?'[GLITCH]':''}</span>
+        ${canUpgrade ? `<button onclick="GQ.upgradeSkill(${idx})"
+          style="background:var(--magenta);border:none;color:#fff;font-family:'Share Tech Mono',monospace;
+          font-size:9px;padding:3px 7px;cursor:pointer;border-radius:3px;">GLITCH'E YÜKSELT</button>` : ''}`;
+      zone.appendChild(div);
+    });
+  }
+  function upgradeSkill(idx) {
+    if (gs.player.level < 10) { addLog('⚠️ Lvl 10 gerekli!','#ff3355'); return; }
+    if (gs.player.glitchSkills.includes(idx)) return;
+    gs.player.glitchSkills.push(idx);
+    document.getElementById(`sk${idx}`).classList.add('glitch-mode');
+    addLog(`🌀 ${CFG.SKILLS[idx].name} GLITCH moduna yükseltildi!`, '#ff00aa');
+    renderSkillUpgrades();
+  }
+
+  // ── RENDER: INVENTORY ────────────────────────────
+  function renderInventory() {
+    const grid = document.getElementById('inv-grid');
+    grid.innerHTML = '';
+    for (let i=0; i<20; i++) {
+      const item = gs.inventory[i];
+      const slot = document.createElement('div');
+      slot.className = 'inv-slot' + (item?'':' empty');
+      slot.textContent = item ? item.icon : '·';
+      if (item) {
+        const dot = document.createElement('div');
+        dot.className = `rarity-dot r-${item.rarity}`;
+        slot.appendChild(dot);
+        slot.addEventListener('mouseenter', (ev) => showTooltip(ev, item));
+        slot.addEventListener('mouseleave', hideTooltip);
+      }
+      grid.appendChild(slot);
+    }
+  }
+
+  // ── RENDER: QUESTS ───────────────────────────────
+  function renderQuests() {
+    const list = document.getElementById('quest-list');
+    list.innerHTML = '';
+    gs.quests.forEach(q => {
+      const pct = Math.min(100, (q.progress/q.goal)*100);
+      const div = document.createElement('div');
+      div.className = 'quest-item';
+      div.style.opacity = q.done ? '.5' : '1';
+      div.style.borderColor = q.done ? 'var(--green)' : 'var(--border)';
+      div.innerHTML = `
+        <div class="q-title">${q.done?'✅ ':''}${q.title}</div>
+        <div class="q-prog">${q.desc} (${q.progress}/${q.goal})</div>
+        <div class="q-bar-bg"><div class="q-bar-fill" style="width:${pct}%"></div></div>
+        <div class="q-reward">🎁 Ödül: ${q.reward==='gqt'?`${q.rewardAmt} GQT`:`${q.rewardAmt} Rare Kutu`}</div>`;
+      list.appendChild(div);
+    });
+  }
+
+  // ── RENDER: BOXES ─────────────────────────────────
+  function renderBoxes() {
+    const panel = document.getElementById('box-panel');
+    panel.innerHTML = '';
+    CFG.BOX_TYPES.forEach((bt, i) => {
+      const count = gs.boxes[i] || 0;
+      const div = document.createElement('div');
+      div.className = 'box-item';
+      div.innerHTML = `
+        <div class="box-icon">${bt.icon}</div>
+        <div class="box-info">
+          <div class="b-name" style="color:${bt.color}">${bt.name}</div>
+          <div class="b-count">${count} adet</div>
+        </div>
+        <button class="box-open-btn" ${count<1?'disabled':''} onclick="GQ.openBox(${i})">AÇ</button>`;
+      panel.appendChild(div);
+    });
+  }
+
+  // ── TOOLTIP ──────────────────────────────────────
+  function showTooltip(ev, item) {
+    const tt = document.getElementById('tooltip');
+    const color = CFG.RARITY_COLORS[item.rarity];
+    document.getElementById('tt-name').textContent = `${item.icon} ${item.name}`;
+    document.getElementById('tt-name').style.color = color;
+    document.getElementById('tt-tier').textContent = `Tier ${item.tier} · ${item.rarity.toUpperCase()}`;
+    document.getElementById('tt-stats').innerHTML = `<div style="color:var(--text);font-size:10px;margin:3px 0">+${item.statBonus.str} STR  +${item.statBonus.agi} AGI</div>`;
+    document.getElementById('tt-affix').textContent = item.affixes.join('\n');
+    tt.style.display = 'block';
+    moveTooltip(ev);
+  }
+  function moveTooltip(ev) {
+    const tt = document.getElementById('tooltip');
+    tt.style.left = (ev.clientX + 12) + 'px';
+    tt.style.top  = (ev.clientY - 10) + 'px';
+  }
+  function hideTooltip() { document.getElementById('tooltip').style.display='none'; }
+
+  // ── TAB SWITCHING ────────────────────────────────
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById(`panel-${name}`).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // ── UI UPDATE ─────────────────────────────────────
+  function updateUI() {
+    const p = gs.player;
+    const cs = combatStats();
+
+    document.getElementById('h-lvl').textContent = p.level;
+    document.getElementById('h-gqt').textContent = p.gqt;
+    document.getElementById('h-kills').textContent = p.kills;
+    document.getElementById('h-wave').textContent = gs.wave;
+    document.getElementById('wb-num').textContent = gs.wave;
+
+    const hpPct = (p.hp / p.maxHp) * 100;
+    const gqtPct = (p.gqt / p.maxGqt) * 100;
+    const xpPct  = (p.xp / p.xpNext) * 100;
+    document.getElementById('bar-hp').style.width  = hpPct + '%';
+    document.getElementById('bar-gqt').style.width = gqtPct + '%';
+    document.getElementById('bar-xp').style.width  = xpPct + '%';
+    document.getElementById('val-hp').textContent  = `${Math.ceil(p.hp)}/${p.maxHp}`;
+    document.getElementById('val-gqt').textContent = `${Math.floor(p.gqt)}/${p.maxGqt}`;
+    document.getElementById('val-xp').textContent  = `${p.xp}/${p.xpNext}`;
+
+    document.getElementById('s-str').textContent = p.stats.str;
+    document.getElementById('s-agi').textContent = p.stats.agi;
+    document.getElementById('s-int').textContent = p.stats.int;
+    document.getElementById('s-lck').textContent = p.stats.lck;
+    document.getElementById('s-atk').textContent  = Math.ceil(cs.atk);
+    document.getElementById('s-def').textContent  = Math.ceil(cs.def);
+    document.getElementById('s-spd').textContent  = cs.spd.toFixed(1);
+    document.getElementById('s-crit').textContent = Math.ceil(cs.crit);
+
+    // Skill cooldowns
+    CFG.SKILLS.forEach((_, i) => {
+      const cd = gs.player.skillCooldowns[i];
+      const cdEl = document.getElementById(`sk${i}-cd`);
+      cdEl.style.display = cd > 0 ? 'flex' : 'none';
+      if (cd > 0) cdEl.textContent = cd.toFixed(1);
+    });
+  }
+
+  // ── CANVAS RENDER ─────────────────────────────────
+  let ctx, canvas;
+  function initCanvas() {
+    canvas = document.getElementById('gameCanvas');
+    const zone = document.getElementById('canvas-zone');
+    CFG.CANVAS_W = zone.clientWidth;
+    CFG.CANVAS_H = zone.clientHeight;
+    canvas.width  = CFG.CANVAS_W;
+    canvas.height = CFG.CANVAS_H;
+    playerY = CFG.CANVAS_H * 0.55;
+    ctx = canvas.getContext('2d');
+  }
+
+  function drawBg(dt) {
+    // Sky gradient
+    const grad = ctx.createLinearGradient(0,0,0,CFG.CANVAS_H);
+    grad.addColorStop(0,'#010408');
+    grad.addColorStop(0.6,'#050a18');
+    grad.addColorStop(1,'#08101e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,CFG.CANVAS_W,CFG.CANVAS_H);
+
+    // Parallax stars
+    bgStars.forEach(s => {
+      s.x -= s.spd * dt * 60;
+      if (s.x < -2) s.x = CFG.CANVAS_W + 2;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(180,200,255,${s.a})`;
+      ctx.fill();
+    });
+
+    // Ground line
+    const groundY = CFG.CANVAS_H * 0.7;
+    ctx.strokeStyle = '#1a2a5e';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([8,12]);
+    ctx.beginPath();
+    ctx.moveTo(0,groundY); ctx.lineTo(CFG.CANVAS_W,groundY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Grid floor
+    ctx.strokeStyle = '#0d1a38';
+    ctx.lineWidth = 0.5;
+    for (let x = (bgX%60)-60; x<CFG.CANVAS_W; x+=60) {
+      ctx.beginPath();
+      ctx.moveTo(x, groundY);
+      ctx.lineTo(x + 40, CFG.CANVAS_H);
+      ctx.stroke();
+    }
+    bgX -= dt * 40;
+  }
+
+  function drawPlayer() {
+    const x = CFG.PLAYER_X, y = playerY;
+    // Shadow
+    ctx.beginPath();
+    ctx.ellipse(x, y+24, 14, 5, 0, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(0,245,255,0.15)';
+    ctx.fill();
+
+    // Body glow
+    ctx.beginPath();
+    ctx.arc(x, y, 20, 0, Math.PI*2);
+    ctx.fillStyle = '#00f5ff11';
+    ctx.fill();
+
+    // Character sprite (text-based)
+    ctx.font = '32px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🧑‍💻', x, y);
+
+    // HP bar above player
+    const barW = 40, barH = 4;
+    const hpPct = gs.player.hp / gs.player.maxHp;
+    ctx.fillStyle = '#111827';
+    ctx.fillRect(x - barW/2, y-30, barW, barH);
+    ctx.fillStyle = hpPct > 0.5 ? '#00ff88' : hpPct > 0.25 ? '#ffd700' : '#ff3355';
+    ctx.fillRect(x - barW/2, y-30, barW*hpPct, barH);
+
+    // GQT bar
+    const gqtPct = gs.player.gqt / gs.player.maxGqt;
+    ctx.fillStyle = '#111827';
+    ctx.fillRect(x - barW/2, y-25, barW, 3);
+    ctx.fillStyle = '#00f5ff';
+    ctx.fillRect(x - barW/2, y-25, barW*gqtPct, 3);
+  }
+
+  function drawEnemies(dt) {
+    const groundY = CFG.CANVAS_H * 0.7;
+    const cs = combatStats();
+    enemies.forEach(e => {
+      if (e.dead) return;
+      // Move toward player
+      if (e.x > CFG.PLAYER_X + 40) {
+        e.x -= e.spd * dt;
+      } else {
+        enemyAttack(e, dt, cs);
+      }
+      if (e.hitFlash > 0) e.hitFlash -= dt;
+
+      // Shadow
+      ctx.beginPath();
+      ctx.ellipse(e.x, groundY, 14, 4, 0, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,0,100,0.1)';
+      ctx.fill();
+
+      // Enemy icon
+      ctx.save();
+      if (e.hitFlash > 0) {
+        ctx.filter = 'brightness(3) saturate(0)';
+      }
+      ctx.font = '28px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(e.icon, e.x, e.y);
+      ctx.restore();
+
+      // HP bar
+      const bw=36, bh=4, hpP = e.hp/e.maxHp;
+      ctx.fillStyle='#1a0a0a';
+      ctx.fillRect(e.x-bw/2, e.y-28, bw, bh);
+      const barColor = e.color;
+      ctx.fillStyle=barColor;
+      ctx.fillRect(e.x-bw/2, e.y-28, bw*hpP, bh);
+
+      // Name
+      ctx.font = '8px Share Tech Mono, monospace';
+      ctx.fillStyle = '#88a0d0';
+      ctx.textAlign = 'center';
+      ctx.fillText(e.type, e.x, e.y+22);
+    });
+
+    // Remove dead off-screen enemies (after death animation)
+    enemies = enemies.filter(e => !e.dead || particles.length > 0);
+    // Check wave complete
+    const alive = enemies.filter(e=>!e.dead);
+    if (enemies.length > 0 && alive.length === 0) {
+      enemies = [];
+      gs.wave++;
+      addLog(`🎉 Dalga temizlendi! Sonraki dalga hazırlanıyor...`, '#00ff88');
+      setTimeout(() => spawnWave(), 2000);
+    }
+  }
+
+  function drawParticles(dt) {
+    particles.forEach(p => {
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vy += 60 * dt;
+      p.life -= dt;
+      const alpha = Math.max(0, p.life / p.maxLife);
+      ctx.font = `${p.size}px Share Tech Mono, monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = p.color + Math.floor(alpha*255).toString(16).padStart(2,'0');
+      ctx.fillText(p.text, p.x, p.y);
+    });
+    particles = particles.filter(p=>p.life>0);
+  }
+
+  function drawGlitchOverlay() {
+    if (glitchTimer <= 0) return;
+    ctx.save();
+    const slices = 6;
+    for (let i=0; i<slices; i++) {
+      const sy = Math.random() * CFG.CANVAS_H;
+      const sh = 4 + Math.random()*20;
+      const dx = (Math.random()-0.5)*30;
+      ctx.drawImage(canvas, 0, sy, CFG.CANVAS_W, sh, dx, sy, CFG.CANVAS_W, sh);
+    }
+    ctx.fillStyle = `rgba(255,0,170,${glitchTimer*0.15})`;
+    ctx.fillRect(0,0,CFG.CANVAS_W,CFG.CANVAS_H);
+    ctx.restore();
+  }
+
+  // ── MAIN LOOP ─────────────────────────────────────
+  let waveSpawnNeeded = true;
+  let uiTickTimer = 0;
+  let saveTimer = 0;
+  let idleVisible = false;
+
+  function gameLoop(ts) {
+    const dt = Math.min((ts - lastFrameTime) / 1000, 0.05);
+    lastFrameTime = ts;
+
+    // Combat
+    autoAttack(dt);
+
+    // Skill cooldowns
+    gs.player.skillCooldowns = gs.player.skillCooldowns.map(cd => Math.max(0, cd-dt));
+
+    // Glitch timer
+    if (glitchTimer > 0) glitchTimer -= dt;
+
+    // Wave spawn
+    if (waveSpawnNeeded && enemies.length === 0) {
+      waveSpawnNeeded = false;
+      spawnWave();
+    }
+
+    // Draw
+    drawBg(dt);
+    drawPlayer();
+    drawEnemies(dt);
+    drawParticles(dt);
+    drawGlitchOverlay();
+
+    // UI update (throttled)
+    uiTickTimer -= dt;
+    if (uiTickTimer <= 0) {
+      uiTickTimer = 0.05;
+      updateUI();
+    }
+
+    // Periodic save
+    saveTimer -= dt;
+    if (saveTimer <= 0) {
+      saveTimer = 15;
+      gs.lastOnline = Date.now();
+      saveState();
+    }
+
+    requestAnimationFrame(gameLoop);
+  }
+
+  // ── INIT ─────────────────────────────────────────
+  function init() {
+    loadState();
+
+    // Idle rewards
+    const idle = calcIdleRewards();
+    if (idle && (idle.gqt > 0 || idle.boxes > 0)) {
+      document.getElementById('idle-badge').style.display = 'block';
+      setTimeout(() => document.getElementById('idle-badge').style.display='none', 5000);
+      setTimeout(() => addLog(`💤 Çevrimdışı ${idle.secs}s: +${idle.gqt} GQT +${idle.boxes} Common Kutu`, '#00ff88'), 500);
+    }
+
+    initCanvas();
+    initBg();
+
+    renderInventory();
+    renderQuests();
+    renderBoxes();
+    renderSkillUpgrades();
+
+    // Glitch skills visual
+    gs.player.glitchSkills.forEach(idx => {
+      document.getElementById(`sk${idx}`)?.classList.add('glitch-mode');
+    });
+
+    window.addEventListener('resize', () => {
+      const zone = document.getElementById('canvas-zone');
+      CFG.CANVAS_W = zone.clientWidth;
+      CFG.CANVAS_H = zone.clientHeight;
+      canvas.width  = CFG.CANVAS_W;
+      canvas.height = CFG.CANVAS_H;
+      playerY = CFG.CANVAS_H * 0.55;
+      initBg();
+    });
+
+    // Visibility change → idle tracking
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { gs.lastOnline = Date.now(); saveState(); }
+    });
+
+    lastFrameTime = performance.now();
+    requestAnimationFrame(gameLoop);
+  }
+
+  return { init, useSkill, openBox, upgradeSkill, switchTab, closeLoot };
+})();
+
+window.addEventListener('load', () => GQ.init());
+</script>
+</body>
+</html>
