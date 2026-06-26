@@ -2,20 +2,32 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Glitch Quantum</title>
+    <title>Glitch Quantum: Hunter</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <h1>Glitch Quantum</h1>
-        <p>GQT Puanı: <span id="score">0</span></p>
-        <button id="clicker">Sistemi Çatlat (GQT Topla)</button>
+        <h1>Glitch Hunter Modu</h1>
+        <div id="stats">
+            <p>Seviye: <span id="level">1</span></p>
+            <p>GQT Puanı: <span id="score">0</span></p>
+        </div>
+        <div id="battle-area">
+            <p>Düşman: <strong>System Corruption</strong></p>
+            <button id="attack-btn">Saldır (Glitch'i Avla)</button>
+        </div>
     </div>
     <script>
         let score = 0;
-        document.getElementById('clicker').addEventListener('click', () => {
-            score++;
+        let level = 1;
+        document.getElementById('attack-btn').addEventListener('click', () => {
+            score += 10;
+            if(score >= level * 50) {
+                level++;
+                alert("Seviye Atladın! Yeni Seviye: " + level);
+            }
             document.getElementById('score').innerText = score;
+            document.getElementById('level').innerText = level;
         });
     </script>
 </body>
