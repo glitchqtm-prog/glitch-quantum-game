@@ -345,13 +345,11 @@ const fmt=n=>{if(n>=1e12)return(n/1e12).toFixed(1)+'T';if(n>=1e9)return(n/1e9).t
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const fmtD=s=>{if(s<60)return Math.ceil(s)+'s';if(s<3600)return Math.ceil(s/60)+'dk';if(s<86400)return(s/3600).toFixed(1)+'sa';return(s/86400).toFixed(1)+'gün'};
-
 const RARS=['bronze','silver','gold','platinum','diamond','radianium','glitchanium'];
 const RLBL={bronze:'BRONZ',silver:'SİLVER',gold:'ALTIN',platinum:'PLATİNYUM',diamond:'DİAMOND',radianium:'RADİANİUM',glitchanium:'GLİTCHANİUM'};
 const RCOL={bronze:'#cd7f32',silver:'#c0c0c0',gold:'#ffd700',platinum:'#e5e4e2',diamond:'#a8f0ff',radianium:'#ff88ff',glitchanium:'#cc44ff'};
 const RSELL={bronze:5,silver:18,gold:55,platinum:160,diamond:450,radianium:1200,glitchanium:4000};
 const RBASE=[8,22,55,140,380,1000,3000];
-
 function lootW(lvl){
   if(lvl<5)  return[90,10,0,0,0,0,0];
   if(lvl<10) return[60,35,5,0,0,0,0];
@@ -367,7 +365,6 @@ function rollRar(lvl,boost=0){
   for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return RARS[i];}
   return 'bronze';
 }
-
 const SLOTS={
   weapon:{label:'Lazer Silahı',icon:'🔫',sk:'atk',  part:'cannon'},
   hull:  {label:'Gemi Gövdesi',icon:'🛡️',sk:'hp',   part:'hull'},
@@ -378,7 +375,6 @@ const SLOTS={
   armor: {label:'Zırh',        icon:'🔩',sk:'def2', part:'armor'},
 };
 function itemSV(ri,sl,st){return Math.round(RBASE[ri]*Math.pow(sl,1.4)*Math.pow(1.18,st));}
-
 // Pixel ship rarity tints
 const RT={
   bronze:   {body:'#3a1a08',bA:'#cd7f32',ck:'#ffbb44',ckG:'#ffeeaa',eg:'#cc5500',grd:'#cd7f32'},
@@ -391,7 +387,6 @@ const RT={
 };
 function getT(slotKey,equipped){const it=equipped[slotKey];return it?RT[it.rar]:null;}
 function TA(slotKey,key,fb,equipped){const t=getT(slotKey,equipped);return(t&&t[key])?t[key]:fb;}
-
 function drawPixelShip(ctx,cx,cy,equipped,pulse,scale=1){
   ctx.save();ctx.translate(cx,cy);ctx.scale(scale,scale);
   const bodyCol =TA('hull','body','#1e2a4a',equipped);
@@ -403,7 +398,6 @@ function drawPixelShip(ctx,cx,cy,equipped,pulse,scale=1){
   const canCol  =TA('weapon','bA','#00f5ff',equipped);
   const armorCol=TA('armor','body','#162040',equipped);
   const reactCol=TA('reactor','bA','#00f5ff',equipped);
-
   // ENGINE EXHAUSTS
   const exLen=28+Math.sin(pulse)*8;
   [-11,10].forEach((ey,i)=>{
@@ -483,7 +477,7 @@ function drawPixelShip(ctx,cx,cy,equipped,pulse,scale=1){
   });
   ctx.restore();
 }
-const SKILLS=[
+  const SKILLS=[
   {name:'PULSE', icon:'⚡',cd:3, dm:1.8,gm:3.2,desc:'Hızlı enerji atışı.'},
   {name:'VORTEX',icon:'🌀',cd:7, dm:2.4,gm:4.2,desc:'Tüm düşmanlara girdap.'},
   {name:'NOVA',  icon:'💥',cd:13,dm:3.5,gm:6.0,desc:'Devasa patlama dalgası.'},
@@ -564,7 +558,7 @@ function mkEnemy(wave,sl){
     ess:Math.ceil(et.em*Math.pow(1.03,wave-1)),
     x:0,y:0,stopX:0,spd:50+rnd(0,35),shootT:rnd(.8,2),hitFlash:0,dead:false};
 }
-const SKEY='gqv4';
+  const SKEY='gqv4';
 let gs;
 function defState(){
   return{charLvl:1,charXp:0,charXpNext:100,shipLvl:1,essence:0,essenceMax:100,
@@ -645,7 +639,6 @@ function mkItem(boost=0){
   for(let i=0;i<ac;i++){const ai=Math.floor(rnd(0,pool.length));afs.push(pool.splice(ai,1)[0]);}
   return{slotKey,rar,ri,stars,sk:SLOTS[slotKey].sk,name:`${RLBL[rar]} ${SLOTS[slotKey].label}`,icon:SLOTS[slotKey].icon,sv,afs,sellVal:Math.ceil(RSELL[rar]*Math.pow(gs.shipLvl,.8))};
 }
-
 // ENEMIES
 let enemies=[],particles=[],projs=[],pProjs=[];
 let bgStars=[],bgX=0,lastT=0,aaTimer=0,pyPos=0;
@@ -658,9 +651,7 @@ const PX=120;
 const CW=()=>gc?gc.width:800;
 const CH=()=>gc?gc.height:500;
 function initBg(){bgStars=Array.from({length:90},()=>({x:rnd(0,CW()),y:rnd(0,CH()*.88),spd:rnd(.3,1.5),r:rnd(.4,1.8),a:rnd(.3,.9)}));}
-
 function setAuto(key,val){gs.autoSettings[key]=val;save();}
-
 function startWithBox(){
   if(gs.boxes<=0){addLog('📦 Box yok! Marketten al.','#ff3355');return;}
   gs.boxes--;waveActive=true;paused=false;lootQueue=[];
