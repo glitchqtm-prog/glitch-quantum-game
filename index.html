@@ -122,19 +122,20 @@
 
         canvas {
             display: block;
+            position: relative;
+            z-index: 1;
         }
 
         /* IDLE SCREEN */
         #idle-sc {
             position: absolute;
             inset: 0;
-            background: #04081099;
+            background: #040810f2;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 15;
-            backdrop-filter: blur(3px);
         }
 
         #idle-sc h2 {
@@ -200,6 +201,8 @@
 
         /* MAIN START BTN */
         #start-btn {
+            position: relative;
+            z-index: 20;
             background: linear-gradient(135deg, var(--cy), #0088cc);
             border: none;
             color: #020810;
@@ -1397,7 +1400,7 @@
             <div class="hi"><label>KILL </label><b id="h-kills">0</b></div>
             <div class="hi"><label>WAVE </label><b id="h-wave">1-1</b></div>
         </div>
-        <button id="mkt-btn" onclick="GQ.openMkt()">🏪 MARKET</button>
+        <button id="mkt-btn" onclick="window.GQ.openMkt()">🏪 MARKET</button>
     </div>
 
     <div id="main">
@@ -1410,23 +1413,23 @@
                 <div id="auto-panel">
                     <div class="ap-title">⚙️ OTOMATİK AYARLAR</div>
                     <div class="ao-row">
-                        <input type="checkbox" id="ao-auto" onchange="GQ.setAuto('autoOpen',this.checked)">
+                        <input type="checkbox" id="ao-auto" onchange="window.GQ.setAuto('autoOpen',this.checked)">
                         <label for="ao-auto">Kutular otomatik açılsın</label>
                     </div>
                     <div class="ao-row">
-                        <input type="checkbox" id="ao-eq" onchange="GQ.setAuto('autoEquip',this.checked)">
+                        <input type="checkbox" id="ao-eq" onchange="window.GQ.setAuto('autoEquip',this.checked)">
                         <label for="ao-eq">Daha iyi ekipmanı otomatik kuşan</label>
                     </div>
                     <div class="ao-row">
-                        <input type="checkbox" id="ao-sell" onchange="GQ.setAuto('autoSell',this.checked)">
+                        <input type="checkbox" id="ao-sell" onchange="window.GQ.setAuto('autoSell',this.checked)">
                         <label for="ao-sell">Kötü ekipmanları otomatik sat</label>
                     </div>
                     <div class="ao-row">
-                        <input type="checkbox" id="ao-sellbag" onchange="GQ.setAuto('autoSellBag',this.checked)">
+                        <input type="checkbox" id="ao-sellbag" onchange="window.GQ.setAuto('autoSellBag',this.checked)">
                         <label for="ao-sellbag">Çantadaki düşük eşyaları otomatik sat</label>
                     </div>
                 </div>
-                <button id="start-btn" onclick="GQ.startWithBox()">📦 QUANTUM BOX AÇ</button>
+                <button id="start-btn" onclick="window.GQ.startWithBox()">📦 QUANTUM BOX AÇ</button>
                 <div class="idle-box-cnt">📦 <span id="idle-box-cnt">10</span> Box mevcut</div>
             </div>
 
@@ -1443,29 +1446,29 @@
                 <div class="lp-auto-note" id="lp-auto-note"></div>
                 <div id="auto-sell-bar" style="display:none;width:100%"></div>
                 <div class="lp-btns">
-                    <button class="lp-btn btn-eq" onclick="GQ.lootEq()">⚔️ KUŞAN</button>
-                    <button class="lp-btn btn-sell" id="lp-sell-btn" onclick="GQ.lootSell()">💰 SAT</button>
-                    <button class="lp-btn btn-bag" onclick="GQ.lootBag()">🎒 ÇANTA</button>
+                    <button class="lp-btn btn-eq" onclick="window.GQ.lootEq()">⚔️ KUŞAN</button>
+                    <button class="lp-btn btn-sell" id="lp-sell-btn" onclick="window.GQ.lootSell()">💰 SAT</button>
+                    <button class="lp-btn btn-bag" onclick="window.GQ.lootBag()">🎒 ÇANTA</button>
                 </div>
             </div>
 
             <div id="skill-bar">
-                <div class="skb" id="sk0" onclick="GQ.useSkill(0)" onmouseenter="GQ.skTip(event,0)" onmouseleave="GQ.skTipH()">
+                <div class="skb" id="sk0" onclick="window.GQ.useSkill(0)" onmouseenter="window.GQ.skTip(event,0)" onmouseleave="window.GQ.skTipH()">
                     <div class="sic">⚡</div><div class="snm">PULSE</div>
                     <div class="sov" id="sk0-ov" style="display:none"><span id="sk0-t">0</span></div>
                     <div class="sbar" id="sk0-bar" style="width:0%"></div>
                 </div>
-                <div class="skb" id="sk1" onclick="GQ.useSkill(1)" onmouseenter="GQ.skTip(event,1)" onmouseleave="GQ.skTipH()">
+                <div class="skb" id="sk1" onclick="window.GQ.useSkill(1)" onmouseenter="window.GQ.skTip(event,1)" onmouseleave="window.GQ.skTipH()">
                     <div class="sic">🌀</div><div class="snm">VORTEX</div>
                     <div class="sov" id="sk1-ov" style="display:none"><span id="sk1-t">0</span></div>
                     <div class="sbar" id="sk1-bar" style="width:0%"></div>
                 </div>
-                <div class="skb" id="sk2" onclick="GQ.useSkill(2)" onmouseenter="GQ.skTip(event,2)" onmouseleave="GQ.skTipH()">
+                <div class="skb" id="sk2" onclick="window.GQ.useSkill(2)" onmouseenter="window.GQ.skTip(event,2)" onmouseleave="window.GQ.skTipH()">
                     <div class="sic">💥</div><div class="snm">NOVA</div>
                     <div class="sov" id="sk2-ov" style="display:none"><span id="sk2-t">0</span></div>
                     <div class="sbar" id="sk2-bar" style="width:0%"></div>
                 </div>
-                <div class="skb" id="sk3" onclick="GQ.useSkill(3)" onmouseenter="GQ.skTip(event,3)" onmouseleave="GQ.skTipH()">
+                <div class="skb" id="sk3" onclick="window.GQ.useSkill(3)" onmouseenter="window.GQ.skTip(event,3)" onmouseleave="window.GQ.skTipH()">
                     <div class="sic">🔮</div><div class="snm">ULTI</div>
                     <div class="sov" id="sk3-ov" style="display:none"><span id="sk3-t">0</span></div>
                     <div class="sbar" id="sk3-bar" style="width:0%"></div>
@@ -1502,9 +1505,9 @@
                     </div>
                     <div class="bf-log" id="bf-log"></div>
                     <div class="bf-actions">
-                        <button class="bf-btn atk" onclick="GQ.bAtk()">⚔️ SALDIRI</button>
-                        <button class="bf-btn atk" style="background:var(--pu)" onclick="GQ.bSkill()">🔮 YETENEĞİ KULLAN</button>
-                        <button class="bf-btn ret" onclick="GQ.bRet()">🚪 GERİ ÇEKİL</button>
+                        <button class="bf-btn atk" onclick="window.GQ.bAtk()">⚔️ SALDIRI</button>
+                        <button class="bf-btn atk" style="background:var(--pu)" onclick="window.GQ.bSkill()">🔮 YETENEĞİ KULLAN</button>
+                        <button class="bf-btn ret" onclick="window.GQ.bRet()">🚪 GERİ ÇEKİL</button>
                     </div>
                 </div>
             </div>
@@ -1513,13 +1516,13 @@
                 <div class="br-box" id="br-box">
                     <h2 id="br-title">Sonuç</h2>
                     <div class="br-txt" id="br-txt"></div>
-                    <button class="br-btn" onclick="GQ.closeBossResult()">TAMAM</button>
+                    <button class="br-btn" onclick="window.GQ.closeBossResult()">TAMAM</button>
                 </div>
             </div>
 
             <div id="mkt-modal" class="modal-ov" style="display:none">
                 <div class="mbox">
-                    <button class="m-close" onclick="GQ.closeMkt()">✕</button>
+                    <button class="m-close" onclick="window.GQ.closeMkt()">✕</button>
                     <h2>🏪 QUANTUM MARKET</h2>
                     <div style="font-size:9px;color:var(--dm);margin-bottom:7px;">💠 GQT: <b id="m-gqt" style="color:var(--cy)">0</b> &nbsp; 💰: <b id="m-gold" style="color:var(--gd)">0</b></div>
                     <div id="mkt-content"></div>
@@ -1532,21 +1535,21 @@
                     <p id="sl-desc" style="font-size:9px;color:var(--tx);margin-bottom:4px;"></p>
                     <div class="sltimer" id="sl-timer">0:00</div>
                     <p style="font-size:8px;color:var(--dm);">Hızlandırıcı: <b id="sl-sp" style="color:var(--cy)">0</b> adet</p>
-                    <button class="slbtn mg" onclick="GQ.useSpeed()">⚡ 1 HIZLANDIRICI (-30dk)</button>
-                    <button class="slbtn gr" onclick="GQ.closeSlvl()">KAPAT</button>
+                    <button class="slbtn mg" onclick="window.GQ.useSpeed()">⚡ 1 HIZLANDIRICI (-30dk)</button>
+                    <button class="slbtn gr" onclick="window.GQ.closeSlvl()">KAPAT</button>
                 </div>
             </div>
         </div>
 
         <div id="sidebar">
             <div id="tabbar">
-                <button class="tb on" onclick="GQ.tab(event,'stats')">STAT</button>
-                <button class="tb" onclick="GQ.tab(event,'inv')">GEMİ</button>
-                <button class="tb" onclick="GQ.tab(event,'quest')">GÖREV</button>
-                <button class="tb" onclick="GQ.tab(event,'box')">KUTU</button>
-                <button class="tb" onclick="GQ.tab(event,'ability')">YETENEKLEr</button>
-                <button class="tb" onclick="GQ.tab(event,'passive')">PASİF</button>
-                <button class="tb" onclick="GQ.tab(event,'boss')">BOSS</button>
+                <button class="tb on" onclick="window.GQ.tab(event,'stats')">STAT</button>
+                <button class="tb" onclick="window.GQ.tab(event,'inv')">GEMİ</button>
+                <button class="tb" onclick="window.GQ.tab(event,'quest')">GÖREV</button>
+                <button class="tb" onclick="window.GQ.tab(event,'box')">KUTU</button>
+                <button class="tb" onclick="window.GQ.tab(event,'ability')">YETENEKLER</button>
+                <button class="tb" onclick="window.GQ.tab(event,'passive')">PASİF</button>
+                <button class="tb" onclick="window.GQ.tab(event,'boss')">BOSS</button>
             </div>
             
             <div class="tpanel on" id="panel-stats">
@@ -1576,13 +1579,13 @@
                 <div class="sl">Gemi Ekipmanları</div>
                 <div id="ship-prev">
                     <canvas id="sc" width="288" height="130"></canvas>
-                    <div class="eqs" id="eq-weapon" style="left:202px;top:50px" onclick="GQ.unequip('weapon')" onmouseenter="GQ.eqTip(event,'weapon')" onmouseleave="GQ.itTipH()" title="Silah">🔫</div>
-                    <div class="eqs" id="eq-hull" style="left:125px;top:46px" onclick="GQ.unequip('hull')" onmouseenter="GQ.eqTip(event,'hull')" onmouseleave="GQ.itTipH()" title="Gövde">🛡️</div>
-                    <div class="eqs" id="eq-engine" style="left:36px;top:50px" onclick="GQ.unequip('engine')" onmouseenter="GQ.eqTip(event,'engine')" onmouseleave="GQ.itTipH()" title="Motor">⚙️</div>
-                    <div class="eqs" id="eq-shield" style="left:125px;top:8px" onclick="GQ.unequip('shield')" onmouseenter="GQ.eqTip(event,'shield')" onmouseleave="GQ.itTipH()" title="Kalkan">🔵</div>
-                    <div class="eqs" id="eq-reactor" style="left:125px;top:100px" onclick="GQ.unequip('reactor')" onmouseenter="GQ.eqTip(event,'reactor')" onmouseleave="GQ.itTipH()" title="Reaktör">⚡</div>
-                    <div class="eqs" id="eq-sensor" style="left:167px;top:8px" onclick="GQ.unequip('sensor')" onmouseenter="GQ.eqTip(event,'sensor')" onmouseleave="GQ.itTipH()" title="Sensör">📡</div>
-                    <div class="eqs" id="eq-armor" style="left:78px;top:8px" onclick="GQ.unequip('armor')" onmouseenter="GQ.eqTip(event,'armor')" onmouseleave="GQ.itTipH()" title="Zırh">🔩</div>
+                    <div class="eqs" id="eq-weapon" style="left:202px;top:50px" onclick="window.GQ.unequip('weapon')" onmouseenter="window.GQ.eqTip(event,'weapon')" onmouseleave="window.GQ.itTipH()" title="Silah">🔫</div>
+                    <div class="eqs" id="eq-hull" style="left:125px;top:46px" onclick="window.GQ.unequip('hull')" onmouseenter="window.GQ.eqTip(event,'hull')" onmouseleave="window.GQ.itTipH()" title="Gövde">🛡️</div>
+                    <div class="eqs" id="eq-engine" style="left:36px;top:50px" onclick="window.GQ.unequip('engine')" onmouseenter="window.GQ.eqTip(event,'engine')" onmouseleave="window.GQ.itTipH()" title="Motor">⚙️</div>
+                    <div class="eqs" id="eq-shield" style="left:125px;top:8px" onclick="window.GQ.unequip('shield')" onmouseenter="window.GQ.eqTip(event,'shield')" onmouseleave="window.GQ.itTipH()" title="Kalkan">🔵</div>
+                    <div class="eqs" id="eq-reactor" style="left:125px;top:100px" onclick="window.GQ.unequip('reactor')" onmouseenter="window.GQ.eqTip(event,'reactor')" onmouseleave="window.GQ.itTipH()" title="Reaktör">⚡</div>
+                    <div class="eqs" id="eq-sensor" style="left:167px;top:8px" onclick="window.GQ.unequip('sensor')" onmouseenter="window.GQ.eqTip(event,'sensor')" onmouseleave="window.GQ.itTipH()" title="Sensör">📡</div>
+                    <div class="eqs" id="eq-armor" style="left:78px;top:8px" onclick="window.GQ.unequip('armor')" onmouseenter="window.GQ.eqTip(event,'armor')" onmouseleave="window.GQ.itTipH()" title="Zırh">🔩</div>
                 </div>
                 <div class="sl">Çanta (20 Slot)</div>
                 <div id="inv-grid"></div>
@@ -1636,7 +1639,7 @@
 </div>
 
 <script>
-const GQ = (() => {
+window.GQ = (() => {
     'use strict';
 
     // UTILS
@@ -1722,6 +1725,7 @@ const GQ = (() => {
     };
 
     function tintForPart(part, equipped) {
+        if (!equipped) return null;
         const map = { hull: 'hull', cannon: 'weapon', engine: 'engine', shield: 'shield', sensor: 'sensor', armor: 'armor', reactor: 'reactor' };
         const slotKey = Object.keys(map).find(k => map[k] === part) || null;
         if (!slotKey) return null;
@@ -1853,7 +1857,7 @@ const GQ = (() => {
         ctx.fill();
 
         // 8. Kalkan Aurası (Açıkken)
-        const shIt = equipped.shield;
+        const shIt = equipped ? equipped.shield : null;
         if (shIt) {
             const shCol = RCOL[shIt.rar];
             ctx.beginPath();
@@ -1895,6 +1899,7 @@ const GQ = (() => {
     ];
 
     function highestRi(equipped) {
+        if (!equipped) return -1;
         const ri = Object.values(equipped).filter(Boolean).map(i => RARS.indexOf(i.rar));
         return ri.length ? Math.max(...ri) : -1;
     }
@@ -2042,13 +2047,26 @@ const GQ = (() => {
 
     function mg() {
         const d = defState();
+        // Temel obje transferleri (Hata riskine karşı derin güvenlik kontrolü)
         ['equipped', 'bag', 'passive', 'marketDaily', 'abilities', 'abilityBonuses', 'autoSettings', 'bossBeaten'].forEach(k => {
             if (!gs[k]) gs[k] = d[k];
         });
-        if (!gs.boxes) gs.boxes = 10;
-        if (!gs.glitchSkills) gs.glitchSkills = [];
-        if (!gs.skillCDs) gs.skillCDs = [0, 0, 0, 0];
+        
+        // KRİTİK GÜVENLİK YAMASI: Eski save'lerde dizilerin bozulmuş/nesneye dönüşmüş olma ihtimalini sıfırlıyoruz!
+        if (!Array.isArray(gs.bag)) gs.bag = d.bag;
+        if (!Array.isArray(gs.abilities)) gs.abilities = [];
+        if (!Array.isArray(gs.glitchSkills)) gs.glitchSkills = [];
+        if (!Array.isArray(gs.bossBeaten)) gs.bossBeaten = [];
+        if (!Array.isArray(gs.skillCDs)) gs.skillCDs = [0, 0, 0, 0];
+        if (typeof gs.passive !== 'object') gs.passive = d.passive;
+        if (typeof gs.equipped !== 'object') gs.equipped = d.equipped;
+        if (typeof gs.stats !== 'object') gs.stats = d.stats;
+        if (typeof gs.autoSettings !== 'object') gs.autoSettings = d.autoSettings;
+        if (typeof gs.abilityBonuses !== 'object') gs.abilityBonuses = d.abilityBonuses;
+
+        if (gs.boxes === undefined || gs.boxes === null) gs.boxes = 10;
         if (!gs.subWave) gs.subWave = 1;
+        if (!gs.wave) gs.wave = 1;
     }
 
     function checkDaily() {
@@ -2063,6 +2081,7 @@ const GQ = (() => {
 
     function calcIdle() {
         const now = Date.now();
+        if (!gs.lastOnline) return null;
         const away = Math.min((now - gs.lastOnline) / 1000, 3600);
         if (away < 30) return null;
         const g = Math.floor(away * .2);
@@ -2082,28 +2101,33 @@ const GQ = (() => {
         let maxHp = gs.maxHp;
         let maxGqt = gs.maxGqtE;
 
-        PASSIVE.forEach(br => {
-            br.nodes.forEach((nd, ni) => {
-                const lvl = (gs.passive[br.id] || [])[ni] || 0;
-                if (!lvl) return;
-                const v = nd.base + nd.per * (lvl - 1);
-                if (nd.sk === 'atk') atk += v;
-                if (nd.sk === 'def') def += v;
-                if (nd.sk === 'spd') spd += v;
-                if (nd.sk === 'crit') crit += v;
-                if (nd.sk === 'hp') maxHp += v;
+        if (Array.isArray(PASSIVE)) {
+            PASSIVE.forEach(br => {
+                if (!br || !br.nodes) return;
+                br.nodes.forEach((nd, ni) => {
+                    const lvl = (gs.passive[br.id] || [])[ni] || 0;
+                    if (!lvl) return;
+                    const v = nd.base + nd.per * (lvl - 1);
+                    if (nd.sk === 'atk') atk += v;
+                    if (nd.sk === 'def') def += v;
+                    if (nd.sk === 'spd') spd += v;
+                    if (nd.sk === 'crit') crit += v;
+                    if (nd.sk === 'hp') maxHp += v;
+                });
             });
-        });
+        }
 
-        Object.values(gs.equipped).forEach(it => {
-            if (!it) return;
-            if (it.sk === 'atk') atk += it.sv;
-            if (it.sk === 'def' || it.sk === 'def2') def += it.sv;
-            if (it.sk === 'spd') spd += it.sv;
-            if (it.sk === 'crit') crit += it.sv;
-            if (it.sk === 'hp') maxHp += it.sv;
-            if (it.sk === 'gqt_m') maxGqt += it.sv;
-        });
+        if (gs.equipped) {
+            Object.values(gs.equipped).forEach(it => {
+                if (!it) return;
+                if (it.sk === 'atk') atk += it.sv;
+                if (it.sk === 'def' || it.sk === 'def2') def += it.sv;
+                if (it.sk === 'spd') spd += it.sv;
+                if (it.sk === 'crit') crit += it.sv;
+                if (it.sk === 'hp') maxHp += it.sv;
+                if (it.sk === 'gqt_m') maxGqt += it.sv;
+            });
+        }
 
         if (ab.auto_dmg) atk *= (1 + ab.auto_dmg);
         if (ab.spd_boost) spd *= (1 + ab.spd_boost);
@@ -2623,7 +2647,7 @@ const GQ = (() => {
             <div style="font-size:8px;color:var(--gd)">Ödül: ${rw}</div>
             ${beaten ? '<div style="font-size:8px;color:var(--gr)">YENİLDİ</div>' :
                 locked ? `<div style="font-size:8px;color:var(--dm)">Karakter Lvl ${b.req} gerekli</div>` :
-                `<button class="bcbtn" onclick="GQ.startSpBoss(${b.id})">⚔️ BOSS'A SALDIRI!</button>`}`;
+                `<button class="bcbtn" onclick="window.GQ.startSpBoss(${b.id})">⚔️ BOSS'A SALDIRI!</button>`}`;
             c.appendChild(d);
         });
     }
@@ -2667,4 +2691,255 @@ const GQ = (() => {
 
     function showBossFight() {
         const bf = document.getElementById('boss-fight');
-        bf
+        bf.style.display = 'flex';
+        bossFightCanvas = document.getElementById('boss-fight-canvas');
+        bossFightCanvas.width = bossFightCanvas.offsetWidth || 600;
+        bossFightCanvas.height = bossFightCanvas.offsetHeight || 400;
+        bfCtx = bossFightCanvas.getContext('2d');
+        document.getElementById('bf-name').textContent = '👹 ' + activeBoss.name;
+        document.getElementById('bf-log').innerHTML = '';
+        const cs = cStats();
+        document.getElementById('bf-patk').textContent = fmt(cs.atk);
+        document.getElementById('bf-php').textContent = fmt(bossPlHp);
+        updBossOv();
+        animateBossBg();
+    }
+
+    function animateBossBg() {
+        if (!bfCtx || !activeBoss) return;
+        bossAnim += 0.04;
+        const w = bossFightCanvas.width, h = bossFightCanvas.height;
+        const g = bfCtx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * .7);
+        g.addColorStop(0, '#1a000a');
+        g.addColorStop(.5, '#0a0005');
+        g.addColorStop(1, '#040006');
+        bfCtx.fillStyle = g;
+        bfCtx.fillRect(0, 0, w, h);
+
+        for (let i = 0; i < 60; i++) {
+            const sx = (i * 97 + bossAnim * 10) % w;
+            const sy = (i * 67) % h;
+            const sr = Math.random() < .3 ? 1.5 : .7;
+            bfCtx.beginPath();
+            bfCtx.arc(sx, sy, sr, 0, Math.PI * 2);
+            bfCtx.fillStyle = `rgba(255,150,200,${.3 + Math.sin(bossAnim + i) * .2})`;
+            bfCtx.fill();
+        }
+
+        const bx = w * .65, by = h * .4, bs = 1.2 + Math.sin(bossAnim * .5) * .05;
+        const hpPct = activeBoss.curHp / activeBoss.hp;
+        const bc = `rgba(255,${Math.floor(80 * hpPct)},${Math.floor(50 * hpPct)},0.9)`;
+        
+        bfCtx.save();
+        bfCtx.translate(bx, by);
+        bfCtx.scale(bs, bs);
+        bfCtx.beginPath();
+        bfCtx.ellipse(0, 0, 55, 50, 0, 0, Math.PI * 2);
+        bfCtx.fillStyle = '#1a0008';
+        bfCtx.fill();
+        bfCtx.strokeStyle = bc;
+        bfCtx.lineWidth = 2;
+        bfCtx.stroke();
+
+        [-20, 20].forEach(ex => {
+            bfCtx.beginPath();
+            bfCtx.ellipse(ex, -12, 12, 10, 0, 0, Math.PI * 2);
+            bfCtx.fillStyle = '#000';
+            bfCtx.fill();
+            bfCtx.strokeStyle = bc + 'aa';
+            bfCtx.lineWidth = 1;
+            bfCtx.stroke();
+            bfCtx.beginPath();
+            bfCtx.arc(ex, -12, 5 + Math.sin(bossAnim) * 2, 0, Math.PI * 2);
+            bfCtx.fillStyle = bc;
+            bfCtx.shadowColor = bc;
+            bfCtx.shadowBlur = 10;
+            bfCtx.fill();
+            bfCtx.shadowBlur = 0;
+        });
+
+        for (let t = -3; t <= 3; t++) {
+            bfCtx.beginPath();
+            bfCtx.moveTo(t * 10, 20);
+            bfCtx.lineTo(t * 10 - 5, 38);
+            bfCtx.lineTo(t * 10 + 5, 38);
+            bfCtx.closePath();
+            bfCtx.fillStyle = '#ddd';
+            bfCtx.fill();
+        }
+
+        [70, 85, 100].forEach((r, ri) => {
+            bfCtx.beginPath();
+            bfCtx.arc(0, 0, r + Math.sin(bossAnim + ri) * .5 * 5, 0, Math.PI * 2);
+            bfCtx.strokeStyle = bc.replace('0.9', String(0.15 - ri * .04));
+            bfCtx.lineWidth = 1.5;
+            bfCtx.stroke();
+        });
+        bfCtx.restore();
+
+        bfCtx.save();
+        bfCtx.translate(w * .2, by);
+        drawPixelShip(bfCtx, 0, 0, gs.equipped, bossAnim, .7);
+        bfCtx.restore();
+
+        if (hpPct < .3) {
+            bfCtx.fillStyle = `rgba(255,0,50,${.05 + Math.sin(bossAnim * 8) * .04})`;
+            bfCtx.fillRect(0, 0, w, h);
+        }
+        if (document.getElementById('boss-fight').style.display !== 'none' && activeBoss) {
+            requestAnimationFrame(animateBossBg);
+        }
+    }
+
+    function updBossOv() {
+        if (!activeBoss) return;
+        const p = activeBoss.curHp / activeBoss.hp * 100;
+        document.getElementById('bf-hpf').style.width = Math.max(0, p) + '%';
+        document.getElementById('bf-hptxt').textContent = `${fmt(activeBoss.curHp)} / ${fmt(activeBoss.hp)}`;
+        document.getElementById('bf-php').textContent = fmt(bossPlHp);
+    }
+
+    function bAtk() {
+        if (!activeBoss) return;
+        const cs = cStats();
+        const ic = rnd(0, 100) < cs.crit;
+        let pd = Math.ceil(cs.atk * (ic ? 2 : 1) * rnd(.85, 1.3));
+        if (gs.abilityBonuses?.double_atk) pd *= 2;
+        activeBoss.curHp -= pd;
+        
+        const log = document.getElementById('bf-log');
+        log.innerHTML += `<div style="color:#00f5ff">▶ Sen: <b>${fmt(pd)}</b>${ic ? ' [CRIT!]' : ''}</div>`;
+        
+        const bd = Math.ceil(activeBoss.dmg * rnd(.8, 1.3));
+        bossPlHp -= bd;
+        log.innerHTML += `<div style="color:#ff3355">◀ ${activeBoss.name}: <b>${fmt(bd)}</b></div>`;
+        log.scrollTop = 9999;
+        updBossOv();
+        
+        if (activeBoss.curHp <= 0) { bossDone(); return; }
+        if (bossPlHp <= 0) { bossDefeat(); return; }
+    }
+
+    function bSkill() {
+        if (!activeBoss) return;
+        const cs = cStats();
+        let pd = Math.ceil(cs.atk * 4 * rnd(.9, 1.2));
+        activeBoss.curHp -= pd;
+        const log = document.getElementById('bf-log');
+        log.innerHTML += `<div style="color:#aa44ff">🔮 YETENEK: <b>${fmt(pd)}</b> hasar!</div>`;
+        log.scrollTop = 9999;
+        updBossOv();
+        if (activeBoss.curHp <= 0) { bossDone(); return; }
+    }
+
+    function bRet() {
+        document.getElementById('boss-fight').style.display = 'none';
+        activeBoss = null;
+        paused = false;
+        addLog('🚪 Boss karşılaşmasından geri çekildin.', '#ffd700');
+    }
+
+    function bossDone() {
+        const b = activeBoss;
+        gs.bossBeaten.push(b.id);
+        gs.gold += b.rw.gold;
+        gs.gqt += b.rw.gqt;
+        gs.boxes += b.rw.boxes;
+        document.getElementById('boss-fight').style.display = 'none';
+        activeBoss = null;
+        
+        const rbox = document.getElementById('boss-result');
+        const bbox = document.getElementById('br-box');
+        bbox.className = 'br-box win';
+        document.getElementById('br-title').textContent = '🏆 ZAFER!';
+        document.getElementById('br-txt').textContent = `${b.name} yenildi!\n+${fmt(b.rw.gold)}💰 +${b.rw.gqt}💠 +${b.rw.boxes}📦\nNadirlik: ${RLBL[b.rw.rar]}`;
+        rbox.style.display = 'flex';
+        
+        const loot = mkItem(RARS.indexOf(b.rw.rar) * 2);
+        pendingLoot = loot;
+        renderBossPanel();
+        save();
+    }
+
+    function bossDefeat() {
+        document.getElementById('boss-fight').style.display = 'none';
+        activeBoss = null;
+        paused = false;
+        const rbox = document.getElementById('boss-result');
+        const bbox = document.getElementById('br-box');
+        bbox.className = 'br-box fail';
+        document.getElementById('br-title').textContent = '💀 BOSS KARŞILAŞMASI BAŞARISIZ';
+        document.getElementById('br-txt').textContent = 'Boss seni yendi!\nTekrar denemek için Boss sayfasına geri dön.';
+        rbox.style.display = 'flex';
+    }
+
+    function closeBossResult() {
+        document.getElementById('boss-result').style.display = 'none';
+        if (pendingLoot) {
+            showLootPop(pendingLoot);
+            paused = true;
+        } else {
+            paused = false;
+        }
+    }
+
+    // MARKET FUNCTIONS
+    function openMkt() {
+        renderMkt();
+        document.getElementById('mkt-modal').style.display = 'flex';
+    }
+    
+    function closeMkt() {
+        document.getElementById('mkt-modal').style.display = 'none';
+    }
+
+    function renderMkt() {
+        document.getElementById('m-gqt').textContent = gs.gqt;
+        document.getElementById('m-gold').textContent = fmt(gs.gold);
+        const c = document.getElementById('mkt-content');
+        c.innerHTML = '';
+        
+        const s1 = document.createElement('div');
+        s1.className = 'mcat';
+        s1.innerHTML = '<div class="mcat-t">💠 GQT TOKEN YÜKLEME (Simülasyon)</div>';
+        MKT.filter(m => m.realMoney).forEach(m => {
+            const d = document.createElement('div');
+            d.className = 'mit';
+            d.innerHTML = `<div class="mic">${m.icon}</div><div><div class="min">${m.name}</div><div class="mid">${m.desc}</div>
+            <div class="mibtns"><button class="mb cy" onclick="window.GQ.mktBuy('${m.id}')">💠 YÜKLE</button></div></div>`;
+            s1.appendChild(d);
+        });
+        c.appendChild(s1);
+
+        [{ t: '📦 QUANTUM BOX', ids: ['qb_gqt', 'qb_gold'] }, { t: '💎 PASİF KRİSTAL', ids: ['pc_gqt', 'pc_gold'] }, { t: '⚡ HIZLANDIRICI', ids: ['sp_gqt', 'sp_gold'] }].forEach(cat => {
+            const sec = document.createElement('div');
+            sec.className = 'mcat';
+            sec.innerHTML = `<div class="mcat-t">${cat.t}</div>`;
+            MKT.filter(m => cat.ids.includes(m.id)).forEach(m => {
+                const used = gs.marketDaily[m.id] || 0;
+                const lim = m.gqtLim || m.goldLim;
+                const rem = Math.max(0, lim - used);
+                const d = document.createElement('div');
+                d.className = 'mit';
+                let btns = '';
+                if (m.gqtP > 0) btns += `<button class="mb cy" onclick="window.GQ.mktBuy('${m.id}','gqt')" ${rem <= 0 || gs.gqt < m.gqtP ? 'disabled' : ''}>💠${m.gqtP} GQT</button>`;
+                if (m.goldP > 0) btns += `<button class="mb gd" onclick="window.GQ.mktBuy('${m.id}','gold')" ${rem <= 0 || gs.gold < m.goldP ? 'disabled' : ''}>💰${fmt(m.goldP)}</button>`;
+                d.innerHTML = `<div class="mic">${m.icon}</div><div><div class="min">${m.name}</div><div class="mid">${m.desc}</div>
+                <div class="mibtns">${btns}</div><div class="mlim">Kalan: ${rem}</div></div>`;
+                sec.appendChild(d);
+            });
+            c.appendChild(sec);
+        });
+    }
+
+    function mktBuy(id, cur = 'gqt') {
+        const m = MKT.find(x => x.id === id);
+        if (!m) return;
+        if (m.realMoney) {
+            gs.gqt += m.realAmt;
+            addLog(`💠 +${m.realAmt} GQT yüklendi!`, '#00f5ff');
+            renderMkt();
+            save();
+            return;
+        }
+        const used = gs
