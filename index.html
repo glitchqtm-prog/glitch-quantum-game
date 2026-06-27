@@ -1701,7 +1701,7 @@ const GQ = (() => {
         return Math.round(RBASE[ri] * Math.pow(shipLvl, 1.4) * Math.pow(1.18, stars));
     }
 
-    // PIXEL-ART SHIP DRAW
+    // YENİ UZAY GEMİSİ TASARIMI
     const PART_BASE = {
         body: '#1e2a4a', bodyAcc: '#00f5ff', bodyDark: '#0d1630',
         cockpit: '#00ccff', cockpitGlow: '#aaeeff',
@@ -1721,11 +1721,6 @@ const GQ = (() => {
         glitchanium: { body: '#0a0012', bA: '#cc44ff', ck: '#ff88ff', ckG: '#ffccff', eg: '#9900ff', grd: '#cc44ff' },
     };
 
-    function getSlotRar(slotKey, equipped) {
-        const it = equipped[slotKey];
-        return it ? it.rar : null;
-    }
-
     function tintForPart(part, equipped) {
         const map = { hull: 'hull', cannon: 'weapon', engine: 'engine', shield: 'shield', sensor: 'sensor', armor: 'armor', reactor: 'reactor' };
         const slotKey = Object.keys(map).find(k => map[k] === part) || null;
@@ -1738,276 +1733,141 @@ const GQ = (() => {
         ctx.save();
         ctx.translate(cx, cy);
         ctx.scale(scale, scale);
+        
         const P = PART_BASE;
         const TA = (part, key, fallback) => {
             const t = tintForPart(part, equipped);
             return (t && t[key]) ? t[key] : fallback;
         };
+        
         const bodyCol = TA('hull', 'body', P.body);
         const bodyAcc = TA('hull', 'bA', P.bodyAcc);
-        const gridCol = TA('hull', 'grd', P.grid);
         const ckCol = TA('sensor', 'ck', P.cockpit);
-        const ckGlow = TA('sensor', 'ckG', P.cockpitGlow);
         const engGlow = TA('engine', 'eg', P.engineGlow);
         const canCol = TA('cannon', 'bA', P.cannonAcc);
         const armorCol = TA('armor', 'body', P.wingTop);
+        const reactCol = TA('reactor', 'bA', '#00f5ff');
 
-        const exLen = 28 + Math.sin(pulse) * 8;
-        [-12, 10].forEach((ey, i) => {
-            const ex = ctx.createLinearGradient(-exLen, 0, 0, 0);
-            ex.addColorStop(0, i === 0 ? '#ff442200' : '#ff220000');
-            ex.addColorStop(0.3, engGlow + '88');
-            ex.addColorStop(1, engGlow);
+        // 1. Ateşli Motor Egzozları
+        const exLen = 35 + Math.sin(pulse * 2) * 10;
+        [-10, 10].forEach(ey => {
+            const ex = ctx.createLinearGradient(-15, 0, -15 - exLen, 0);
+            ex.addColorStop(0, engGlow);
+            ex.addColorStop(1, '#ff000000');
             ctx.beginPath();
-            ctx.moveTo(-20, ey - 5);
-            ctx.lineTo(-20 - exLen, ey);
-            ctx.lineTo(-20, ey + 5);
-            ctx.closePath();
+            ctx.moveTo(-15, ey - 4);
+            ctx.lineTo(-15 - exLen, ey);
+            ctx.lineTo(-15, ey + 4);
             ctx.fillStyle = ex;
             ctx.fill();
         });
 
-        const eng1 = TA('engine', 'body', P.engine1);
-        ctx.fillStyle = eng1;
-        ctx.beginPath();
-        ctx.roundRect(-22, -16, 14, 10, 3);
-        ctx.fill();
-        ctx.fillStyle = '#2a1808';
-        ctx.fillRect(-20, -14, 10, 6);
-
-        for (let r = 0; r < 3; r++) {
-            ctx.strokeStyle = '#1a0c04';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.arc(-8 - r * 3, -11, 4, 0, Math.PI * 2);
-            ctx.stroke();
-        }
-        ctx.fillStyle = engGlow + 'cc';
-        ctx.beginPath();
-        ctx.arc(-9, -11, 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = eng1;
-        ctx.beginPath();
-        ctx.roundRect(-22, 6, 14, 10, 3);
-        ctx.fill();
-        ctx.fillStyle = '#2a1808';
-        ctx.fillRect(-20, 8, 10, 6);
-
-        for (let r = 0; r < 3; r++) {
-            ctx.strokeStyle = '#1a0c04';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.arc(-8 - r * 3, 11, 4, 0, Math.PI * 2);
-            ctx.stroke();
-        }
-        ctx.fillStyle = engGlow + 'cc';
-        ctx.beginPath();
-        ctx.arc(-9, 11, 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        const reactCol = TA('reactor', 'bA', '#00f5ff');
-        ctx.fillStyle = '#050d1a';
-        ctx.beginPath();
-        ctx.roundRect(-12, -4, 8, 8, 4);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(-8, 0, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = reactCol;
-        ctx.shadowColor = reactCol;
-        ctx.shadowBlur = 6 + Math.sin(pulse) * 3;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        const bGrad = ctx.createLinearGradient(-18, -18, 22, 18);
-        bGrad.addColorStop(0, bodyCol);
-        bGrad.addColorStop(0.4, TA('hull', 'bA', P.bodyAcc) + '18');
-        bGrad.addColorStop(1, bodyCol);
-        ctx.beginPath();
-        ctx.moveTo(28, 0);
-        ctx.bezierCurveTo(24, -6, 8, -14, -4, -13);
-        ctx.lineTo(-16, -12);
-        ctx.lineTo(-16, 12);
-        ctx.lineTo(-4, 13);
-        ctx.bezierCurveTo(8, 14, 24, 6, 28, 0);
-        ctx.closePath();
-        ctx.fillStyle = bGrad;
-        ctx.fill();
-        ctx.strokeStyle = bodyAcc + '55';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.strokeStyle = gridCol + '44';
-        ctx.lineWidth = 0.5;
-        [-5, 0, 5].forEach(gy => {
-            ctx.beginPath();
-            ctx.moveTo(-14, gy);
-            ctx.lineTo(24, gy);
-            ctx.stroke();
-        });
-        [-8, 0, 8, 16].forEach(gx => {
-            ctx.beginPath();
-            ctx.moveTo(gx, -12 + Math.abs(gx) * 0.3);
-            ctx.lineTo(gx, 12 - Math.abs(gx) * 0.3);
-            ctx.stroke();
-        });
-
-        ctx.strokeStyle = bodyAcc + '88';
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        ctx.moveTo(28, 0);
-        ctx.bezierCurveTo(24, -6, 8, -14, -4, -13);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(28, 0);
-        ctx.bezierCurveTo(24, 6, 8, 14, -4, 13);
-        ctx.stroke();
-
+        // 2. Ana Kanatlar (Sivri ve geriye kıvrık Starfighter stili)
         ctx.fillStyle = armorCol;
-        ctx.strokeStyle = TA('armor', 'bA', bodyAcc) + '55';
-        ctx.lineWidth = 0.6;
+        ctx.strokeStyle = bodyAcc + '88';
+        ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.roundRect(4, -6, 10, 4, 1);
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.roundRect(4, 2, 10, 4, 1);
-        ctx.fill();
-        ctx.stroke();
-
-        const wGrad = ctx.createLinearGradient(0, -14, 0, -28);
-        wGrad.addColorStop(0, armorCol);
-        wGrad.addColorStop(1, armorCol + '88');
-        ctx.beginPath();
-        ctx.moveTo(6, -12);
-        ctx.lineTo(4, -26);
-        ctx.lineTo(-2, -24);
-        ctx.lineTo(-10, -12);
+        ctx.moveTo(-10, 0);
+        ctx.lineTo(-20, -25);
+        ctx.lineTo(5, -25);
+        ctx.lineTo(15, -10);
+        ctx.lineTo(15, 10);
+        ctx.lineTo(5, 25);
+        ctx.lineTo(-20, 25);
         ctx.closePath();
-        ctx.fillStyle = wGrad;
         ctx.fill();
-        ctx.strokeStyle = TA('armor', 'bA', bodyAcc) + '55';
-        ctx.lineWidth = 0.6;
         ctx.stroke();
 
-        ctx.strokeStyle = gridCol + '33';
-        ctx.lineWidth = 0.4;
-        [[4, -14, -1, -13], [2, -18, -2, -17], [0, -22, -2, -21]].forEach(([x1, y1, x2, y2]) => {
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-        });
-
+        // 3. İç Kanat Detayları ve Zırh Katmanları
+        ctx.fillStyle = P.bodyDark;
         ctx.beginPath();
-        ctx.moveTo(6, 12);
-        ctx.lineTo(4, 26);
-        ctx.lineTo(-2, 24);
-        ctx.lineTo(-10, 12);
+        ctx.moveTo(-5, 0);
+        ctx.lineTo(-12, -18);
+        ctx.lineTo(8, -18);
+        ctx.lineTo(18, -5);
+        ctx.lineTo(18, 5);
+        ctx.lineTo(8, 18);
+        ctx.lineTo(-12, 18);
         ctx.closePath();
-        ctx.fillStyle = wGrad;
-        ctx.fill();
-        ctx.strokeStyle = TA('armor', 'bA', bodyAcc) + '55';
-        ctx.lineWidth = 0.6;
-        ctx.stroke();
-        [[4, 14, -1, 13], [2, 18, -2, 17], [0, 22, -2, 21]].forEach(([x1, y1, x2, y2]) => {
-            ctx.beginPath();
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
-        });
-
-        ctx.strokeStyle = gridCol + '66';
-        ctx.lineWidth = 0.8;
-        for (let a = 0; a < 6; a++) {
-            const ang = (a / 6) * Math.PI * 2;
-            ctx.beginPath();
-            ctx.moveTo(6, 0);
-            ctx.lineTo(6 + Math.cos(ang) * 8, Math.sin(ang) * 6);
-            ctx.stroke();
-        }
-
-        const dGrad = ctx.createRadialGradient(6, -1, 1, 6, -1, 8);
-        dGrad.addColorStop(0, ckGlow);
-        dGrad.addColorStop(0.5, ckCol + 'cc');
-        dGrad.addColorStop(1, ckCol + '44');
-        ctx.beginPath();
-        ctx.ellipse(6, -0.5, 8.5, 6, 0, 0, Math.PI * 2);
-        ctx.fillStyle = dGrad;
-        ctx.shadowColor = ckCol;
-        ctx.shadowBlur = 8 + Math.sin(pulse) * 4;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        ctx.strokeStyle = ckCol + 'aa';
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        ctx.ellipse(6, -0.5, 8.5, 6, 0, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.ellipse(4, -2, 4, 2, -.4, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(220,250,255,0.5)';
-        ctx.fill();
-
-        ctx.fillStyle = '#0a1828';
-        ctx.strokeStyle = gridCol + '44';
-        ctx.lineWidth = 0.6;
-        ctx.beginPath();
-        ctx.roundRect(8, -15, 12, 4, 2);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = canCol + '88';
+        ctx.fillStyle = bodyAcc + '33';
         ctx.beginPath();
-        ctx.rect(14, -14, 10, 2);
-        ctx.fill();
-        ctx.fillStyle = canCol + '66';
+        ctx.moveTo(-15, -22); ctx.lineTo(2, -22); ctx.lineTo(10, -10); ctx.lineTo(-10, -10); ctx.fill();
         ctx.beginPath();
-        ctx.rect(10, -9, 8, 1.5);
-        ctx.fill();
+        ctx.moveTo(-15, 22); ctx.lineTo(2, 22); ctx.lineTo(10, 10); ctx.lineTo(-10, 10); ctx.fill();
 
-        ctx.beginPath();
-        ctx.arc(24, -13, 2, 0, Math.PI * 2);
+        // 4. Çift Kanat Topları (Blasters)
+        ctx.fillStyle = '#111';
+        ctx.fillRect(0, -28, 20, 4);
+        ctx.fillRect(0, 24, 20, 4);
         ctx.fillStyle = canCol;
+        ctx.fillRect(15, -29, 10, 6);
+        ctx.fillRect(15, 23, 10, 6);
+        
+        ctx.shadowBlur = 8;
         ctx.shadowColor = canCol;
-        ctx.shadowBlur = 5 + Math.sin(pulse) * 2;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(20, -28, 6, 4);
+        ctx.fillRect(20, 24, 6, 4);
+        ctx.shadowBlur = 0;
+
+        // 5. Ana Gövde (Mızrak Ucu / Dart stili)
+        const bGrad = ctx.createLinearGradient(-20, 0, 35, 0);
+        bGrad.addColorStop(0, '#111');
+        bGrad.addColorStop(0.5, bodyCol);
+        bGrad.addColorStop(1, bodyAcc);
+        ctx.fillStyle = bGrad;
+        ctx.beginPath();
+        ctx.moveTo(-15, -8);
+        ctx.lineTo(10, -8);
+        ctx.lineTo(35, 0);
+        ctx.lineTo(10, 8);
+        ctx.lineTo(-15, 8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // 6. Ortadaki Reaktör Çekirdeği
+        ctx.beginPath();
+        ctx.arc(-5, 0, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(-5, 0, 3 + Math.sin(pulse) * 1, 0, Math.PI * 2);
+        ctx.fillStyle = reactCol;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = reactCol;
         ctx.fill();
         ctx.shadowBlur = 0;
 
-        ctx.fillStyle = '#0a1828';
+        // 7. Kokpit Camı
+        ctx.fillStyle = ckCol;
         ctx.beginPath();
-        ctx.roundRect(8, 11, 10, 3, 1.5);
+        ctx.ellipse(12, 0, 8, 4, 0, 0, Math.PI * 2);
         ctx.fill();
-        ctx.fillStyle = canCol + '66';
+        ctx.fillStyle = '#ffffffaa';
         ctx.beginPath();
-        ctx.rect(12, 12, 8, 1.5);
+        ctx.ellipse(14, -1, 3, 1.5, 0, 0, Math.PI * 2);
         ctx.fill();
 
+        // 8. Kalkan Aurası (Açıkken)
         const shIt = equipped.shield;
         if (shIt) {
             const shCol = RCOL[shIt.rar];
             ctx.beginPath();
-            ctx.ellipse(4, 0, 36, 26, 0, 0, Math.PI * 2);
-            ctx.strokeStyle = shCol + '44';
-            ctx.lineWidth = 1.5 + Math.sin(pulse);
+            ctx.ellipse(5, 0, 40, 35, 0, 0, Math.PI * 2);
+            ctx.strokeStyle = shCol + '55';
+            ctx.lineWidth = 2 + Math.sin(pulse);
             ctx.stroke();
             ctx.beginPath();
-            ctx.ellipse(4, 0, 36, 26, 0, 0, Math.PI * 2);
+            ctx.ellipse(5, 0, 42, 37, 0, 0, Math.PI * 2);
             ctx.strokeStyle = shCol + '22';
-            ctx.lineWidth = 3 + Math.sin(pulse) * 1.5;
+            ctx.lineWidth = 1;
             ctx.stroke();
         }
 
-        [[22, -2, P.light1], [22, 2, P.light2], [-18, -10, '#aa44ff'], [-18, 10, '#aa44ff']].forEach(([lx, ly, lc]) => {
-            ctx.beginPath();
-            ctx.arc(lx, ly, 1.5, 0, Math.PI * 2);
-            ctx.fillStyle = lc;
-            ctx.shadowColor = lc;
-            ctx.shadowBlur = 4 + Math.sin(pulse) * 2;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        });
         ctx.restore();
     }
 
@@ -2807,1026 +2667,4 @@ const GQ = (() => {
 
     function showBossFight() {
         const bf = document.getElementById('boss-fight');
-        bf.style.display = 'flex';
-        bossFightCanvas = document.getElementById('boss-fight-canvas');
-        bossFightCanvas.width = bossFightCanvas.offsetWidth || 600;
-        bossFightCanvas.height = bossFightCanvas.offsetHeight || 400;
-        bfCtx = bossFightCanvas.getContext('2d');
-        document.getElementById('bf-name').textContent = '👹 ' + activeBoss.name;
-        document.getElementById('bf-log').innerHTML = '';
-        const cs = cStats();
-        document.getElementById('bf-patk').textContent = fmt(cs.atk);
-        document.getElementById('bf-php').textContent = fmt(bossPlHp);
-        updBossOv();
-        animateBossBg();
-    }
-
-    function animateBossBg() {
-        if (!bfCtx || !activeBoss) return;
-        bossAnim += 0.04;
-        const w = bossFightCanvas.width, h = bossFightCanvas.height;
-        const g = bfCtx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * .7);
-        g.addColorStop(0, '#1a000a');
-        g.addColorStop(.5, '#0a0005');
-        g.addColorStop(1, '#040006');
-        bfCtx.fillStyle = g;
-        bfCtx.fillRect(0, 0, w, h);
-
-        for (let i = 0; i < 60; i++) {
-            const sx = (i * 97 + bossAnim * 10) % w;
-            const sy = (i * 67) % h;
-            const sr = Math.random() < .3 ? 1.5 : .7;
-            bfCtx.beginPath();
-            bfCtx.arc(sx, sy, sr, 0, Math.PI * 2);
-            bfCtx.fillStyle = `rgba(255,150,200,${.3 + Math.sin(bossAnim + i) * .2})`;
-            bfCtx.fill();
-        }
-
-        const bx = w * .65, by = h * .4, bs = 1.2 + Math.sin(bossAnim * .5) * .05;
-        const hpPct = activeBoss.curHp / activeBoss.hp;
-        const bc = `rgba(255,${Math.floor(80 * hpPct)},${Math.floor(50 * hpPct)},0.9)`;
-        
-        bfCtx.save();
-        bfCtx.translate(bx, by);
-        bfCtx.scale(bs, bs);
-        bfCtx.beginPath();
-        bfCtx.ellipse(0, 0, 55, 50, 0, 0, Math.PI * 2);
-        bfCtx.fillStyle = '#1a0008';
-        bfCtx.fill();
-        bfCtx.strokeStyle = bc;
-        bfCtx.lineWidth = 2;
-        bfCtx.stroke();
-
-        [-20, 20].forEach(ex => {
-            bfCtx.beginPath();
-            bfCtx.ellipse(ex, -12, 12, 10, 0, 0, Math.PI * 2);
-            bfCtx.fillStyle = '#000';
-            bfCtx.fill();
-            bfCtx.strokeStyle = bc + 'aa';
-            bfCtx.lineWidth = 1;
-            bfCtx.stroke();
-            bfCtx.beginPath();
-            bfCtx.arc(ex, -12, 5 + Math.sin(bossAnim) * 2, 0, Math.PI * 2);
-            bfCtx.fillStyle = bc;
-            bfCtx.shadowColor = bc;
-            bfCtx.shadowBlur = 10;
-            bfCtx.fill();
-            bfCtx.shadowBlur = 0;
-        });
-
-        for (let t = -3; t <= 3; t++) {
-            bfCtx.beginPath();
-            bfCtx.moveTo(t * 10, 20);
-            bfCtx.lineTo(t * 10 - 5, 38);
-            bfCtx.lineTo(t * 10 + 5, 38);
-            bfCtx.closePath();
-            bfCtx.fillStyle = '#ddd';
-            bfCtx.fill();
-        }
-
-        [70, 85, 100].forEach((r, ri) => {
-            bfCtx.beginPath();
-            bfCtx.arc(0, 0, r + Math.sin(bossAnim + ri) * .5 * 5, 0, Math.PI * 2);
-            bfCtx.strokeStyle = bc.replace('0.9', String(0.15 - ri * .04));
-            bfCtx.lineWidth = 1.5;
-            bfCtx.stroke();
-        });
-        bfCtx.restore();
-
-        bfCtx.save();
-        bfCtx.translate(w * .2, by);
-        drawPixelShip(bfCtx, 0, 0, gs.equipped, bossAnim, .7);
-        bfCtx.restore();
-
-        if (hpPct < .3) {
-            bfCtx.fillStyle = `rgba(255,0,50,${.05 + Math.sin(bossAnim * 8) * .04})`;
-            bfCtx.fillRect(0, 0, w, h);
-        }
-        if (document.getElementById('boss-fight').style.display !== 'none' && activeBoss) {
-            requestAnimationFrame(animateBossBg);
-        }
-    }
-
-    function updBossOv() {
-        if (!activeBoss) return;
-        const p = activeBoss.curHp / activeBoss.hp * 100;
-        document.getElementById('bf-hpf').style.width = Math.max(0, p) + '%';
-        document.getElementById('bf-hptxt').textContent = `${fmt(activeBoss.curHp)} / ${fmt(activeBoss.hp)}`;
-        document.getElementById('bf-php').textContent = fmt(bossPlHp);
-    }
-
-    function bAtk() {
-        if (!activeBoss) return;
-        const cs = cStats();
-        const ic = rnd(0, 100) < cs.crit;
-        let pd = Math.ceil(cs.atk * (ic ? 2 : 1) * rnd(.85, 1.3));
-        if (gs.abilityBonuses?.double_atk) pd *= 2;
-        activeBoss.curHp -= pd;
-        
-        const log = document.getElementById('bf-log');
-        log.innerHTML += `<div style="color:#00f5ff">▶ Sen: <b>${fmt(pd)}</b>${ic ? ' [CRIT!]' : ''}</div>`;
-        
-        const bd = Math.ceil(activeBoss.dmg * rnd(.8, 1.3));
-        bossPlHp -= bd;
-        log.innerHTML += `<div style="color:#ff3355">◀ ${activeBoss.name}: <b>${fmt(bd)}</b></div>`;
-        log.scrollTop = 9999;
-        updBossOv();
-        
-        if (activeBoss.curHp <= 0) { bossDone(); return; }
-        if (bossPlHp <= 0) { bossDefeat(); return; }
-    }
-
-    function bSkill() {
-        if (!activeBoss) return;
-        const cs = cStats();
-        let pd = Math.ceil(cs.atk * 4 * rnd(.9, 1.2));
-        activeBoss.curHp -= pd;
-        const log = document.getElementById('bf-log');
-        log.innerHTML += `<div style="color:#aa44ff">🔮 YETENEK: <b>${fmt(pd)}</b> hasar!</div>`;
-        log.scrollTop = 9999;
-        updBossOv();
-        if (activeBoss.curHp <= 0) { bossDone(); return; }
-    }
-
-    function bRet() {
-        document.getElementById('boss-fight').style.display = 'none';
-        activeBoss = null;
-        paused = false;
-        addLog('🚪 Boss karşılaşmasından geri çekildin.', '#ffd700');
-    }
-
-    function bossDone() {
-        const b = activeBoss;
-        gs.bossBeaten.push(b.id);
-        gs.gold += b.rw.gold;
-        gs.gqt += b.rw.gqt;
-        gs.boxes += b.rw.boxes;
-        document.getElementById('boss-fight').style.display = 'none';
-        activeBoss = null;
-        
-        const rbox = document.getElementById('boss-result');
-        const bbox = document.getElementById('br-box');
-        bbox.className = 'br-box win';
-        document.getElementById('br-title').textContent = '🏆 ZAFER!';
-        document.getElementById('br-txt').textContent = `${b.name} yenildi!\n+${fmt(b.rw.gold)}💰 +${b.rw.gqt}💠 +${b.rw.boxes}📦\nNadirlik: ${RLBL[b.rw.rar]}`;
-        rbox.style.display = 'flex';
-        
-        const loot = mkItem(RARS.indexOf(b.rw.rar) * 2);
-        pendingLoot = loot;
-        renderBossPanel();
-        save();
-    }
-
-    function bossDefeat() {
-        document.getElementById('boss-fight').style.display = 'none';
-        activeBoss = null;
-        paused = false;
-        const rbox = document.getElementById('boss-result');
-        const bbox = document.getElementById('br-box');
-        bbox.className = 'br-box fail';
-        document.getElementById('br-title').textContent = '💀 BOSS KARŞILAŞMASI BAŞARISIZ';
-        document.getElementById('br-txt').textContent = 'Boss seni yendi!\nTekrar denemek için Boss sayfasına geri dön.';
-        rbox.style.display = 'flex';
-    }
-
-    function closeBossResult() {
-        document.getElementById('boss-result').style.display = 'none';
-        if (pendingLoot) {
-            showLootPop(pendingLoot);
-            paused = true;
-        } else {
-            paused = false;
-        }
-    }
-
-    // MARKET FUNCTIONS
-    function openMkt() {
-        renderMkt();
-        document.getElementById('mkt-modal').style.display = 'flex';
-    }
-    
-    function closeMkt() {
-        document.getElementById('mkt-modal').style.display = 'none';
-    }
-
-    function renderMkt() {
-        document.getElementById('m-gqt').textContent = gs.gqt;
-        document.getElementById('m-gold').textContent = fmt(gs.gold);
-        const c = document.getElementById('mkt-content');
-        c.innerHTML = '';
-        
-        const s1 = document.createElement('div');
-        s1.className = 'mcat';
-        s1.innerHTML = '<div class="mcat-t">💠 GQT TOKEN YÜKLEME (Simülasyon)</div>';
-        MKT.filter(m => m.realMoney).forEach(m => {
-            const d = document.createElement('div');
-            d.className = 'mit';
-            d.innerHTML = `<div class="mic">${m.icon}</div><div><div class="min">${m.name}</div><div class="mid">${m.desc}</div>
-            <div class="mibtns"><button class="mb cy" onclick="GQ.mktBuy('${m.id}')">💠 YÜKLE</button></div></div>`;
-            s1.appendChild(d);
-        });
-        c.appendChild(s1);
-
-        [{ t: '📦 QUANTUM BOX', ids: ['qb_gqt', 'qb_gold'] }, { t: '💎 PASİF KRİSTAL', ids: ['pc_gqt', 'pc_gold'] }, { t: '⚡ HIZLANDIRICI', ids: ['sp_gqt', 'sp_gold'] }].forEach(cat => {
-            const sec = document.createElement('div');
-            sec.className = 'mcat';
-            sec.innerHTML = `<div class="mcat-t">${cat.t}</div>`;
-            MKT.filter(m => cat.ids.includes(m.id)).forEach(m => {
-                const used = gs.marketDaily[m.id] || 0;
-                const lim = m.gqtLim || m.goldLim;
-                const rem = Math.max(0, lim - used);
-                const d = document.createElement('div');
-                d.className = 'mit';
-                let btns = '';
-                if (m.gqtP > 0) btns += `<button class="mb cy" onclick="GQ.mktBuy('${m.id}','gqt')" ${rem <= 0 || gs.gqt < m.gqtP ? 'disabled' : ''}>💠${m.gqtP} GQT</button>`;
-                if (m.goldP > 0) btns += `<button class="mb gd" onclick="GQ.mktBuy('${m.id}','gold')" ${rem <= 0 || gs.gold < m.goldP ? 'disabled' : ''}>💰${fmt(m.goldP)}</button>`;
-                d.innerHTML = `<div class="mic">${m.icon}</div><div><div class="min">${m.name}</div><div class="mid">${m.desc}</div>
-                <div class="mibtns">${btns}</div><div class="mlim">Kalan: ${rem}</div></div>`;
-                sec.appendChild(d);
-            });
-            c.appendChild(sec);
-        });
-    }
-
-    function mktBuy(id, cur = 'gqt') {
-        const m = MKT.find(x => x.id === id);
-        if (!m) return;
-        if (m.realMoney) {
-            gs.gqt += m.realAmt;
-            addLog(`💠 +${m.realAmt} GQT yüklendi!`, '#00f5ff');
-            renderMkt();
-            save();
-            return;
-        }
-        const used = gs.marketDaily[id] || 0;
-        const lim = cur === 'gqt' ? m.gqtLim : m.goldLim;
-        if (lim > 0 && used >= lim) { addLog('⚠️ Günlük limit!', '#ff3355'); return; }
-        if (cur === 'gqt' && gs.gqt < m.gqtP) { addLog('⚠️ Yetersiz GQT!', '#ff3355'); return; }
-        if (cur === 'gold' && gs.gold < m.goldP) { addLog('⚠️ Yetersiz Gold!', '#ff3355'); return; }
-        
-        if (cur === 'gqt') gs.gqt -= m.gqtP; 
-        else gs.gold -= m.goldP;
-        
-        gs.marketDaily[id] = (gs.marketDaily[id] || 0) + 1;
-        if (m.eff === 'boxes') { gs.boxes += m.amt; addLog(`📦 +${m.amt} Quantum Box alındı!`, '#00f5ff'); }
-        if (m.eff === 'pcryst') { gs.pCrystals += m.amt; addLog(`💎 +${m.amt} Pasif Kristal!`, '#aa44ff'); }
-        if (m.eff === 'speedup') { gs.speedups += m.amt; addLog(`⚡ +${m.amt} Hızlandırıcı!`, '#ffd700'); }
-        renderMkt();
-        save();
-    }
-
-    // SKILLS & ABILITIES INTERACTION
-    function renderAbilityList() {
-        const c = document.getElementById('ability-list');
-        if (!c) return;
-        c.innerHTML = '';
-        const highRi = highestRi(gs.equipped);
-        ABILITIES.forEach(ab => {
-            const owned = gs.abilities.includes(ab.id);
-            const rarReq = RARS.indexOf(ab.rarReq);
-            const locked = gs.charLvl < ab.lvlReq || highRi < rarReq;
-            const col = RCOL[ab.rarReq];
-            const d = document.createElement('div');
-            d.className = 'ab-card';
-            d.style.borderColor = owned ? 'var(--gr)' : locked ? 'var(--brd)' : col;
-            d.innerHTML = `<div class="ab-title" style="color:${owned ? 'var(--gr)' : col}">${ab.icon} ${ab.name} <span style="font-size:8px;color:var(--dm)">[${RLBL[ab.rarReq]}+,Lvl${ab.lvlReq}+]</span></div>
-            <div class="ab-desc">${ab.desc}</div><div class="ab-eff">${ab.eff}</div>
-            ${owned ? '<span style="color:var(--gr);font-size:8px">✅ ÖĞRENILDI</span>' :
-                locked ? `<span style="font-size:8px;color:var(--dm)">🔒 Req: Lvl${ab.lvlReq}, ${RLBL[ab.rarReq]}+ ekipman</span>` :
-                `<button class="ab-btn" onclick="GQ.buyAbility('${ab.id}')" ${gs.gold < ab.cost ? 'disabled' : ''}>💰 ${fmt(ab.cost)} Gold</button>`}`;
-            c.appendChild(d);
-        });
-    }
-
-    function buyAbility(id) {
-        const ab = ABILITIES.find(a => a.id === id);
-        if (!ab || gs.abilities.includes(id)) return;
-        if (gs.gold < ab.cost) { addLog('⚠️ Yetersiz Gold!', '#ff3355'); return; }
-        gs.gold -= ab.cost;
-        gs.abilities.push(id);
-        const bns = gs.abilityBonuses;
-        if (ab.effect === 'auto_dmg') bns.auto_dmg = (bns.auto_dmg || 0) + ab.val;
-        if (ab.effect === 'spd_boost') bns.spd_boost = (bns.spd_boost || 0) + ab.val;
-        if (ab.effect === 'crit_boost') bns.crit_boost = (bns.crit_boost || 0) + ab.val;
-        if (ab.effect === 'atk_pct') bns.atk_pct = (bns.atk_pct || 0) + ab.val;
-        if (ab.effect === 'def_boost') bns.def_boost = (bns.def_boost || 0) + ab.val;
-        if (ab.effect === 'atk_flat') bns.atk_flat = (bns.atk_flat || 0) + ab.val;
-        if (ab.effect === 'spd_flat') bns.spd_flat = (bns.spd_flat || 0) + ab.val;
-        if (ab.effect === 'all_pct') bns.all_pct = (bns.all_pct || 0) + ab.val;
-        if (ab.effect === 'double_atk') bns.double_atk = 1;
-        if (ab.effect === 'godmode') bns.godmode = 1;
-        addLog(`⭐ ${ab.name} öğrenildi!`, RCOL[ab.rarReq]);
-        renderAbilityList();
-        save();
-    }
-
-    function renderPassiveTree() {
-        const c = document.getElementById('ptree');
-        if (!c) return;
-        c.innerHTML = '';
-        PASSIVE.forEach(br => {
-            const d = document.createElement('div');
-            d.className = 'pbr';
-            d.innerHTML = `<div class="pbrt">${br.icon} ${br.name}</div>`;
-            br.nodes.forEach((nd, ni) => {
-                const lvl = (gs.passive[br.id] || [])[ni] || 0;
-                const maxL = nd.cc.length;
-                const nc = lvl < maxL ? nd.cc[lvl] : null;
-                const curV = (lvl > 0 ? (nd.base + nd.per * (lvl - 1)).toFixed(nd.per < 1 ? 2 : 0) : 0);
-                const nd2 = document.createElement('div');
-                nd2.className = 'pbn';
-                nd2.innerHTML = `<span style="font-size:12px">${nd.sk === 'crit' ? '🎯' : nd.sk === 'spd' ? '💨' : '⭐'}</span>
-                <div style="flex:1"><div>${nd.nm} <span style="color:var(--dm)">[${lvl}/${maxL}]</span></div>
-                <div style="color:var(--cy);font-size:8px">${lvl > 0 ? '+' + curV : 'Kilitli'}</div>
-                ${nc !== null ? `<div style="color:var(--dm);font-size:8px">${nc} 💎</div>` : '<div style="color:var(--gr);font-size:8px">MAX</div>'}
-                </div>${nc !== null && gs.pCrystals >= nc ? `<button class="pbb" onclick="GQ.upPassive('${br.id}',${ni})">YÜK</button>` : `<button class="pbb" disabled>${gs.pCrystals}/${nc || 'MAX'}</button>`}`;
-                d.appendChild(nd2);
-            });
-            c.appendChild(d);
-        });
-    }
-
-    function upPassive(brid, ni) {
-        const br = PASSIVE.find(b => b.id === brid);
-        if (!br) return;
-        const nd = br.nodes[ni];
-        if (!gs.passive[brid]) gs.passive[brid] = [0, 0];
-        const lvl = gs.passive[brid][ni] || 0;
-        if (lvl >= nd.cc.length) return;
-        const cost = nd.cc[lvl];
-        if (gs.pCrystals < cost) { addLog('⚠️ Kristal yetersiz!', '#ff3355'); return; }
-        gs.pCrystals -= cost;
-        gs.passive[brid][ni] = lvl + 1;
-        addLog(`✨ ${nd.nm} Lvl ${lvl + 1}!`, '#aa44ff');
-        renderPassiveTree();
-        save();
-    }
-
-    function openSlvl() {
-        if (!gs.upgrading) return;
-        const left = Math.max(0, (gs.upgradeEnd - Date.now()) / 1000);
-        document.getElementById('sl-desc').textContent = `Gemi Lvl ${gs.shipLvl} → ${gs.shipLvl + 1}`;
-        document.getElementById('sl-timer').textContent = fmtDur(left);
-        document.getElementById('sl-sp').textContent = gs.speedups;
-        document.getElementById('slvl-modal').style.display = 'flex';
-    }
-
-    function closeSlvl() { document.getElementById('slvl-modal').style.display = 'none'; }
-
-    function renderShipUpgZone() {
-        const z = document.getElementById('ship-upg-zone');
-        if (!z) return;
-        const cost = essCost(gs.shipLvl);
-        const ts = fmtDur(upTime(gs.shipLvl));
-        if (gs.upgrading) {
-            const left = Math.max(0, (gs.upgradeEnd - Date.now()) / 1000);
-            z.innerHTML = `<div style="font-size:9px;color:var(--cy);margin-bottom:4px;">⚙️ Yükseltiliyor... ${fmtDur(left)} kaldı</div>
-            <button onclick="GQ.openSlvl()" style="background:var(--mg);border:none;color:#fff;font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;cursor:pointer;border-radius:4px;">⏳ Detay / Hızlandır</button>`;
-        } else {
-            z.innerHTML = `<div style="font-size:8px;color:var(--dm)">Lvl ${gs.shipLvl}→${gs.shipLvl + 1}: ${fmt(cost)} Öz · ${ts}</div>
-            <button onclick="GQ.tryShipUpgrade()" style="background:var(--cy);border:none;color:#020810;font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;cursor:pointer;border-radius:4px;margin-top:4px;">🚀 GELİŞTİR</button>`;
-        }
-    }
-
-    function renderSkillTree() {
-        const z = document.getElementById('skill-tree-zone');
-        if (!z) return;
-        z.innerHTML = '';
-        SKILLS.forEach((sk, i) => {
-            const isG = gs.glitchSkills.includes(i);
-            const can = gs.charLvl >= 10 && !isG;
-            const d = document.createElement('div');
-            d.style.cssText = `display:flex;align-items:center;gap:4px;font-size:9px;padding:3px;background:#04080f;border:1px solid ${isG ? 'var(--mg)' : 'var(--brd)'};border-radius:3px;margin-bottom:2px;`;
-            d.innerHTML = `<span style="font-size:13px">${sk.icon}</span><span style="flex:1;color:${isG ? 'var(--mg)' : 'var(--tx)'}">${sk.name}${isG ? ' [G]' : ''}</span>
-            ${can ? `<button onclick="GQ.upgSkill(${i})" style="background:var(--mg);border:none;color:#fff;font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 5px;cursor:pointer;border-radius:3px;">GLITCH</button>` : ''}`;
-            z.appendChild(d);
-        });
-    }
-
-    function upgSkill(i) {
-        if (gs.charLvl < 10) { addLog('Karakter Lvl 10 gerekli!', '#ff3355'); return; }
-        if (gs.glitchSkills.includes(i)) return;
-        gs.glitchSkills.push(i);
-        document.getElementById('sk' + i).classList.add('G');
-        addLog(`🌀 ${SKILLS[i].name} GLITCH!`, '#ff00aa');
-        renderSkillTree();
-    }
-
-    // INVENTORY RENDERS
-    function renderInv() {
-        Object.keys(SLOTS).forEach(sk => {
-            const el = document.getElementById('eq-' + sk);
-            if (!el) return;
-            const it = gs.equipped[sk];
-            el.innerHTML = SLOTS[sk].icon;
-            if (it) {
-                const d = document.createElement('div');
-                d.className = 'erd r-' + it.rar;
-                el.appendChild(d);
-                const s = document.createElement('div');
-                s.className = 'estars';
-                s.textContent = '★'.repeat(Math.min(it.stars, 5));
-                el.appendChild(s);
-                el.style.borderColor = RCOL[it.rar];
-            } else {
-                el.style.borderColor = '';
-            }
-        });
-        
-        const grid = document.getElementById('inv-grid');
-        grid.innerHTML = '';
-        for (let i = 0; i < 20; i++) {
-            const it = gs.bag[i];
-            const sl = document.createElement('div');
-            sl.className = 'isl' + (it ? '' : ' empty');
-            sl.textContent = it ? SLOTS[it.slotKey].icon : '·';
-            if (it) {
-                const d = document.createElement('div');
-                d.className = 'rdot r-' + it.rar;
-                sl.appendChild(d);
-                const s = document.createElement('div');
-                s.className = 'istars';
-                s.textContent = '★'.repeat(Math.min(it.stars, 5));
-                sl.appendChild(s);
-                sl.addEventListener('click', () => equipFromBag(i));
-                sl.addEventListener('mouseenter', ev => showItTip(ev, it));
-                sl.addEventListener('mouseleave', itTipH);
-            }
-            grid.appendChild(sl);
-        }
-    }
-
-    function renderShipPrev() {
-        if (!sctx) return;
-        sctx.clearRect(0, 0, 288, 130);
-        sctx.fillStyle = '#02050e';
-        sctx.fillRect(0, 0, 288, 130);
-        sctx.strokeStyle = '#080f20';
-        sctx.lineWidth = .5;
-        for (let x = 0; x < 288; x += 16) {
-            sctx.beginPath(); sctx.moveTo(x, 0); sctx.lineTo(x, 130); sctx.stroke();
-        }
-        for (let y = 0; y < 130; y += 16) {
-            sctx.beginPath(); sctx.moveTo(0, y); sctx.lineTo(288, y); sctx.stroke();
-        }
-        drawPixelShip(sctx, 144, 68, gs.equipped, shipPulse, 1.15);
-        
-        Object.keys(SLOTS).forEach(sk => {
-            const el = document.getElementById('eq-' + sk);
-            if (!el) return;
-            const it = gs.equipped[sk];
-            el.innerHTML = SLOTS[sk].icon;
-            if (it) {
-                const d = document.createElement('div');
-                d.className = 'erd r-' + it.rar;
-                el.appendChild(d);
-                const s = document.createElement('div');
-                s.className = 'estars';
-                s.textContent = '★'.repeat(Math.min(it.stars, 5));
-                el.appendChild(s);
-                el.style.borderColor = RCOL[it.rar];
-            } else {
-                el.style.borderColor = '';
-            }
-        });
-    }
-
-    function renderQuests() {
-        const list = document.getElementById('quest-list');
-        if (!list) return;
-        list.innerHTML = '';
-        const QUESTS = [
-            { title: 'Günlük Giriş', desc: 'Bugün giriş yap', goal: 1, progress: 1, reward: 'box', rewardAmt: 100, done: true },
-            { title: '50 Box Aç', desc: '50 Quantum Box aç', goal: 50, progress: Math.min(50, gs.kills > 0 ? 50 : 0), reward: 'box', rewardAmt: 10, done: gs.kills >= 50 },
-            { title: '100 Düşman Öldür', desc: '100 düşman yok et', goal: 100, progress: Math.min(100, gs.kills), reward: 'gold', rewardAmt: 500, done: gs.kills >= 100 },
-            { title: 'Wave 5-1\'e ulaş', desc: '5. Wave\'e ulaş', goal: 5, progress: Math.min(5, gs.wave), reward: 'gqt', rewardAmt: 20, done: gs.wave >= 5 },
-        ];
-        QUESTS.forEach(q => {
-            const pct = Math.min(100, (q.progress / q.goal) * 100);
-            const d = document.createElement('div');
-            d.className = 'qi';
-            d.style.opacity = q.done ? .5 : 1;
-            d.style.borderColor = q.done ? 'var(--gr)' : 'var(--brd)';
-            d.innerHTML = `<div class="qt">${q.done ? '✅ ' : ''}${q.title}</div>
-            <div class="qp">${q.desc} (${q.progress}/${q.goal})</div>
-            <div class="qbg"><div class="qf" style="width:${pct}%"></div></div>
-            <div class="qr">🎁 ${q.reward === 'box' ? q.rewardAmt + ' Box' : q.reward === 'gold' ? fmt(q.rewardAmt) + ' Gold' : q.rewardAmt + ' GQT'}</div>`;
-            list.appendChild(d);
-        });
-        const di = document.getElementById('daily-info');
-        if (di) di.textContent = `📦 Mevcut: ${gs.boxes} Box`;
-    }
-
-    function renderBoxPanel() {
-        const bl = document.getElementById('box-list');
-        if (!bl) return;
-        bl.innerHTML = '';
-        const d = document.createElement('div');
-        d.className = 'bxi';
-        d.innerHTML = `<div style="font-size:26px">📦</div>
-        <div style="flex:1"><div style="font-size:10px">Quantum Box</div><div style="font-size:8px;color:var(--dm)">${gs.boxes} adet · Her box = 1 dalga</div></div>
-        <button class="bxb" ${gs.boxes <= 0 ? 'disabled' : ''} onclick="GQ.startWithBox()">BAŞLAT</button>`;
-        bl.appendChild(d);
-    }
-
-    // TOOLTIPS
-    function showItTip(ev, item) {
-        const c = RCOL[item.rar];
-        const sl = { atk: 'ATK', def: 'DEF', def2: 'DEF', spd: 'Hız', crit: 'Crit%', hp: 'MaxHP', gqt_m: 'MaxGQT' }[item.sk] || item.sk;
-        document.getElementById('it-nm').textContent = item.icon + ' ' + item.name;
-        document.getElementById('it-nm').style.color = c;
-        document.getElementById('it-sb').textContent = RLBL[item.rar] + ' ·' + '★'.repeat(item.stars) + ' · ' + SLOTS[item.slotKey].label;
-        document.getElementById('it-st').innerHTML = `<div>+${fmt(item.sv)} ${sl}</div><div style="color:var(--gd)">Sat: ${fmt(item.sellVal)}💰</div>`;
-        document.getElementById('it-af').textContent = item.afs.join(' · ');
-        const tt = document.getElementById('it-tip');
-        tt.style.display = 'block';
-        const r = ev.target.getBoundingClientRect();
-        tt.style.left = Math.max(0, r.left - 200) + 'px';
-        tt.style.top = r.top + 'px';
-    }
-
-    function itTipH() { document.getElementById('it-tip').style.display = 'none'; }
-
-    function eqTip(ev, sk) {
-        const it = gs.equipped[sk];
-        if (it) showItTip(ev, it);
-        else {
-            document.getElementById('it-nm').textContent = SLOTS[sk].icon + ' ' + SLOTS[sk].label;
-            document.getElementById('it-nm').style.color = 'var(--dm)';
-            document.getElementById('it-sb').textContent = 'Boş slot';
-            document.getElementById('it-st').innerHTML = '';
-            document.getElementById('it-af').textContent = '';
-            const tt = document.getElementById('it-tip');
-            tt.style.display = 'block';
-            const r = ev.target.getBoundingClientRect();
-            tt.style.left = Math.max(0, r.left - 200) + 'px';
-            tt.style.top = r.top + 'px';
-        }
-    }
-
-    function skTip(ev, i) {
-        const sk = SKILLS[i];
-        const isG = gs.glitchSkills.includes(i);
-        const cs = cStats();
-        document.getElementById('stn').textContent = sk.icon + ' ' + sk.name + (isG ? ' [GLITCH]' : '');
-        document.getElementById('stn').style.color = isG ? 'var(--mg)' : 'var(--cy)';
-        document.getElementById('st-cd').textContent = sk.cd + 's';
-        document.getElementById('st-dm').textContent = `${sk.dm} (≈${fmt(cs.atk * sk.dm)})`;
-        document.getElementById('st-gm').textContent = isG ? sk.gm + ' AKTİF' : sk.gm + ' (Lvl10+)';
-        document.getElementById('st-ds').textContent = sk.desc;
-        const tt = document.getElementById('sk-tip');
-        tt.style.display = 'block';
-        tt.style.left = Math.max(0, ev.clientX - 200) + 'px';
-        tt.style.top = Math.max(0, ev.clientY - 160) + 'px';
-    }
-
-    function skTipH() { document.getElementById('sk-tip').style.display = 'none'; }
-
-    // TAB MANAGEMENT
-    function tab(ev, name) {
-        document.querySelectorAll('.tpanel').forEach(p => p.classList.remove('on'));
-        document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
-        document.getElementById('panel-' + name).classList.add('on');
-        ev.target.classList.add('on');
-        if (name === 'inv') { renderInv(); renderShipPrev(); }
-        if (name === 'quest') renderQuests();
-        if (name === 'box') renderBoxPanel();
-        if (name === 'ability') renderAbilityList();
-        if (name === 'passive') renderPassiveTree();
-        if (name === 'boss') renderBossPanel();
-    }
-
-    // LOG PANEL
-    function addLog(msg, col = '#c0d0ff') {
-        const log = document.getElementById('clog');
-        const line = document.createElement('div');
-        line.className = 'cl';
-        line.style.color = col;
-        line.textContent = msg;
-        log.appendChild(line);
-        setTimeout(() => line.remove(), 6000);
-        while (log.children.length > 8) log.removeChild(log.firstChild);
-    }
-
-    // INTERFACE REFRESH
-    function renderUI() {
-        const cs = cStats();
-        document.getElementById('h-lvl').textContent = gs.charLvl;
-        document.getElementById('h-slvl').textContent = gs.shipLvl + (gs.upgrading ? '⚙️' : '');
-        document.getElementById('h-ess').textContent = fmt(gs.essence);
-        document.getElementById('h-gold').textContent = fmt(gs.gold);
-        document.getElementById('h-gqt').textContent = gs.gqt;
-        document.getElementById('h-boxes').textContent = gs.boxes;
-        document.getElementById('h-kills').textContent = gs.kills;
-        document.getElementById('h-wave').textContent = `${gs.wave}-${gs.subWave}`;
-        document.getElementById('wb-wave').textContent = gs.wave;
-        document.getElementById('wb-sub').textContent = gs.subWave;
-        document.getElementById('idle-box-cnt').textContent = gs.boxes;
-
-        const hpPct = gs.hp / cs.maxHp * 100;
-        const gtPct = gs.gqtE / cs.maxGqt * 100;
-        const xpPct = gs.charXp / gs.charXpNext * 100;
-        const esPct = gs.essence / gs.essenceMax * 100;
-
-        document.getElementById('bar-hp').style.width = clamp(hpPct, 0, 100) + '%';
-        document.getElementById('bar-gt').style.width = clamp(gtPct, 0, 100) + '%';
-        document.getElementById('bar-xp').style.width = clamp(xpPct, 0, 100) + '%';
-        document.getElementById('bar-es').style.width = clamp(esPct, 0, 100) + '%';
-
-        document.getElementById('v-hp').textContent = fmt(Math.ceil(gs.hp)) + '/' + fmt(cs.maxHp);
-        document.getElementById('v-gt').textContent = fmt(Math.floor(gs.gqtE)) + '/' + fmt(cs.maxGqt);
-        document.getElementById('v-xp').textContent = fmt(gs.charXp) + '/' + fmt(gs.charXpNext);
-        document.getElementById('v-es').textContent = fmt(gs.essence) + '/' + fmt(gs.essenceMax);
-
-        document.getElementById('s-str').textContent = ' ' + gs.stats.str;
-        document.getElementById('s-agi').textContent = ' ' + gs.stats.agi;
-        document.getElementById('s-int').textContent = ' ' + gs.stats.int;
-        document.getElementById('s-lck').textContent = ' ' + gs.stats.lck;
-        document.getElementById('s-atk').textContent = ' ' + fmt(cs.atk);
-        document.getElementById('s-def').textContent = ' ' + fmt(cs.def);
-        document.getElementById('s-spd').textContent = ' ' + cs.spd.toFixed(2);
-        document.getElementById('s-crit').textContent = ' ' + Math.ceil(cs.crit);
-
-        SKILLS.forEach((sk, i) => {
-            const cd = gs.skillCDs[i];
-            document.getElementById('sk' + i + '-ov').style.display = cd > 0 ? 'flex' : 'none';
-            if (cd > 0) document.getElementById('sk' + i + '-t').textContent = cd.toFixed(1);
-            document.getElementById('sk' + i + '-bar').style.width = (cd > 0 ? cd / sk.cd * 100 : 0) + '%';
-        });
-
-        if (gs.upgrading) {
-            const left = Math.max(0, (gs.upgradeEnd - Date.now()) / 1000);
-            document.getElementById('upg-bar').style.display = 'block';
-            document.getElementById('ub-txt').textContent = `Gemi ${gs.shipLvl}→${gs.shipLvl + 1} | ${fmtDur(left)}`;
-        } else {
-            document.getElementById('upg-bar').style.display = 'none';
-        }
-
-        const sb = document.getElementById('start-btn');
-        if (sb) sb.disabled = gs.boxes <= 0;
-    }
-
-    // GRAPHICS DRAWS
-    function drawBg(dt) {
-        const g = gctx.createLinearGradient(0, 0, 0, CH());
-        g.addColorStop(0, '#010306');
-        g.addColorStop(.6, '#030810');
-        g.addColorStop(1, '#060f1a');
-        gctx.fillStyle = g;
-        gctx.fillRect(0, 0, CW(), CH());
-        
-        bgStars.forEach(s => {
-            s.x -= s.spd * dt * 60;
-            if (s.x < -2) s.x = CW() + 2;
-            gctx.beginPath();
-            gctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            gctx.fillStyle = `rgba(170,190,255,${s.a})`;
-            gctx.fill();
-        });
-        
-        gctx.fillStyle = 'rgba(0,12,28,.055)';
-        for (let y = 0; y < CH(); y += 4) {
-            gctx.fillRect(0, y, CW(), 2);
-        }
-    }
-
-    function drawPlayer() {
-        shipPulse += .05;
-        const x = PX;
-        const y = pyPos;
-        const bestRi = Math.max(...Object.values(gs.equipped).filter(Boolean).map(i => i.ri), -1);
-        const glowCol = bestRi >= 0 ? RCOL[RARS[bestRi]] : '#00f5ff';
-        
-        const gr = gctx.createRadialGradient(x, y, 4, x, y, 48);
-        gr.addColorStop(0, glowCol + '22');
-        gr.addColorStop(1, 'transparent');
-        gctx.beginPath();
-        gctx.ellipse(x, y, 48, 32, 0, 0, Math.PI * 2);
-        gctx.fillStyle = gr;
-        gctx.fill();
-        
-        ctx.save();
-        ctx.translate(x, y);
-        drawPixelShip(gctx, 0, 0, gs.equipped, shipPulse, 1);
-        ctx.restore();
-
-        const bw = 58, bh = 4, hpP = gs.hp / cStats().maxHp;
-        gctx.fillStyle = '#08121e';
-        gctx.fillRect(x - bw / 2, y - 56, bw, bh);
-        gctx.fillStyle = hpP > .5 ? '#00ff88' : hpP > .25 ? '#ffd700' : '#ff3355';
-        gctx.fillRect(x - bw / 2, y - 56, bw * hpP, bh);
-        gctx.strokeStyle = '#182050';
-        gctx.lineWidth = .5;
-        gctx.strokeRect(x - bw / 2, y - 56, bw, bh);
-
-        const gqP = gs.gqtE / gs.maxGqtE;
-        gctx.fillStyle = '#08121e';
-        gctx.fillRect(x - bw / 2, y - 50, bw, 3);
-        gctx.fillStyle = '#00f5ff';
-        gctx.fillRect(x - bw / 2, y - 50, bw * gqP, 3);
-
-        gctx.font = '7px Share Tech Mono,monospace';
-        gctx.fillStyle = '#00f5ff88';
-        gctx.textAlign = 'center';
-        gctx.textBaseline = 'middle';
-        gctx.fillText('GQ-VANGUARD',x, y - 62);
-    }
-
-    function drawEnemies(dt) {
-        const cs = cStats();
-        enemies.forEach(e => {
-            if (e.dead) return;
-            if (e.x > e.stopX) {
-                e.x -= e.spd * dt;
-                if (e.x < e.stopX) e.x = e.stopX;
-            } else if (!paused) {
-                e.shootT -= dt;
-                if (e.shootT <= 0) {
-                    e.shootT = rnd(.9, 1.7);
-                    const dx = PX - e.x;
-                    const dy = pyPos - e.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-                    projs.push({ x: e.x - 14, y: e.y, vx: (dx / dist) * 255, vy: (dy / dist) * 255, dmg: e.dmg, col: e.col, life: 1.6 });
-                }
-            }
-            if (e.hitFlash > 0) e.hitFlash -= dt;
-            
-            const ctx = gctx;
-            const c = e.col;
-            const sc2 = e.isBoss ? 1.8 : 1;
-            ctx.save();
-            ctx.translate(e.x, e.y);
-            ctx.scale(-sc2, sc2);
-            if (e.hitFlash > 0) ctx.filter = 'brightness(5) saturate(0)';
-            
-            const exL = 12 + Math.sin(shipPulse * 1.3) * 4;
-            const exG = ctx.createLinearGradient(-exL, 0, 0, 0);
-            exG.addColorStop(0, c + '00');
-            exG.addColorStop(1, c + 'bb');
-            ctx.beginPath();
-            ctx.moveTo(-10, -3.5);
-            ctx.lineTo(-10 - exL, 0);
-            ctx.lineTo(-10, 3.5);
-            ctx.closePath();
-            ctx.fillStyle = exG;
-            ctx.fill();
-
-            const hg = ctx.createLinearGradient(-10, -6, 13, 6);
-            hg.addColorStop(0, '#18041a');
-            hg.addColorStop(.5, c + '18');
-            hg.addColorStop(1, '#0c0214');
-            ctx.beginPath();
-            ctx.moveTo(13, 0);
-            ctx.bezierCurveTo(9, -4, 2, -7, -8, -5.5);
-            ctx.lineTo(-11, -3);
-            ctx.lineTo(-11, 3);
-            ctx.lineTo(-8, 5.5);
-            ctx.bezierCurveTo(2, 7, 9, 4, 13, 0);
-            ctx.closePath();
-            ctx.fillStyle = hg;
-            ctx.fill();
-            ctx.strokeStyle = c + '88';
-            ctx.lineWidth = .8;
-            ctx.stroke();
-
-            [[3, -5, 0, -13, -5, -11, -7, -5], [3, 5, 0, 13, -5, 11, -7, 5]].forEach(p => {
-                ctx.beginPath();
-                ctx.moveTo(p[0], p[1]);
-                ctx.lineTo(p[2], p[3]);
-                ctx.lineTo(p[4], p[5]);
-                ctx.lineTo(p[6], p[7]);
-                ctx.closePath();
-                ctx.fillStyle = '#1a0520';
-                ctx.fill();
-                ctx.strokeStyle = c + '44';
-                ctx.lineWidth = .5;
-                ctx.stroke();
-            });
-
-            ctx.beginPath();
-            ctx.ellipse(4, 0, 3, 2.5, 0, 0, Math.PI * 2);
-            ctx.fillStyle = c + 'cc';
-            ctx.shadowColor = c;
-            ctx.shadowBlur = 5;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-
-            ctx.fillStyle = '#300830';
-            ctx.strokeStyle = c + 'aa';
-            ctx.lineWidth = .6;
-            ctx.beginPath();
-            ctx.rect(10, -1.5, 6, 3);
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
-
-            const bw = 36 * sc2, bh = 3, hpP = e.hp / e.maxHp;
-            ctx.fillStyle = '#1a0a0a';
-            ctx.fillRect(e.x - bw / 2, e.y - 30 * sc2, bw, bh);
-            ctx.fillStyle = c;
-            ctx.fillRect(e.x - bw / 2, e.y - 30 * sc2, bw * hpP, bh);
-            
-            ctx.font = `${e.isBoss ? 9 : 7}px Share Tech Mono,monospace`;
-            ctx.fillStyle = e.isBoss ? '#ffd700' : '#aa80c0';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(e.name, e.x, e.y + (e.isBoss ? 30 : 22));
-        });
-
-        if (!paused) projs.forEach(p => {
-            p.x += p.vx * dt;
-            p.y += p.vy * dt;
-            p.life -= dt;
-            const dx = p.x - PX;
-            const dy = p.y - pyPos;
-            if (Math.sqrt(dx * dx + dy * dy) < 24) {
-                const dmg = Math.max(1, p.dmg - cStats().def * .2);
-                gs.hp = Math.max(0, gs.hp - dmg);
-                spawnDmgP(PX, pyPos, dmg, false, true);
-                p.life = -1;
-                if (gs.hp <= 0) respawn();
-            }
-            if (p.life < 0) return;
-            gctx.save();
-            gctx.globalAlpha = Math.min(1, p.life * 2);
-            gctx.strokeStyle = p.col;
-            gctx.lineWidth = 2;
-            gctx.shadowColor = p.col;
-            gctx.shadowBlur = 5;
-            gctx.beginPath();
-            gctx.moveTo(p.x, p.y);
-            gctx.lineTo(p.x - p.vx * .04, p.y - p.vy * .04);
-            gctx.stroke();
-            gctx.beginPath();
-            gctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
-            gctx.fillStyle = '#fff';
-            gctx.shadowBlur = 7;
-            gctx.fill();
-            gctx.shadowBlur = 0;
-            gctx.restore();
-        });
-
-        projs = projs.filter(p => p.life > 0 && p.x > -10 && p.x < CW() + 10);
-        pProjs.forEach(p => {
-            p.x += p.vx * dt;
-            p.y += p.vy * dt;
-            p.life -= dt;
-            enemies.forEach(e => {
-                if (e.dead) return;
-                const dx = p.x - e.x;
-                const dy = p.y - e.y;
-                if (Math.sqrt(dx * dx + dy * dy) < 26 && p.life > 0) {
-                    hitEnemy(e, p.dmg, p.isCrit);
-                    p.life = -1;
-                }
-            });
-            if (p.life < 0) return;
-            gctx.save();
-            gctx.globalAlpha = Math.min(1, p.life * 3);
-            gctx.strokeStyle = '#00f5ff';
-            gctx.lineWidth = 2.5;
-            gctx.shadowColor = '#00f5ff';
-            gctx.shadowBlur = 7;
-            gctx.beginPath();
-            gctx.moveTo(p.x, p.y);
-            gctx.lineTo(p.x - p.vx * .05, p.y - p.vy * .05);
-            gctx.stroke();
-            gctx.beginPath();
-            gctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
-            gctx.fillStyle = '#ccfaff';
-            gctx.shadowBlur = 9;
-            gctx.fill();
-            gctx.shadowBlur = 0;
-            gctx.restore();
-        });
-        pProjs = pProjs.filter(p => p.life > 0 && p.x < CW() + 20);
-    }
-
-    function drawParticles(dt) {
-        particles.forEach(p => {
-            p.x += p.vx * dt;
-            p.y += p.vy * dt;
-            p.vy += 55 * dt;
-            p.life -= dt;
-            const al = Math.max(0, p.life / p.ml);
-            gctx.font = p.sz + 'px Share Tech Mono,monospace';
-            gctx.textAlign = 'center';
-            gctx.textBaseline = 'middle';
-            gctx.fillStyle = p.col + Math.floor(al * 255).toString(16).padStart(2, '0');
-            gctx.fillText(p.txt, p.x, p.y);
-        });
-        particles = particles.filter(p => p.life > 0);
-    }
-
-    function drawGlitch() {
-        if (glitchT <= 0) return;
-        glitchT -= .016;
-        gctx.save();
-        for (let i = 0; i < 6; i++) {
-            const sy = rnd(0, CH());
-            const sh = rnd(3, 18);
-            const dx = rnd(-26, 26);
-            gctx.drawImage(gc, 0, sy, CW(), sh, dx, sy, CW(), sh);
-        }
-        gctx.fillStyle = `rgba(255,0,170,${glitchT * .18})`;
-        gctx.fillRect(0, 0, CW(), CH());
-        gctx.restore();
-    }
-
-    // MAIN GAME LOOP
-    function loop(ts) {
-        const dt = Math.min((ts - lastT) / 1000, .05);
-        lastT = ts;
-        if (waveActive && !paused) {
-            autoAtk(dt);
-            autoSkills(dt);
-        }
-        gs.skillCDs = gs.skillCDs.map((cd) => Math.max(0, cd - dt));
-        checkUpgrade();
-        drawBg(dt);
-        if (waveActive || enemies.length > 0) drawEnemies(dt);
-        drawPlayer();
-        drawParticles(dt);
-        if (glitchT > 0) drawGlitch();
-        
-        uiTick -= dt;
-        if (uiTick <= 0) {
-            uiTick = .08;
-            renderUI();
-        }
-        saveTick -= dt;
-        if (saveTick <= 0) {
-            saveTick = 15;
-            gs.lastOnline = Date.now();
-            save();
-        }
-        requestAnimationFrame(loop);
-    }
-
-    // CORE INITIALIZATION
-    function init() {
-        load();
-        checkDaily();
-        const idle = calcIdle();
-        if (idle && (idle.gold > 0 || idle.ess > 0)) {
-            setTimeout(() => addLog(`💤 Çevrimdışı ${fmtDur(idle.secs)}: +${fmt(idle.gold)}💰 +${fmt(idle.ess)}Öz`, '#00ff88'), 600);
-        }
-        gc = document.getElementById('gc');
-        const zone = document.getElementById('czone');
-        gc.width = zone.clientWidth;
-        gc.height = zone.clientHeight;
-        gctx = gc.getContext('2d');
-        sc = document.getElementById('sc');
-        sctx = sc ? sc.getContext('2d') : null;
-        pyPos = gc.height * .50;
-        
-        initBg();
-        renderInv();
-        renderShipPrev();
-        renderQuests();
-        renderBoxPanel();
-        renderSkillTree();
-        renderShipUpgZone();
-        
-        gs.glitchSkills.forEach(i => document.getElementById('sk' + i)?.classList.add('G'));
-        const ao = gs.autoSettings || {};
-        if (document.getElementById('ao-auto')) document.getElementById('ao-auto').checked = !!ao.autoOpen;
-        if (document.getElementById('ao-eq')) document.getElementById('ao-eq').checked = !!ao.autoEquip;
-        if (document.getElementById('ao-sell')) document.getElementById('ao-sell').checked = !!ao.autoSell;
-        if (document.getElementById('ao-sellbag')) document.getElementById('ao-sellbag').checked = !!ao.autoSellBag;
-        document.getElementById('idle-box-cnt').textContent = gs.boxes;
-        
-        window.addEventListener('resize', () => {
-            const z = document.getElementById('czone');
-            gc.width = z.clientWidth;
-            gc.height = z.clientHeight;
-            pyPos = gc.height * .50;
-            initBg();
-        });
-        
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                gs.lastOnline = Date.now();
-                save();
-            }
-        });
-        
-        lastT = performance.now();
-        requestAnimationFrame(loop);
-    }
-
-    return {
-        init, startWithBox, setAuto, useSkill, tab,
-        lootEq, lootSell, lootBag, unequip, eqTip, itTipH, skTip, skTipH,
-        openMkt, closeMkt, mktBuy,
-        upgSkill, upPassive,
-        tryShipUpgrade, openSlvl, closeSlvl, useSpeed,
-        startSpBoss, bAtk, bSkill, bRet, closeBossResult,
-        buyAbility,
-    };
-})();
-
-window.addEventListener('load', () => GQ.init());
-</script>
-</body>
-</html>
+        bf
