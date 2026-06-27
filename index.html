@@ -821,3 +821,198 @@ function respawn(){
 function spawnBurst(i,m){const c=['#00f5ff','#aa44ff','#ff8800','#ff00aa'][i];for(let j=0;j<8;j++){const a=rnd(0,Math.PI*2),s=rnd(60,120);particles.push({x:PX+26,y:pyPos,vx:Math.cos(a)*s,vy:Math.sin(a)*s,txt:'✦',col:c,life:.6,ml:.6,sz:7+m});}}
 function spawnDmgP(x,y,d,ic,ip=false){particles.push({x,y:y-16,vx:rnd(-25,25),vy:rnd(-65,-38),txt:(ic?'CRIT! ':'')+fmt(d),col:ip?'#ff3355':ic?'#ffd700':'#00f5ff',life:1.5,ml:1.5,sz:ic?13:10});}
 function spawnDeathP(x,y,col){for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2;particles.push({x,y,vx:Math.cos(a)*80,vy:Math.sin(a)*80,txt:'✦',col,life:.7,ml:.7,sz:11});}}
+  function spawnDeathP(x,y,col){for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2;particles.push({x,y,vx:Math.cos(a)*80,vy:Math.sin(a)*80,txt:'✦',col,life:.7,ml:.7,sz:11});}}
+
+// --- BUNDAN SONRASINI TAMAMEN AŞAĞIDAKİYLE DEĞİŞTİR ---
+
+function showLootPop(item){
+  document.getElementById('loot-ov').style.display='block';
+  const pop=document.getElementById('loot-pop');pop.style.display='block';pop.classList.add('open');
+  document.getElementById('lp-ic').textContent=item.icon;
+  document.getElementById('lp-rar').textContent=RLBL[item.rar];
+  document.getElementById('lp-rar').style.color=RCOL[item.rar];
+  document.getElementById('lp-nm').textContent=item.name;
+  document.getElementById('lp-st').textContent=`Güç Değeri: ${item.sv}`;
+  document.getElementById('lp-sell-btn').textContent=`💰 SAT (${item.sellVal})`;
+  if(gs.autoSettings.autoSell) startAutoSellTimer();
+}
+
+function lootEq(){
+  clearAutoTimer();
+  const slot=pendingLoot.slotKey;const old=gs.equipped[slot];
+  if(old){gs.gold+=old.sellVal;addLog(`🎒 Eski eşya satıldı: +${fmt(old.sellVal)}💰`)}
+  gs.equipped[slot]=pendingLoot;pendingLoot=null;
+  document.getElementById('loot-ov').style.display='none';
+  document.getElementById('loot-pop').style.display='none';
+  paused=false;renderInv();renderShipPrev();processLoot();
+}
+
+function lootSell(){
+  clearAutoTimer();gs.gold+=pendingLoot.sellVal;
+  addLog(`💰 Satıldı: +${fmt(pendingLoot.sellVal)}💰`);pendingLoot=null;
+  document.getElementById('loot-ov').style.display='none';
+  document.getElementById('loot-pop').style.display='none';
+  paused=false;processLoot();
+}
+
+function lootBag(){
+  clearAutoTimer();
+  const emptyIdx=gs.bag.findIndex(x=>x===null);
+  if(emptyIdx===-1){addLog('⚠️ Çanta dolu! Satmak zorundasın.','#ff3355');return;}
+  gs.bag[emptyIdx]=pendingLoot;pendingLoot=null;
+  document.getElementById('loot-ov').style.display='none';
+  document.getElementById('loot-pop').style.display='none';
+  paused=false;renderInv();processLoot();
+}
+
+function addLog(txt,col='#tx'){
+  const clog=document.getElementById('clog');
+  const d=document.createElement('div');d.className='cl';d.style.color=col;d.textContent=txt;
+  clog.insertBefore(d,clog.firstChild);if(clog.children.length>8)clog.removeChild(clog.lastChild);
+}
+
+function renderInv(){
+  const grid=document.getElementById('inv-grid');grid.innerHTML='';
+  gs.bag.forEach((it,i)=>{
+    const slot=document.createElement('div');slot.className='isl'+(it?'':' empty');
+    if(it){
+      slot.textContent=it.icon;slot.style.borderColor=RCOL[it.rar];
+      slot.onclick=()=>{
+        const eq=gs.equipped[it.slotKey];gs.equipped[it.slotKey]=it;gs.bag[i]=eq;
+        renderInv();renderShipPrev();addLog(`⚔️ Kuşanıldı: ${it.name}`);
+      };
+    }
+    grid.appendChild(slot);
+  });
+  document.getElementById('h-gold').textContent=fmt(gs.gold);
+  document.getElementById('h-gqt').textContent=fmt(gs.gqt);
+  document.getElementById('h-boxes').textContent=fmt(gs.boxes);
+  document.getElementById('h-ess').textContent=fmt(gs.essence);
+}
+
+function renderShipPrev(){
+  if(!sctx)return;
+  sctx.clearRect(0,0,288,130);
+  drawPixelShip(sctx,144,65,gs.equipped,shipPulse,1.8);
+  Object.keys(SLOTS).forEach(sk=>{
+    const el=document.getElementById(`eq-${sk}`);
+    if(el){
+      if(gs.equipped[sk]){el.textContent=gs.equipped[sk].icon;el.style.borderColor=RCOL[gs.equipped[sk].rar];}
+      else{el.textContent=SLOTS[sk].icon;el.style.borderColor='var(--brd)';}
+    }
+  });
+}
+
+function loop(t){
+  if(!lastT)lastT=t;let dt=(t-lastT)/1000;lastT=t;
+  if(dt>0.1)dt=0.1;
+  
+  shipPulse+=dt*5;
+  gctx.clearRect(0,0,CW(),CH());
+  
+  // Arkaplan Yıldızları
+  gctx.fillStyle='#fff';
+  bgStars.forEach(s=>{
+    s.x-=s.spd*dt*20;if(s.x<0)s.x=CW();
+    gctx.globalAlpha=s.a;gctx.fillRect(s.x,s.y,s.r,s.r);
+  });
+  gctx.globalAlpha=1;
+
+  // Oyuncu Gemisi Çizimi
+  pyPos=CH()/2+Math.sin(shipPulse)*15;
+  drawPixelShip(gctx,PX,pyPos,gs.equipped,shipPulse,1.3);
+
+  if(waveActive && !paused){
+    autoAtk(dt);
+    
+    // Düşmanlar
+    enemies.forEach(e=>{
+      if(e.dead)return;
+      if(e.x > e.stopX) e.x -= e.spd*dt;
+      gctx.fillStyle=e.hitFlash>0?'#fff':e.col;
+      if(e.hitFlash>0)e.hitFlash-=dt;
+      gctx.fillRect(e.x-10,e.y-10,20,20);
+    });
+
+    // Oyuncu Mermileri
+    pProjs.forEach((p,pi)=>{
+      p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
+      gctx.fillStyle=p.isCrit?'var(--gd)':'var(--cy)';
+      gctx.fillRect(p.x,p.y,4,2);
+      
+      enemies.forEach(e=>{
+        if(!e.dead && Math.abs(p.x-e.x)<15 && Math.abs(p.y-e.y)<15){
+          hitEnemy(e,p.dmg,p.isCrit);p.life=0;
+        }
+      });
+      if(p.life<=0)pProjs.splice(pi,1);
+    });
+
+    // Partiküller
+    particles.forEach((p,pi)=>{
+      p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
+      gctx.fillStyle=p.col;gctx.font=`${p.sz}px monospace`;
+      gctx.fillText(p.txt,p.x,p.y);
+      if(p.life<=0)particles.splice(pi,1);
+    });
+  }
+
+  // Arayüz Değerlerini Güncelleme
+  uiTick+=dt;
+  if(uiTick>0.2){
+    uiTick=0;
+    const cs=cStats();
+    document.getElementById('h-lvl').textContent=gs.charLvl;
+    document.getElementById('h-slvl').textContent=gs.shipLvl;
+    document.getElementById('v-hp').textContent=`${Math.floor(gs.hp)}/${cs.maxHp}`;
+    document.getElementById('bar-hp').style.width=(gs.hp/cs.maxHp)*100+'%';
+    document.getElementById('s-atk').textContent=Math.floor(cs.atk);
+    document.getElementById('s-def').textContent=Math.floor(cs.def);
+    document.getElementById('s-spd').textContent=cs.spd.toFixed(1);
+    document.getElementById('s-crit').textContent=Math.floor(cs.crit);
+    document.getElementById('idle-cnt').textContent=gs.boxes;
+  }
+
+  requestAnimationFrame(loop);
+}
+
+function init(){
+  gc=document.getElementById('gc');gctx=gc.getContext('2d');
+  sc=document.getElementById('sc');sctx=sc.getContext('2d');
+  
+  const resize=()=>{
+    gc.width=gc.parentElement.clientWidth;
+    gc.height=gc.parentElement.clientHeight;
+    initBg();
+  };
+  window.addEventListener('resize',resize);resize();
+  
+  load();
+  checkDaily();
+  renderInv();
+  renderShipPrev();
+  
+  requestAnimationFrame(loop);
+}
+
+window.addEventListener('DOMContentLoaded', init);
+
+// Kritik Bölge: HTML butonlarının erişebilmesi için fonksiyonları dışarı aktarıyoruz
+return {
+  startWithBox,
+  setAuto,
+  lootEq,
+  lootSell,
+  lootBag,
+  tab:(e,id)=>{
+    document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+    e.target.classList.add('on');
+    document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
+    document.getElementById(`panel-${id}`).classList.add('on');
+  },
+  openMkt:()=>{},closeMkt:()=>{},useSkill:()=>{},skTip:()=>{},skTipH:()=>{},eqTip:()=>{},itTipH:()=>{},unequip:()=>{}
+};
+})();
+</script>
+</body>
+</html>
