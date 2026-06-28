@@ -1,0 +1,471 @@
+<!-- Part 2 (append after index1.html). When concatenated, this completes the application -->
+<script>
+/* -------------------------
+   Part 2 JS: game logic, spawn, combat, UI bindings
+   ------------------------- */
+(function(){
+  'use strict';
+  // grab core
+  const CORE = window._GQCORE;
+  const $ = CORE.$, fmt = CORE.fmt, rnd = CORE.rnd, RCOL = CORE.RCOL, SLOTS = CORE.SLOTS, ENEMY_TYPES = CORE.ENEMY_TYPES;
+  let gs = CORE.gs; // reference to state
+  // canvas refs
+  const canvas = document.getElementById('gc');
+  CORE.setCanvasRefs(canvas);
+  const gctx = canvas.getContext('2d');
+
+  // variables
+  let W = canvas.width, H = canvas.height, lastT = 0, shipPulse = 0;
+  let enemies = CORE.enemies, pProjs = CORE.pProjs, projs = CORE.projs, particles = CORE.particles;
+  let lootPaused = false, pendingLoot = null;
+  let aaTimer = 0;
+
+  // helper: recalc W/H on resize
+  function refreshSize(){ W = canvas.width; H = canvas.height; }
+
+  // spawn one enemy tailored to wave/subwave/ship level
+  function mkEnemy(wave, sub){
+    const tIndex = Math.min(Math.floor((wave-1)/3), ENEMY_TYPES.length-1);
+    const t = ENEMY_TYPES[tIndex];
+    const scale = Math.pow(1.18, wave-1) * (1 + (sub-1)*.06);
+    const hp = Math.ceil(t.baseHp * scale);
+    const dmg = Math.ceil(t.baseDmg * Math.pow(1.12, wave-1));
+    const startX = W + 80 + Math.random()*120;
+    const startY = Math.floor(H*0.2 + Math.random()*H*0.6);
+    return {name:t.name, col:t.col, hp, maxHp:hp, dmg, xp:t.xp, gold:t.gold, x:startX, y:startY, stopX:Math.floor(W*0.65), dead:false, isBoss:false, spd:40 + Math.random()*60};
+  }
+
+  // spawn group for current box (called when a box is opened)
+  function spawnGroupForCurrentBox(){
+    refreshSize();
+    enemies.length = 0;
+    const wave = gs.wave, sub = gs.subwave;
+    if(sub < 10){
+      const count = 3 + Math.min(10, Math.floor(gs.wave*0.4) + sub);
+      for(let i=0;i<count;i++){
+        const e = mkEnemy(wave, sub);
+        e.x += i*18; e.y = Math.max(80, Math.min(H-80, Math.floor(H*0.25 + (i*(H*0.5/count)) + Math.random()*24)));
+        enemies.push(e);
+      }
+      addLog(`🌊 Dalga ${wave}-${sub} geldi: ${count} düşman`);
+    } else {
+      // boss
+      const bossHp = Math.ceil(500 * Math.pow(1.25, wave-1) * Math.pow(1.2, gs.shipLvl-1));
+      const bossDmg = Math.ceil(20 * Math.pow(1.12, wave-1));
+      const boss = {name:`WAVE BOSS ${wave}`, col:'#ffd700', hp:bossHp, maxHp:bossHp, dmg:bossDmg, xp:Math.ceil(200*wave), gold:Math.ceil(100*wave), x:Math.floor(W*0.6), y:Math.floor(H*0.5), stopX:Math.floor(W*0.6), dead:false, isBoss:true, spd:20};
+      enemies.push(boss);
+      addLog(`🔥 BOSS DALGA: ${boss.name}`, '#ffd700');
+    }
+    renderUI();
+  }
+
+  // generate item
+  function generateItem(){
+    const rarRoll = Math.random();
+    const rarList = ['bronze','silver','gold','platinum','diamond'];
+    const rar = rarRoll < 0.6 ? 'bronze' : rarRoll < 0.85 ? 'silver' : rarRoll < 0.95 ? 'gold' : 'platinum';
+    const slots = Object.keys(SLOTS);
+    const slotKey = slots[Math.floor(Math.random()*slots.length)];
+    const sv = Math.round(12 + Math.random()*66);
+    const sellVal = Math.max(5, Math.round((sv/2) + (rarList.indexOf(rar)*12)));
+    return {slotKey, rar, stars: Math.floor(Math.random()*4)+1, sv, name:`${rar.toUpperCase()} ${SLOTS[slotKey].label}`, icon:SLOTS[slotKey].icon, sellVal, statKey:SLOTS[slotKey].statKey};
+  }
+
+  // show loot and pause game
+  function showLoot(item){
+    pendingLoot = item;
+    $('loot-overlay').style.display = 'block';
+    $('loot-pop').style.display = 'block';
+    $('lp-ic').textContent = item.icon;
+    $('lp-rar').textContent = item.rar.toUpperCase();
+    $('lp-rar').style.color = RCOL[item.rar] || '#fff';
+    $('lp-nm').textContent = item.name + ' ' + '★'.repeat(item.stars);
+    $('lp-st').textContent = `+${item.sv} ${item.statKey.toUpperCase()}`;
+    lootPaused = true;
+
+    // handle autos
+    if(gs.autoEquip){
+      const cur = gs.equipped[item.slotKey];
+      const curVal = cur?cur.sv:0;
+      if(item.sv > curVal){ setTimeout(()=> equipLoot(), 350); return; }
+    }
+    if(gs.autoSell){
+      const cur = gs.equipped[item.slotKey];
+      const curVal = cur?cur.sv:0;
+      if(item.sv <= curVal){ setTimeout(()=> sellLoot(), 700); return; }
+    }
+  }
+
+  function closeLoot(){
+    pendingLoot = null;
+    $('loot-pop').style.display = 'none';
+    $('loot-overlay').style.display = 'none';
+    lootPaused = false;
+  }
+
+  function equipLoot(){
+    if(!pendingLoot) return;
+    const it = pendingLoot;
+    const prev = gs.equipped[it.slotKey];
+    if(prev){
+      const idx = gs.bag.findIndex(x=>x===null);
+      if(idx!==-1) gs.bag[idx] = prev;
+    }
+    gs.equipped[it.slotKey] = it;
+    addLog(`✅ ${it.name} kuşanıldı`, RCOL[it.rar]);
+    closeLoot();
+    finishAfterLoot();
+    renderPanels();
+    CORE.save();
+  }
+  function bagLoot(){
+    if(!pendingLoot) return;
+    const idx = gs.bag.findIndex(x=>x===null);
+    if(idx===-1){ addLog('⚠️ Çanta dolu!', '#ff3355'); return; }
+    gs.bag[idx] = pendingLoot;
+    addLog(`🎒 ${pendingLoot.name} çantaya eklendi`, '#cfe');
+    closeLoot(); finishAfterLoot(); renderPanels(); CORE.save();
+  }
+  function sellLoot(){
+    if(!pendingLoot) return;
+    gs.gold += pendingLoot.sellVal;
+    addLog(`💰 Satıldı: +${fmt(pendingLoot.sellVal)} Gold`, '#ffd700');
+    closeLoot(); finishAfterLoot(); renderPanels(); CORE.save();
+  }
+
+  function finishAfterLoot(){
+    gs.activeBoxGroups = Math.max(0, gs.activeBoxGroups - 1);
+    // increment subwave/wave
+    if(gs.subwave < 10) gs.subwave++;
+    else { gs.subwave = 1; gs.wave++; }
+    if(gs.activeBoxGroups > 0){
+      // spawn next queued group
+      spawnGroupForCurrentBox();
+    } else {
+      addLog('⏸️ Grup tamamlandı, sıra bitti', '#88a');
+    }
+    renderUI();
+  }
+
+  // open boxes - each box queues a group
+  function openBox(count=1){
+    if(gs.boxes < 1){ addLog('⚠️ Kutunuz yok', '#ff3355'); return; }
+    const use = Math.min(gs.boxes, count);
+    gs.boxes -= use; gs.activeBoxGroups += use;
+    addLog(`📦 ${use} Box açıldı — ${gs.activeBoxGroups} grup kuyruğunda`, '#00f5ff');
+    if(enemies.length === 0) spawnGroupForCurrentBox();
+    renderPanels(); CORE.save();
+  }
+
+  // small logging helper
+  function addLog(msg, color='#cfe'){
+    const el = document.createElement('div');
+    el.className = 'clog-line'; el.textContent = msg; el.style.color = color;
+    $('clog').appendChild(el);
+    setTimeout(()=>{ try{ $('clog').removeChild(el);}catch(e){} }, 6000);
+  }
+
+  // projectile & combat logic
+  function updateProjectiles(dt){
+    // player projectiles
+    for(let i=pProjs.length-1;i>=0;i--){
+      const p = pProjs[i];
+      p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt;
+      for(let j=0;j<enemies.length;j++){
+        const e = enemies[j]; if(e.dead) continue;
+        const dx = p.x - e.x, dy = p.y - e.y;
+        if(Math.hypot(dx,dy) < 18){
+          e.hp -= p.dmg;
+          spawnFloatingText(e.x, e.y-10, p.dmg, '#fff');
+          pProjs.splice(i,1);
+          if(e.hp <= 0 && !e.dead){
+            e.dead = true;
+            addLog(`💀 ${e.name} yok edildi! +${e.xp||0}XP +${e.gold||0}G`, e.col);
+            gs.gold += e.gold||0;
+          }
+          break;
+        }
+      }
+      if(p && (p.life<=0 || p.x < -50 || p.x>W+50)) pProjs.splice(i,1);
+    }
+    // enemy projectiles -> player (we just spawn effect)
+    for(let i=projs.length-1;i>=0;i--){
+      const p = projs[i];
+      p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt;
+      if(Math.hypot(p.x - 130, p.y - H*0.5) < 20){
+        spawnFloatingText(130, H*0.5, Math.max(1,p.dmg - 1), '#f55');
+        projs.splice(i,1);
+      }
+      if(p && (p.life<=0 || p.x<-50 || p.x>W+50)) projs.splice(i,1);
+    }
+  }
+
+  function spawnFloatingText(x,y,txt,col='#fff'){
+    particles.push({x,y,txt:txt.toString(),col,life:1.2});
+  }
+
+  // main update
+  function update(dt){
+    shipPulse += dt*3.5;
+    // auto-open if enabled
+    if(gs.autoOpen && gs.boxes > 0 && !lootPaused && !bossFightActive){
+      // simple timer using Math.random to spread opens over time
+      if(Math.random() < dt*0.5) openBox(1);
+    }
+    // auto-sell bag occasionally
+    if(gs.autoSellBag && Math.random() < dt*0.08){
+      // find weak items
+      let worstIdx=-1, worstVal=1e9;
+      for(let i=0;i<gs.bag.length;i++){ const it=gs.bag[i]; if(it && it.sv < worstVal){ worstVal = it.sv; worstIdx = i; } }
+      if(worstIdx!==-1){ gs.gold += gs.bag[worstIdx].sellVal; addLog(`♻️ Otomatik satıldı: ${gs.bag[worstIdx].name} +${gs.bag[worstIdx].sellVal}G`,'#ffd700'); gs.bag[worstIdx] = null; CORE.save(); renderPanels(); }
+    }
+
+    // auto attack if enemies exist
+    if(!lootPaused && !bossFightActive && enemies.length>0){
+      aaTimer -= dt;
+      const cs = 0.9 + gs.stats.agi*0.04;
+      if(aaTimer <= 0){
+        aaTimer = 1 / cs;
+        // fire projectile to nearest enemy
+        const alive = enemies.filter(e=>!e.dead);
+        if(alive.length){
+          const tgt = alive.reduce((a,b)=> a.x<b.x ? a : b );
+          const dx = tgt.x - 130, dy = tgt.y - H*0.5; const dist = Math.hypot(dx,dy)||1;
+          pProjs.push({x:130+22,y:H*0.5,vx:(dx/dist)*420,vy:(dy/dist)*420,dmg:Math.ceil(10 + gs.charLvl*1.8),life:1.6});
+        }
+      }
+    }
+
+    // update projectiles
+    updateProjectiles(dt);
+
+    // update enemies movement & shooting
+    for(let e of enemies){
+      if(e.dead) continue;
+      if(e.x > e.stopX) e.x -= (e.spd||50)*dt;
+      else{
+        if(!lootPaused && Math.random() < dt*0.6){
+          const dx = 130 - e.x, dy = H*0.5 - e.y; const dist = Math.hypot(dx,dy)||1;
+          projs.push({x:e.x-10,y:e.y,vx:(dx/dist)*260,vy:(dy/dist)*260,dmg:Math.ceil(e.dmg),life:1.6});
+        }
+      }
+    }
+
+    // particles reduce life
+    for(let i=particles.length-1;i>=0;i--){
+      particles[i].life -= dt;
+      particles[i].y -= dt * 12;
+      if(particles[i].life <= 0) particles.splice(i,1);
+    }
+
+    // check group clear and drops
+    if(!lootPaused && enemies.length>0 && enemies.every(x=>x.dead)){
+      enemies = []; // clear
+      // handle drop or advance
+      if(gs.activeBoxGroups > 0){
+        // 30..55% drop chance based on luck
+        const dropChance = 0.25 + Math.min(0.3, gs.stats.lck * 0.01);
+        if(Math.random() < dropChance){
+          const item = generateItem();
+          showLoot(item);
+          // keep activeBoxGroups until handled to allow autos to work
+        } else {
+          // no drop: group finished
+          gs.activeBoxGroups = Math.max(0, gs.activeBoxGroups - 1);
+          if(gs.subwave < 10) gs.subwave++; else { gs.subwave = 1; gs.wave++; }
+          if(gs.activeBoxGroups > 0) spawnGroupForCurrentBox();
+        }
+      } else {
+        // nothing queued
+      }
+      renderUI();
+    }
+  }
+
+  // render entire scene
+  function render(){
+    gctx.clearRect(0,0,W,H);
+    // background
+    const g = gctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#010516'); g.addColorStop(1,'#041028');
+    gctx.fillStyle = g; gctx.fillRect(0,0,W,H);
+
+    // stars
+    for(let i=0;i<64;i++){
+      gctx.fillStyle = 'rgba(180,200,255,0.03)';
+      gctx.fillRect((i*47 + Math.sin(shipPulse + i)*6) % W, (i*37) % H, 2, 2);
+    }
+
+    // draw player ship (left)
+    CORE.drawShip(gctx, 130, H*0.5, shipPulse, 1.0, gs.equipped);
+
+    // draw enemies
+    for(let e of enemies){
+      if(!e.dead) CORE.drawEnemy(gctx, e);
+      // healthbar
+      const w = e.isBoss ? 70 : 36;
+      const h = 4;
+      gctx.fillStyle = '#071028';
+      gctx.fillRect(e.x - w/2, e.y - (e.isBoss? 60:28), w, h);
+      const pct = Math.max(0, e.hp / (e.maxHp || 1));
+      gctx.fillStyle = e.isBoss ? '#ffd700' : e.col;
+      gctx.fillRect(e.x - w/2, e.y - (e.isBoss? 60:28), w*pct, h);
+    }
+
+    // projectiles
+    for(let p of pProjs){
+      gctx.fillStyle = '#00f5ff';
+      gctx.beginPath(); gctx.arc(p.x, p.y, 3, 0, Math.PI*2); gctx.fill();
+    }
+    for(let p of projs){
+      gctx.fillStyle = '#ff3344';
+      gctx.beginPath(); gctx.arc(p.x, p.y, 3, 0, Math.PI*2); gctx.fill();
+    }
+
+    // particles / floating text
+    gctx.textAlign = 'center';
+    for(let pp of particles){
+      gctx.fillStyle = pp.col || '#fff';
+      gctx.globalAlpha = Math.max(0, pp.life);
+      gctx.fillText(pp.txt, pp.x, pp.y);
+      gctx.globalAlpha = 1;
+    }
+  }
+
+  // main loop
+  function loop(ts){
+    if(!lastT) lastT = ts;
+    const dt = Math.min((ts - lastT)/1000, 0.05);
+    lastT = ts;
+    update(dt);
+    render();
+    renderUI();
+    requestAnimationFrame(loop);
+  }
+
+  // UI controls and renderers
+  function renderPanels(){
+    // boxes / inventory / equips
+    $('box-count').textContent = gs.boxes;
+    // equip list
+    const el = $('equip-list'); el.innerHTML = '';
+    Object.keys(SLOTS).forEach(k=>{
+      const s = SLOTS[k];
+      const it = gs.equipped[k];
+      const row = document.createElement('div'); row.className='equip-slot';
+      const left = document.createElement('div'); left.innerHTML = `<div style="font-size:14px">${s.icon} ${s.label}</div><div style="color:var(--dim);font-size:12px">${it?it.name:'Boş'}</div>`;
+      const btn = document.createElement('button'); btn.className='btn'; btn.textContent = it ? 'Çıkart' : '—';
+      btn.addEventListener('click', ()=> { if(it){ unequip(k); } });
+      row.appendChild(left); row.appendChild(btn); el.appendChild(row);
+    });
+    // inventory grid
+    const grid = $('inv-grid'); grid.innerHTML = '';
+    for(let i=0;i<20;i++){
+      const slot = document.createElement('div'); slot.className = 'inv-slot';
+      const it = gs.bag[i];
+      if(!it){ slot.classList.add('empty'); slot.textContent = ''; } else { slot.textContent = it.icon; slot.title = it.name + ' +' + it.sv; slot.addEventListener('click', ()=> equipFromBag(i)); }
+      grid.appendChild(slot);
+    }
+  }
+
+  function renderUI(){
+    refreshSize();
+    $('wb-wave').textContent = gs.wave;
+    $('wb-sub').textContent = gs.subwave;
+    $('h-gold').textContent = fmt(gs.gold);
+    $('h-gqt').textContent = fmt(gs.gqt);
+    $('h-lvl').textContent = gs.charLvl;
+    // update boss hp bar if active
+    if(activeSpecialBoss && $('boss-hp-bar')){
+      const pct = Math.max(0, activeSpecialBoss.hp / activeSpecialBoss.maxHp * 100);
+      $('boss-hp-bar').style.width = pct + '%';
+    }
+    renderPanels();
+  }
+
+  // event bindings
+  $('open-1').addEventListener('click', ()=> openBox(1));
+  $('open-10').addEventListener('click', ()=> openBox(10));
+  $('open-1-side').addEventListener('click', ()=> openBox(1));
+  $('open-10-side').addEventListener('click', ()=> openBox(10));
+  $('lp-eq').addEventListener('click', equipLoot);
+  $('lp-bag').addEventListener('click', bagLoot);
+  $('lp-sell').addEventListener('click', sellLoot);
+
+  $('auto-open').addEventListener('change', e=>{ gs.autoOpen = e.target.checked; CORE.save(); });
+  $('auto-equip').addEventListener('change', e=>{ gs.autoEquip = e.target.checked; CORE.save(); });
+  $('auto-sell').addEventListener('change', e=>{ gs.autoSell = e.target.checked; CORE.save(); });
+
+  // equip from bag quick action
+  window.equipFromBag = function(i){
+    const it = gs.bag[i]; if(!it) return;
+    const old = gs.equipped[it.slotKey];
+    if(old){
+      const idx = gs.bag.findIndex(x=>x===null); if(idx===-1){ addLog('Çanta dolu!','#ff3355'); return; } gs.bag[idx] = old;
+    }
+    gs.equipped[it.slotKey] = it; gs.bag[i] = null; addLog(`✅ ${it.name} kuşanıldı`,'#cfe'); renderPanels(); CORE.save();
+  };
+  window.unequip = function(slotKey){
+    const it = gs.equipped[slotKey]; if(!it) return;
+    const idx = gs.bag.findIndex(x=>x===null); if(idx===-1){ addLog('Çanta dolu!','#ff3355'); return; }
+    gs.bag[idx] = it; gs.equipped[slotKey] = null; addLog(`🔓 ${it.name} çıkarıldı`,'#cfe'); renderPanels(); CORE.save();
+  };
+
+  // special boss (challenge) starter (simple)
+  const CH_BOSSES = [
+    {id:0,name:'PRIME ANOMALI', req:1, hp:5000, dmg:50, reward:{gold:500,gqt:0,boxes:5}},
+    {id:1,name:'VOID EMPEROR', req:5, hp:80000, dmg:800, reward:{gold:3000,gqt:10,boxes:10}}
+  ];
+  // boss modal actions
+  $('boss-attack').addEventListener('click', ()=> {
+    if(!activeSpecialBoss) return;
+    const dmg = Math.ceil(15 + gs.charLvl*1.8);
+    activeSpecialBoss.hp -= dmg; $('boss-log').innerHTML += `<div style="color:#0ff">▶ Sen: ${dmg} hasar</div>`;
+    // boss counterattack
+    if(activeSpecialBoss.hp > 0){
+      const bdmg = Math.ceil(activeSpecialBoss.dmg * (0.8 + Math.random()*0.5));
+      $('boss-log').innerHTML += `<div style="color:#f55">◀ Boss: ${bdmg} hasar</div>`;
+      // no player hp tracking, just show
+    } else {
+      $('boss-log').innerHTML += `<div style="color:#ffd700">🏆 Boss öldü! Ödüller verildi</div>`;
+      // give rewards
+      gs.gold += activeSpecialBoss.reward.gold; gs.gqt += activeSpecialBoss.reward.gqt; gs.boxes += activeSpecialBoss.reward.boxes;
+      CORE.save(); renderPanels();
+      endSpecialBoss(true);
+    }
+    $('boss-hp-bar').style.width = Math.max(0, Math.round(activeSpecialBoss.hp / activeSpecialBoss.maxHp * 100)) + '%';
+  });
+  $('boss-retreat').addEventListener('click', ()=> endSpecialBoss(false));
+
+  function startSpecialBoss(id){
+    const b = CH_BOSSES.find(x=>x.id===id); if(!b) return;
+    if(gs.charLvl < b.req){ addLog(`Gerekli seviye ${b.req}`,'#ff3355'); return; }
+    activeSpecialBoss = { ...b, hp:b.hp, maxHp:b.hp };
+    $('boss-title').textContent = b.name;
+    $('boss-hp-bar').style.width = '100%';
+    $('boss-log').innerHTML = '';
+    $('boss-modal').style.display = 'flex';
+    bossFightActive = true;
+  }
+  function endSpecialBoss(won){
+    $('boss-modal').style.display = 'none';
+    bossFightActive = false;
+    if(!won) addLog('❌ Boss karşılaşması tamamlandı (yenilgi/geri çekilme)','#ff3355');
+    activeSpecialBoss = null;
+    CORE.save(); renderPanels();
+  }
+
+  // collision detection & floaters exist above
+
+  // spawnGroupForCurrentBox exported for console use
+  window.spawnGroupForCurrentBox = spawnGroupForCurrentBox;
+
+  // initial render & start
+  renderPanels();
+  spawnGroupForCurrentBox();
+  requestAnimationFrame(function start(ts){ lastT = ts; requestAnimationFrame(loop); });
+
+})();
+</script>
+</body>
+</html>
