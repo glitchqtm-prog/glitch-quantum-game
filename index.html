@@ -7,191 +7,268 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
 :root{
-  --bg:#04050e;--bg2:#060818;--brd:#182050;
+  --bg:#03040c;--bg2:#050712;--brd:#1a2460;
   --cy:#00f5ff;--mg:#ff00aa;--gd:#ffd700;--gr:#00ff88;
   --rd:#ff3355;--tx:#c0d0ff;--dm:#4a5888;--pu:#aa44ff;
-  --sc:0 0 10px #00f5ff88,0 0 28px #00f5ff22;
-  --sm:0 0 10px #ff00aa88,0 0 28px #ff00aa22;
+  --sc:0 0 12px #00f5ff88,0 0 30px #00f5ff22;
+  --sm:0 0 12px #ff00aa88,0 0 30px #ff00aa22;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Share Tech Mono',monospace;}
 #root{display:flex;flex-direction:column;height:100vh;}
-#hdr{display:flex;align-items:center;gap:8px;padding:4px 12px;border-bottom:1px solid var(--brd);background:#030410;flex-shrink:0;flex-wrap:wrap;}
-#logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;color:var(--cy);text-shadow:var(--sc);letter-spacing:3px;white-space:nowrap;}
+
+/* HEADER */
+#hdr{display:flex;align-items:center;gap:8px;padding:4px 12px;border-bottom:1px solid var(--brd);background:#02030a;flex-shrink:0;flex-wrap:wrap;}
+#logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;color:var(--cy);text-shadow:var(--sc);letter-spacing:3px;white-space:nowrap;}
 #logo em{color:var(--mg);font-style:normal;}
-#hud{display:flex;gap:8px;font-size:9px;flex:1;flex-wrap:wrap;}
+#hud{display:flex;gap:10px;font-size:9px;flex:1;flex-wrap:wrap;align-items:center;}
 .hi label{color:var(--dm);}.hi b{color:var(--cy);}
-.hi.gd b{color:var(--gd);}
-#mkt-btn{background:linear-gradient(135deg,var(--mg),#880044);border:none;color:#fff;font-family:'Share Tech Mono',monospace;font-size:9px;padding:4px 9px;cursor:pointer;border-radius:4px;white-space:nowrap;}
+.hi.gd b{color:var(--gd);}.hi.mg b{color:var(--mg);}
+#mkt-btn{background:linear-gradient(135deg,var(--mg),#660033);border:none;color:#fff;
+  font-family:'Share Tech Mono',monospace;font-size:9px;padding:5px 11px;cursor:pointer;
+  border-radius:4px;white-space:nowrap;letter-spacing:1px;box-shadow:var(--sm);}
+#mkt-btn:hover{opacity:.85;}
+
+/* LAYOUT */
 #main{display:flex;flex:1;overflow:hidden;}
 #czone{flex:1;position:relative;overflow:hidden;background:var(--bg2);}
 canvas{display:block;}
-#idle-sc{position:absolute;inset:0;background:#04081099;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:15;backdrop-filter:blur(3px);}
-#idle-sc h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:20px;margin-bottom:6px;text-shadow:var(--sc);}
-#idle-sc .sub{font-size:10px;color:var(--dm);margin-bottom:14px;text-align:center;max-width:280px;line-height:1.6;}
-.idle-cnt{font-size:10px;color:var(--dm);margin-top:8px;}
-#auto-panel{background:#07101ecc;border:1px solid var(--brd);border-radius:10px;padding:12px 16px;margin-bottom:14px;min-width:280px;}
-#auto-panel .ap-t{font-size:9px;letter-spacing:2px;color:var(--dm);margin-bottom:8px;text-align:center;}
-.ao-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:10px;}
-.ao-row input[type=checkbox]{accent-color:var(--cy);width:14px;height:14px;cursor:pointer;}
+
+/* IDLE SCREEN */
+#idle-sc{position:absolute;inset:0;background:#030408ee;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:15;backdrop-filter:blur(4px);}
+#idle-sc h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:22px;margin-bottom:6px;
+  text-shadow:var(--sc);}
+#idle-sc .sub{font-size:10px;color:var(--dm);margin-bottom:14px;text-align:center;
+  max-width:300px;line-height:1.7;}
+#auto-panel{background:#07101ecc;border:1px solid var(--brd);border-radius:10px;
+  padding:14px 18px;margin-bottom:16px;min-width:290px;}
+#auto-panel .apt{font-size:9px;letter-spacing:2px;color:var(--dm);margin-bottom:10px;
+  text-align:center;text-transform:uppercase;}
+.ao-row{display:flex;align-items:center;gap:9px;margin-bottom:7px;font-size:10px;}
+.ao-row input[type=checkbox]{accent-color:var(--cy);width:15px;height:15px;cursor:pointer;}
 .ao-row label{cursor:pointer;color:var(--tx);}
-#start-btn{background:linear-gradient(135deg,var(--cy),#0088cc);border:none;color:#020810;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;padding:12px 26px;cursor:pointer;border-radius:8px;letter-spacing:2px;box-shadow:var(--sc);transition:transform .1s;}
-#start-btn:hover{transform:scale(1.04);}
+#start-btn{background:linear-gradient(135deg,var(--cy),#0077bb);border:none;color:#020810;
+  font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;padding:13px 28px;
+  cursor:pointer;border-radius:8px;letter-spacing:2px;box-shadow:var(--sc);transition:transform .1s;}
+#start-btn:hover{transform:scale(1.05);}
 #start-btn:disabled{opacity:.4;cursor:default;transform:none;}
-#loot-ov{position:absolute;inset:0;background:#020408cc;z-index:18;display:none;}
-#loot-pop{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.88);background:#03060cfa;border:2px solid var(--mg);border-radius:14px;padding:16px 22px;text-align:center;z-index:19;display:none;min-width:265px;box-shadow:var(--sm);}
+.idle-cnt{font-size:10px;color:var(--dm);margin-top:9px;}
+
+/* LOOT OVERLAY */
+#loot-ov{position:absolute;inset:0;background:#010308cc;z-index:18;display:none;}
+#loot-pop{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);
+  background:#02050bfa;border:2px solid var(--mg);border-radius:14px;padding:18px 24px;
+  text-align:center;z-index:19;display:none;min-width:275px;box-shadow:var(--sm);}
 @keyframes pIn{to{transform:translate(-50%,-50%) scale(1);}}
-#loot-pop.open{animation:pIn .2s forwards;}
-.lp-ic{font-size:38px;margin-bottom:3px;}
-.lp-rar{font-size:9px;letter-spacing:3px;text-transform:uppercase;}
-.lp-stars{color:var(--gd);font-size:13px;margin:2px 0;}
-.lp-nm{font-size:13px;font-family:'Orbitron',sans-serif;margin:2px 0;}
-.lp-sub{font-size:8px;color:var(--dm);margin-bottom:3px;}
-.lp-st{font-size:10px;color:var(--tx);margin-bottom:2px;}
-.lp-af{font-size:8px;color:var(--gr);margin-bottom:3px;line-height:1.5;}
-.lp-cmp{font-size:9px;padding:4px 8px;border-radius:4px;background:#070e1e;margin:3px 0;border:1px solid var(--brd);}
-.lp-cmp.up{border-color:var(--gr);color:var(--gr);}
-.lp-cmp.dn{border-color:var(--rd);color:var(--rd);}
-.lp-cmp.eq{border-color:var(--dm);color:var(--dm);}
-.lp-auto-note{font-size:8px;color:var(--cy);margin-top:3px;min-height:12px;}
-.lp-btns{display:flex;gap:6px;margin-top:8px;}
-.lp-btn{flex:1;padding:6px 0;border:none;font-family:'Share Tech Mono',monospace;font-size:9px;cursor:pointer;border-radius:5px;transition:opacity .2s;}
+#loot-pop.open{animation:pIn .22s forwards;}
+.lp-ic{font-size:42px;margin-bottom:4px;}
+.lp-rar{font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px;}
+.lp-stars{color:var(--gd);font-size:14px;margin:3px 0;}
+.lp-nm{font-size:14px;font-family:'Orbitron',sans-serif;margin:3px 0;}
+.lp-type{font-size:8px;color:var(--dm);margin-bottom:4px;}
+.lp-stats{font-size:9px;color:var(--tx);margin-bottom:4px;line-height:1.6;}
+.lp-af{font-size:8px;color:var(--gr);margin-bottom:4px;line-height:1.5;}
+.lp-cmp{font-size:9px;padding:5px 9px;border-radius:5px;background:#060d1e;margin:4px 0;}
+.lp-cmp.up{border:1px solid var(--gr);color:var(--gr);}
+.lp-cmp.dn{border:1px solid var(--rd);color:var(--rd);}
+.lp-cmp.eq{border:1px solid var(--dm);color:var(--dm);}
+.lp-note{font-size:8px;color:var(--cy);margin-top:4px;min-height:13px;}
+#as-bar{height:3px;background:var(--mg);width:100%;margin-top:5px;border-radius:2px;}
+.lp-btns{display:flex;gap:7px;margin-top:10px;}
+.lp-btn{flex:1;padding:7px 0;border:none;font-family:'Share Tech Mono',monospace;
+  font-size:9px;cursor:pointer;border-radius:5px;letter-spacing:.5px;transition:opacity .2s;}
 .lp-btn:hover{opacity:.82;}
 .btn-eq{background:var(--cy);color:#020810;}
 .btn-sell{background:#12243a;color:var(--gd);border:1px solid var(--gd);}
 .btn-bag{background:#0f1e38;color:var(--tx);border:1px solid var(--brd);}
-#as-bar{height:3px;background:var(--mg);width:100%;margin-top:6px;border-radius:2px;}
-#skill-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:8;}
-.skb{width:56px;height:56px;background:#06091acc;border:1px solid var(--brd);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s;}
+
+/* SKILL BAR */
+#skill-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:8;}
+.skb{width:58px;height:58px;background:#06091acc;border:1px solid var(--brd);
+  border-radius:7px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s;}
 .skb:hover{border-color:var(--cy);}
-.skb .sic{font-size:17px;line-height:1;}.skb .snm{font-size:7px;color:var(--dm);margin-top:1px;}
+.skb .sic{font-size:18px;line-height:1;}
+.skb .snm{font-size:7px;color:var(--dm);margin-top:2px;}
 .skb .sov{position:absolute;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-.skb .sov span{font-size:12px;font-weight:700;color:var(--cy);}
+.skb .sov span{font-size:13px;font-weight:700;color:var(--cy);}
 .skb .sbar{position:absolute;bottom:0;left:0;height:3px;background:var(--cy);}
 .skb.G{border-color:var(--mg);}.skb.G .sbar{background:var(--mg);}
-#clog{position:absolute;top:8px;left:8px;width:220px;max-height:110px;overflow:hidden;pointer-events:none;z-index:6;}
-.cl{font-size:9px;line-height:1.5;animation:lf 6s forwards;white-space:nowrap;}
+
+/* HUD BADGES */
+#clog{position:absolute;top:8px;left:8px;width:230px;max-height:120px;overflow:hidden;pointer-events:none;z-index:6;}
+.cl{font-size:10px;line-height:1.5;animation:lf 6s forwards;white-space:nowrap;}
 @keyframes lf{0%{opacity:1}70%{opacity:1}100%{opacity:0}}
-#wbadge{position:absolute;top:8px;right:8px;background:#07101dcc;border:1px solid var(--mg);padding:3px 10px;font-family:'Orbitron',sans-serif;font-size:9px;color:var(--mg);border-radius:4px;z-index:6;text-align:right;line-height:1.6;}
-#upg-bar{position:absolute;bottom:72px;left:50%;transform:translateX(-50%);background:#07101dcc;border:1px solid var(--cy);border-radius:20px;padding:3px 12px;display:none;font-size:9px;color:var(--cy);white-space:nowrap;z-index:7;}
-#boss-enter{position:absolute;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;}
-#boss-enter canvas{position:absolute;inset:0;width:100%;height:100%;}
-#be-content{position:relative;z-index:2;text-align:center;}
-#be-content h1{font-family:'Orbitron',sans-serif;font-size:26px;color:var(--mg);text-shadow:var(--sm);margin-bottom:8px;}
-#be-content .be-sub{font-size:11px;color:var(--tx);margin-bottom:4px;}
-#boss-cd{font-family:'Orbitron',sans-serif;font-size:64px;color:var(--gd);text-shadow:0 0 20px #ffd700aa;margin:8px 0;}
-#boss-fight{position:absolute;inset:0;z-index:28;display:none;flex-direction:column;}
-#boss-fight canvas{position:absolute;inset:0;width:100%;height:100%;}
-#bf-ui{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;padding:16px;}
-.bf-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.bf-bi{flex:1;}
-.bf-bn{font-family:'Orbitron',sans-serif;font-size:14px;color:var(--mg);margin-bottom:4px;}
-.bf-hbg{height:8px;background:#1a0a0a;border-radius:4px;overflow:hidden;width:200px;}
-.bf-hf{height:100%;background:linear-gradient(90deg,var(--rd),#ff6688);border-radius:4px;transition:width .3s;}
-.bf-ht{font-size:8px;color:var(--rd);margin-top:2px;}
-.bf-pi{text-align:right;font-size:9px;}
-.bf-php{color:var(--gr);}
-.bf-log{flex:1;overflow-y:auto;background:#02040aaa;border:1px solid var(--brd);border-radius:6px;padding:6px;margin:8px 0;font-size:9px;line-height:1.6;}
-.bf-log::-webkit-scrollbar{width:3px;}.bf-log::-webkit-scrollbar-thumb{background:var(--brd);}
-.bf-acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
-.bf-btn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:8px 18px;border-radius:6px;cursor:pointer;border:none;transition:transform .1s;}
-.bf-btn:hover{transform:scale(1.04);}
-.bf-btn.at{background:var(--cy);color:#020810;}
-.bf-btn.sk{background:var(--pu);color:#fff;}
-.bf-btn.rt{background:#182050;color:var(--tx);border:1px solid var(--brd);}
-#boss-result{position:absolute;inset:0;z-index:32;display:none;align-items:center;justify-content:center;background:#000000bb;}
-.br-box{background:#04070dee;border:2px solid var(--mg);border-radius:14px;padding:24px 32px;text-align:center;max-width:300px;}
-.br-box.win{border-color:var(--gd);}
-.br-box h2{font-family:'Orbitron',sans-serif;font-size:17px;margin-bottom:8px;}
+#wbadge{position:absolute;top:8px;right:8px;background:#07101dcc;border:1px solid var(--mg);
+  padding:4px 12px;font-family:'Orbitron',sans-serif;font-size:10px;color:var(--mg);
+  border-radius:4px;z-index:6;text-align:right;line-height:1.7;}
+#upg-bar{position:absolute;bottom:74px;left:50%;transform:translateX(-50%);
+  background:#07101dcc;border:1px solid var(--cy);border-radius:20px;padding:3px 13px;
+  display:none;font-size:9px;color:var(--cy);white-space:nowrap;z-index:7;}
+
+/* BOSS ARENA */
+#boss-arena{position:absolute;inset:0;z-index:26;display:none;flex-direction:column;}
+#boss-arena canvas{position:absolute;inset:0;width:100%;height:100%;}
+#ba-ui{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;padding:16px;}
+.ba-hud{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px;}
+.ba-side{flex:1;}
+.ba-name{font-family:'Orbitron',sans-serif;font-size:12px;margin-bottom:4px;}
+.ba-hpbg{height:9px;border-radius:5px;overflow:hidden;margin-bottom:3px;border:1px solid rgba(255,255,255,.1);}
+.ba-hpf{height:100%;border-radius:5px;transition:width .25s;}
+.ba-hptx{font-size:8px;margin-top:1px;}
+.ba-vs{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--gd);padding:0 8px;align-self:center;}
+#ba-log{flex:1;overflow-y:auto;background:#020408aa;border:1px solid var(--brd);
+  border-radius:6px;padding:7px;margin:6px 0;font-size:9px;line-height:1.7;}
+#ba-log::-webkit-scrollbar{width:3px;}#ba-log::-webkit-scrollbar-thumb{background:var(--brd);}
+.ba-acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:4px;}
+.ba-btn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:9px 18px;
+  border-radius:6px;cursor:pointer;border:none;transition:transform .1s,opacity .2s;}
+.ba-btn:hover{transform:scale(1.05);}
+.ba-btn:active{transform:scale(.97);}
+.ba-btn.atk{background:var(--cy);color:#020810;}
+.ba-btn.skl{background:var(--pu);color:#fff;}
+.ba-btn.ret{background:#182050;color:var(--tx);border:1px solid var(--brd);}
+
+/* BOSS RESULT */
+#boss-result{position:absolute;inset:0;z-index:32;display:none;align-items:center;
+  justify-content:center;background:#000000bb;}
+.br-box{background:#03060bfa;border-radius:14px;padding:26px 34px;text-align:center;max-width:310px;}
+.br-box.win{border:2px solid var(--gd);}.br-box.fail{border:2px solid var(--rd);}
+.br-box h2{font-family:'Orbitron',sans-serif;font-size:18px;margin-bottom:8px;}
 .br-box.win h2{color:var(--gd);}.br-box.fail h2{color:var(--rd);}
-.br-txt{font-size:10px;color:var(--tx);margin-bottom:10px;line-height:1.6;white-space:pre-line;}
-.br-btn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:8px 20px;border-radius:6px;cursor:pointer;border:none;background:var(--cy);color:#020810;}
-.modal-ov{position:absolute;inset:0;background:#000000aa;display:flex;align-items:center;justify-content:center;z-index:25;}
-.mbox{background:#04070dee;border:2px solid var(--cy);border-radius:12px;padding:16px 20px;max-width:390px;width:94%;max-height:86vh;overflow-y:auto;box-shadow:var(--sc);}
-.mbox h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:14px;margin-bottom:7px;}
-.mcat{margin-bottom:9px;}
-.mcat-t{font-size:8px;letter-spacing:2px;color:var(--mg);border-bottom:1px solid #ff00aa22;padding-bottom:2px;margin-bottom:4px;}
-.mit{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:6px;display:flex;gap:7px;margin-bottom:3px;align-items:flex-start;}
-.mit .mic{font-size:20px;flex-shrink:0;}.mit .min{flex:1;font-size:10px;margin-bottom:2px;}
-.mit .mid{font-size:8px;color:var(--dm);margin-bottom:3px;line-height:1.4;}
-.mit .mibtns{display:flex;gap:4px;flex-wrap:wrap;}
-.mb{font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 6px;border-radius:3px;cursor:pointer;border:none;}
+.br-txt{font-size:10px;color:var(--tx);margin-bottom:12px;line-height:1.7;white-space:pre-line;}
+.br-btn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:9px 22px;
+  border-radius:6px;cursor:pointer;border:none;background:var(--cy);color:#020810;margin:3px;}
+
+/* MARKET MODAL */
+.modal-ov{position:absolute;inset:0;background:#000000aa;display:flex;align-items:center;
+  justify-content:center;z-index:25;}
+.mbox{background:#03060bfa;border:2px solid var(--cy);border-radius:12px;padding:17px 22px;
+  max-width:400px;width:94%;max-height:86vh;overflow-y:auto;box-shadow:var(--sc);}
+.mbox h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:14px;margin-bottom:8px;}
+.mcat{margin-bottom:10px;}
+.mcat-t{font-size:8px;letter-spacing:2px;color:var(--mg);text-transform:uppercase;
+  border-bottom:1px solid #ff00aa22;padding-bottom:3px;margin-bottom:5px;}
+.mit{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:7px;
+  display:flex;gap:8px;margin-bottom:4px;align-items:flex-start;}
+.mit .mic{font-size:21px;flex-shrink:0;}.mit .min{flex:1;font-size:10px;margin-bottom:2px;}
+.mit .mid{font-size:8px;color:var(--dm);margin-bottom:4px;line-height:1.4;}
+.mit .mbts{display:flex;gap:4px;flex-wrap:wrap;}
+.mb{font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 7px;
+  border-radius:3px;cursor:pointer;border:none;}
 .mb.cy{background:var(--cy);color:#020810;}.mb.gd{background:var(--gd);color:#0a0800;}
 .mb:disabled{opacity:.3;cursor:default;}
 .mlim{font-size:8px;color:var(--dm);margin-top:2px;}
-.m-close{background:none;border:none;color:var(--dm);font-size:17px;cursor:pointer;float:right;margin-top:-3px;}
-.slbox{background:#04070dee;border:2px solid var(--cy);border-radius:12px;padding:18px 24px;text-align:center;max-width:300px;box-shadow:var(--sc);}
-.slbox h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:14px;margin-bottom:7px;}
-.sltimer{font-size:22px;font-family:'Orbitron',sans-serif;color:var(--gd);margin:7px 0;}
-.slbtn{font-family:'Share Tech Mono',monospace;font-size:9px;padding:6px 14px;border-radius:5px;cursor:pointer;border:none;margin:3px;}
+.m-close{background:none;border:none;color:var(--dm);font-size:18px;cursor:pointer;float:right;}
+
+/* SHIP LVL MODAL */
+.slbox{background:#03060bfa;border:2px solid var(--cy);border-radius:12px;
+  padding:20px 26px;text-align:center;max-width:310px;box-shadow:var(--sc);}
+.slbox h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:14px;margin-bottom:8px;}
+.sltimer{font-size:24px;font-family:'Orbitron',sans-serif;color:var(--gd);margin:8px 0;}
+.slbtn{font-family:'Share Tech Mono',monospace;font-size:9px;padding:7px 15px;
+  border-radius:5px;cursor:pointer;border:none;margin:3px;}
 .slbtn.cy{background:var(--cy);color:#020810;}.slbtn.mg{background:var(--mg);color:#fff;}
 .slbtn.gr{background:#182050;color:var(--tx);border:1px solid var(--brd);}
-#sidebar{width:288px;border-left:1px solid var(--brd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+
+/* SIDEBAR */
+#sidebar{width:292px;border-left:1px solid var(--brd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
 #tabbar{display:flex;border-bottom:1px solid var(--brd);flex-shrink:0;}
-.tb{flex:1;padding:5px 1px;background:none;border:none;color:var(--dm);font-family:'Share Tech Mono',monospace;font-size:8px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.tb{flex:1;padding:5px 1px;background:none;border:none;color:var(--dm);
+  font-family:'Share Tech Mono',monospace;font-size:8px;cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .2s;}
 .tb.on{color:var(--cy);border-bottom-color:var(--cy);}
 .tb:hover:not(.on){color:var(--tx);}
 .tpanel{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:7px;}
 .tpanel.on{display:flex;}
 .tpanel::-webkit-scrollbar{width:3px;}.tpanel::-webkit-scrollbar-thumb{background:var(--brd);}
-.sl{font-size:8px;letter-spacing:2px;color:var(--dm);text-transform:uppercase;margin:5px 0 3px;border-bottom:1px solid var(--brd);padding-bottom:2px;}
+.sl{font-size:8px;letter-spacing:2px;color:var(--dm);text-transform:uppercase;
+  margin:6px 0 3px;border-bottom:1px solid var(--brd);padding-bottom:2px;}
 .sr{display:flex;align-items:center;gap:4px;margin-bottom:3px;font-size:9px;}
-.sr .la{width:70px;color:var(--dm);}
+.sr .la{width:72px;color:var(--dm);}
 .sbg{flex:1;height:5px;background:#0d1530;border-radius:3px;overflow:hidden;}
 .sf{height:100%;border-radius:3px;transition:width .3s;}
-.hp{background:linear-gradient(90deg,#ff3355,#ff7788);}
-.gt{background:linear-gradient(90deg,#00f5ff,#0088ff);}
-.xp{background:linear-gradient(90deg,#ffd700,#ff9900);}
-.es{background:linear-gradient(90deg,#aa44ff,#6600cc);}
-.sv2{width:52px;text-align:right;font-size:8px;}
+.hp{background:linear-gradient(90deg,#ff3355,#ff8899);}
+.gt{background:linear-gradient(90deg,#00f5ff,#0099ee);}
+.xp{background:linear-gradient(90deg,#ffd700,#ffaa00);}
+.es{background:linear-gradient(90deg,#aa44ff,#7700cc);}
+.sv2{width:54px;text-align:right;font-size:8px;}
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:9px;}
-#ship-prev{position:relative;width:100%;height:130px;background:#03060e;border:1px solid var(--brd);border-radius:6px;margin-bottom:5px;overflow:hidden;}
+
+/* SHIP PREVIEW in sidebar */
+#ship-prev{position:relative;width:100%;height:132px;background:#02050e;
+  border:1px solid var(--brd);border-radius:6px;margin-bottom:5px;overflow:hidden;}
 #ship-prev canvas{display:block;}
-.eqs{position:absolute;width:22px;height:22px;background:#08102acc;border:1px solid var(--brd);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;transition:border-color .15s;overflow:hidden;}
+.eqs{position:absolute;width:23px;height:23px;background:#07102acc;border:1px solid var(--brd);
+  border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;
+  cursor:pointer;transition:border-color .15s;overflow:hidden;}
 .eqs:hover{border-color:var(--cy);}
 .eqs .erd{position:absolute;bottom:1px;right:1px;width:4px;height:4px;border-radius:50%;}
-.eqs .estars{position:absolute;top:0;left:0;right:0;text-align:center;font-size:5px;color:var(--gd);line-height:1.2;}
+.eqs .estars{position:absolute;top:0;left:0;right:0;text-align:center;font-size:5px;
+  color:var(--gd);line-height:1.3;}
+
+/* INV GRID */
 #inv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-top:3px;}
-.isl{aspect-ratio:1;background:#07101e;border:1px solid var(--brd);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;position:relative;transition:border-color .15s;}
+.isl{aspect-ratio:1;background:#07101e;border:1px solid var(--brd);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;
+  position:relative;transition:border-color .15s;}
 .isl:hover{border-color:var(--cy);}
 .isl.empty{opacity:.2;}
 .rdot{position:absolute;bottom:2px;right:2px;width:4px;height:4px;border-radius:50%;}
-.istars{position:absolute;top:1px;left:0;right:0;text-align:center;font-size:5px;color:var(--gd);line-height:1;pointer-events:none;}
+.istars{position:absolute;top:1px;left:0;right:0;text-align:center;font-size:5px;
+  color:var(--gd);line-height:1;pointer-events:none;}
+
+/* QUEST / BOX / ABILITY / PASSIVE / BOSS */
 .qi{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:6px;margin-bottom:4px;font-size:9px;}
 .qi .qt{color:var(--cy);margin-bottom:2px;font-size:10px;}
 .qi .qp{color:var(--dm);margin-bottom:2px;}
 .qbg{height:3px;background:#0d1530;border-radius:2px;overflow:hidden;}
-.qf{height:100%;background:var(--gr);border-radius:2px;transition:width .3s;box-shadow:0 0 3px var(--gr);}
+.qf{height:100%;background:var(--gr);border-radius:2px;transition:width .3s;}
 .qr{color:var(--gd);margin-top:2px;font-size:8px;}
-.bxi{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:8px;display:flex;align-items:center;gap:8px;margin-bottom:4px;}
-.bxb{background:linear-gradient(135deg,#182050,#080f20);border:1px solid var(--cy);color:var(--cy);font-family:'Share Tech Mono',monospace;font-size:8px;padding:4px 8px;cursor:pointer;border-radius:4px;}
+.bxi{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:8px;
+  display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.bxb{border:1px solid var(--cy);color:var(--cy);font-family:'Share Tech Mono',monospace;
+  font-size:8px;padding:5px 9px;cursor:pointer;border-radius:4px;background:transparent;}
 .bxb:hover{background:var(--cy);color:#020810;}.bxb:disabled{opacity:.3;cursor:default;}
 .ab-card{background:#07101e;border:1px solid var(--brd);border-radius:6px;padding:7px;margin-bottom:4px;}
 .ab-title{font-size:10px;font-family:'Orbitron',sans-serif;margin-bottom:2px;}
 .ab-desc{font-size:8px;color:var(--dm);margin-bottom:3px;line-height:1.4;}
 .ab-eff{font-size:9px;color:var(--gr);margin-bottom:3px;}
-.ab-btn{font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;border-radius:4px;cursor:pointer;border:none;background:var(--gd);color:#0a0800;}
+.ab-btn{font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;
+  border-radius:4px;cursor:pointer;border:none;background:var(--gd);color:#0a0800;}
 .ab-btn:disabled{opacity:.3;cursor:default;}
 .pbr{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:6px;margin-bottom:4px;}
 .pbrt{font-size:10px;color:var(--cy);margin-bottom:3px;}
-.pbn{display:flex;align-items:center;gap:5px;margin-bottom:2px;font-size:9px;padding:3px 4px;background:#04080f;border-radius:3px;}
-.pbb{font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 5px;background:#182050;border:1px solid var(--cy);color:var(--cy);cursor:pointer;border-radius:3px;}
+.pbn{display:flex;align-items:center;gap:5px;margin-bottom:2px;font-size:9px;
+  padding:3px 5px;background:#04080f;border-radius:3px;}
+.pbb{font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 6px;
+  background:#182050;border:1px solid var(--cy);color:var(--cy);cursor:pointer;border-radius:3px;}
 .pbb:disabled{opacity:.3;cursor:default;}
 .bcard{background:#07101e;border:1px solid var(--brd);border-radius:6px;padding:8px;margin-bottom:4px;}
 .bcard .bct{font-size:10px;font-family:'Orbitron',sans-serif;color:var(--mg);}
 .bcard.done{border-color:var(--gr);}.bcard.done .bct{color:var(--gr);}
-.bcbtn{font-family:'Share Tech Mono',monospace;font-size:9px;padding:5px 11px;border-radius:4px;cursor:pointer;border:none;background:var(--mg);color:#fff;margin-top:5px;}
-#sk-tip,#it-tip{position:fixed;background:#03060cfa;border:1px solid var(--cy);padding:8px 11px;border-radius:6px;font-size:9px;pointer-events:none;z-index:200;max-width:185px;display:none;}
-#sk-tip .stn{font-size:11px;font-family:'Orbitron',sans-serif;color:var(--cy);margin-bottom:3px;}
+.bcbtn{font-family:'Share Tech Mono',monospace;font-size:9px;padding:5px 12px;
+  border-radius:4px;cursor:pointer;border:none;background:var(--mg);color:#fff;margin-top:5px;}
+
+/* TOOLTIPS */
+#sk-tip,#it-tip{position:fixed;background:#02050bfa;border:1px solid var(--cy);
+  padding:9px 12px;border-radius:6px;font-size:9px;pointer-events:none;z-index:200;
+  max-width:190px;display:none;}
+#sk-tip .stn{font-size:12px;font-family:'Orbitron',sans-serif;color:var(--cy);margin-bottom:4px;}
 #sk-tip .strow{display:flex;justify-content:space-between;margin-bottom:2px;}
 #sk-tip .stl{color:var(--dm);}
-#sk-tip .std{color:var(--gr);margin-top:3px;font-size:8px;line-height:1.4;}
+#sk-tip .std{color:var(--gr);margin-top:4px;font-size:8px;line-height:1.4;}
+
+/* RARITY COLORS */
 .r-bronze{background:#cd7f32;}.r-silver{background:#aaa;}
-.r-gold{background:#ffd700;box-shadow:0 0 3px #ffd700;}
-.r-platinum{background:#ddd;box-shadow:0 0 3px #ddd;}
+.r-gold{background:#ffd700;box-shadow:0 0 4px #ffd700;}
+.r-platinum{background:#e5e4e2;box-shadow:0 0 4px #ddd;}
 .r-diamond{background:#a8f0ff;box-shadow:0 0 5px #a8f0ff;}
 .r-radianium{background:#ff88ff;box-shadow:0 0 6px #ff88ff;}
-.r-glitchanium{background:linear-gradient(45deg,#ff00aa,#00f5ff);box-shadow:0 0 7px #aa00ff;}
+.r-glitchanium{background:linear-gradient(45deg,#ff00aa,#00f5ff);box-shadow:0 0 8px #aa00ff;}
+
 *::-webkit-scrollbar{width:3px;}*::-webkit-scrollbar-thumb{background:var(--brd);}
 </style>
 </head>
@@ -203,41 +280,58 @@ canvas{display:block;}
     <div class="hi"><label>LVL </label><b id="h-lvl">1</b></div>
     <div class="hi"><label>SHIP </label><b id="h-slvl">1</b></div>
     <div class="hi"><label>ÖZ </label><b id="h-ess" style="color:var(--pu)">0</b></div>
-    <div class="hi gd"><label>💰</label><b id="h-gold">0</b></div>
-    <div class="hi"><label>💠GQT </label><b id="h-gqt">50</b></div>
-    <div class="hi"><label>📦</label><b id="h-boxes">10</b></div>
+    <div class="hi gd"><label>💰 </label><b id="h-gold">0</b></div>
+    <div class="hi"><label>💠 </label><b id="h-gqt">50</b></div>
+    <div class="hi"><label>📦 </label><b id="h-boxes">10</b></div>
     <div class="hi"><label>KILL </label><b id="h-kills">0</b></div>
     <div class="hi"><label>WAVE </label><b id="h-wave">1-1</b></div>
   </div>
   <button id="mkt-btn" onclick="GQ.openMkt()">🏪 MARKET</button>
 </div>
+
 <div id="main">
 <div id="czone">
   <canvas id="gc"></canvas>
+
+  <!-- IDLE SCREEN -->
   <div id="idle-sc">
     <h2>⚡ GLITCH QUANTUM</h2>
-    <div class="sub">Her Quantum Box bir dalga açar.<br>Dalga temizlenince eşya düşer.</div>
+    <div class="sub">Her Quantum Box bir dalga açar.<br>Dalga temizlenince eşya düşebilir.</div>
     <div id="auto-panel">
-      <div class="ap-t">⚙️ OTOMATİK AYARLAR</div>
-      <div class="ao-row"><input type="checkbox" id="ao-open" onchange="GQ.setAuto('autoOpen',this.checked)"><label for="ao-open">Kutular otomatik açılsın</label></div>
-      <div class="ao-row"><input type="checkbox" id="ao-eq" onchange="GQ.setAuto('autoEquip',this.checked)"><label for="ao-eq">Daha iyi ekipmanı otomatik kuşan</label></div>
-      <div class="ao-row"><input type="checkbox" id="ao-sell" onchange="GQ.setAuto('autoSell',this.checked)"><label for="ao-sell">Zayıf eşyaları otomatik sat (5sn)</label></div>
-      <div class="ao-row"><input type="checkbox" id="ao-bag" onchange="GQ.setAuto('autoSellBag',this.checked)"><label for="ao-bag">Çantadaki zayıf eşyaları otomatik sat</label></div>
+      <div class="apt">⚙️ OTOMATİK AYARLAR</div>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-open" onchange="GQ.setAuto('autoOpen',this.checked)">
+        <label for="ao-open">Kutular otomatik açılsın</label>
+      </div>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-eq" onchange="GQ.setAuto('autoEquip',this.checked)">
+        <label for="ao-eq">Daha iyi ekipmanı otomatik kuşan</label>
+      </div>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-sell" onchange="GQ.setAuto('autoSell',this.checked)">
+        <label for="ao-sell">Zayıf eşyaları otomatik sat (5sn)</label>
+      </div>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-bag" onchange="GQ.setAuto('autoSellBag',this.checked)">
+        <label for="ao-bag">Çantadaki zayıf eşyaları sat</label>
+      </div>
     </div>
     <button id="start-btn" onclick="GQ.startWithBox()">📦 QUANTUM BOX AÇ</button>
     <div class="idle-cnt">📦 <span id="idle-cnt">10</span> Box mevcut</div>
   </div>
+
+  <!-- LOOT OVERLAY + POPUP -->
   <div id="loot-ov"></div>
   <div id="loot-pop">
-    <div class="lp-ic" id="lp-ic">🔫</div>
+    <div class="lp-ic" id="lp-ic">⚔️</div>
     <div class="lp-rar" id="lp-rar"></div>
     <div class="lp-stars" id="lp-stars"></div>
     <div class="lp-nm" id="lp-nm"></div>
-    <div class="lp-sub" id="lp-sub"></div>
-    <div class="lp-st" id="lp-st"></div>
+    <div class="lp-type" id="lp-type"></div>
+    <div class="lp-stats" id="lp-stats"></div>
     <div class="lp-af" id="lp-af"></div>
     <div class="lp-cmp" id="lp-cmp" style="display:none"></div>
-    <div class="lp-auto-note" id="lp-note"></div>
+    <div class="lp-note" id="lp-note"></div>
     <div id="as-bar" style="display:none"></div>
     <div class="lp-btns">
       <button class="lp-btn btn-eq" onclick="GQ.lootEq()">⚔️ KUŞAN</button>
@@ -245,111 +339,219 @@ canvas{display:block;}
       <button class="lp-btn btn-bag" onclick="GQ.lootBag()">🎒 ÇANTA</button>
     </div>
   </div>
+
+  <!-- SKILL BAR -->
   <div id="skill-bar">
-    <div class="skb" id="sk0" onclick="GQ.useSkill(0)" onmouseenter="GQ.skTip(event,0)" onmouseleave="GQ.skTipH()"><div class="sic">⚡</div><div class="snm">PULSE</div><div class="sov" id="sk0-ov" style="display:none"><span id="sk0-t">0</span></div><div class="sbar" id="sk0-bar" style="width:0%"></div></div>
-    <div class="skb" id="sk1" onclick="GQ.useSkill(1)" onmouseenter="GQ.skTip(event,1)" onmouseleave="GQ.skTipH()"><div class="sic">🌀</div><div class="snm">VORTEX</div><div class="sov" id="sk1-ov" style="display:none"><span id="sk1-t">0</span></div><div class="sbar" id="sk1-bar" style="width:0%"></div></div>
-    <div class="skb" id="sk2" onclick="GQ.useSkill(2)" onmouseenter="GQ.skTip(event,2)" onmouseleave="GQ.skTipH()"><div class="sic">💥</div><div class="snm">NOVA</div><div class="sov" id="sk2-ov" style="display:none"><span id="sk2-t">0</span></div><div class="sbar" id="sk2-bar" style="width:0%"></div></div>
-    <div class="skb" id="sk3" onclick="GQ.useSkill(3)" onmouseenter="GQ.skTip(event,3)" onmouseleave="GQ.skTipH()"><div class="sic">🔮</div><div class="snm">ULTI</div><div class="sov" id="sk3-ov" style="display:none"><span id="sk3-t">0</span></div><div class="sbar" id="sk3-bar" style="width:0%"></div></div>
+    <div class="skb" id="sk0" onclick="GQ.useSkill(0)" onmouseenter="GQ.skTip(event,0)" onmouseleave="GQ.skTipH()">
+      <div class="sic">⚡</div><div class="snm">PULSE</div>
+      <div class="sov" id="sk0-ov" style="display:none"><span id="sk0-t">0</span></div>
+      <div class="sbar" id="sk0-bar" style="width:0%"></div>
+    </div>
+    <div class="skb" id="sk1" onclick="GQ.useSkill(1)" onmouseenter="GQ.skTip(event,1)" onmouseleave="GQ.skTipH()">
+      <div class="sic">🌀</div><div class="snm">VORTEX</div>
+      <div class="sov" id="sk1-ov" style="display:none"><span id="sk1-t">0</span></div>
+      <div class="sbar" id="sk1-bar" style="width:0%"></div>
+    </div>
+    <div class="skb" id="sk2" onclick="GQ.useSkill(2)" onmouseenter="GQ.skTip(event,2)" onmouseleave="GQ.skTipH()">
+      <div class="sic">💥</div><div class="snm">NOVA</div>
+      <div class="sov" id="sk2-ov" style="display:none"><span id="sk2-t">0</span></div>
+      <div class="sbar" id="sk2-bar" style="width:0%"></div>
+    </div>
+    <div class="skb" id="sk3" onclick="GQ.useSkill(3)" onmouseenter="GQ.skTip(event,3)" onmouseleave="GQ.skTipH()">
+      <div class="sic">🔮</div><div class="snm">ULTI</div>
+      <div class="sov" id="sk3-ov" style="display:none"><span id="sk3-t">0</span></div>
+      <div class="sbar" id="sk3-bar" style="width:0%"></div>
+    </div>
   </div>
+
   <div id="clog"></div>
-  <div id="wbadge">WAVE <span id="wb-w">1</span>-<span id="wb-s">1</span><br><span id="wb-k" style="font-size:8px;color:var(--dm)"></span></div>
+  <div id="wbadge">WAVE <span id="wb-w">1</span>-<span id="wb-s">1</span><br>
+    <span id="wb-k" style="font-size:8px;color:var(--dm)"></span></div>
   <div id="upg-bar">⚙️ <span id="ub-txt">Gemi Yükseltiliyor</span></div>
-  <div id="boss-enter">
-    <canvas id="be-canvas"></canvas>
-    <div id="be-content"><h1 id="be-name">👹 BOSS</h1><div class="be-sub" id="be-sub">Hazır ol!</div><div id="boss-cd">3</div></div>
-  </div>
-  <div id="boss-fight">
-    <canvas id="bf-canvas"></canvas>
-    <div id="bf-ui">
-      <div class="bf-top">
-        <div class="bf-bi"><div class="bf-bn" id="bf-name">BOSS</div><div class="bf-hbg"><div class="bf-hf" id="bf-hf" style="width:100%"></div></div><div class="bf-ht" id="bf-ht">HP</div></div>
-        <div class="bf-pi"><div style="font-size:8px;color:var(--dm)">Senin HP</div><div class="bf-php" id="bf-php">0</div><div style="font-size:8px;color:var(--dm);margin-top:3px">ATK: <span id="bf-atk" style="color:var(--cy)">0</span></div></div>
+
+  <!-- BOSS ARENA -->
+  <div id="boss-arena">
+    <canvas id="ba-canvas"></canvas>
+    <div id="ba-ui">
+      <div class="ba-hud">
+        <div class="ba-side">
+          <div class="ba-name" style="color:var(--cy)">GQ-VANGUARD</div>
+          <div class="ba-hpbg" style="background:#081428;">
+            <div class="ba-hpf" id="ba-php-bar" style="background:linear-gradient(90deg,#00ff88,#00cc55);width:100%;"></div>
+          </div>
+          <div class="ba-hptx" id="ba-php-txt" style="color:var(--gr)"></div>
+        </div>
+        <div class="ba-vs">⚔️ VS ⚔️</div>
+        <div class="ba-side" style="text-align:right;">
+          <div class="ba-name" id="ba-bname" style="color:var(--mg)">BOSS</div>
+          <div class="ba-hpbg" style="background:#1a0505;">
+            <div class="ba-hpf" id="ba-bhp-bar" style="background:linear-gradient(90deg,#ff3355,#ff0033);width:100%;"></div>
+          </div>
+          <div class="ba-hptx" id="ba-bhp-txt" style="color:var(--rd)"></div>
+        </div>
       </div>
-      <div class="bf-log" id="bf-log"></div>
-      <div class="bf-acts">
-        <button class="bf-btn at" onclick="GQ.bAtk()">⚔️ SALDIRI</button>
-        <button class="bf-btn sk" onclick="GQ.bSkill()">🔮 YETENEĞİ KULLAN</button>
-        <button class="bf-btn rt" onclick="GQ.bRet()">🚪 GERİ ÇEKİL</button>
+      <div id="ba-log"></div>
+      <div class="ba-acts">
+        <button class="ba-btn atk" onclick="GQ.baManualAtk()">⚔️ +BONUS SALDIRI</button>
+        <button class="ba-btn skl" onclick="GQ.baUseSkill()">🔮 YETENEĞİ KULLAN</button>
+        <button class="ba-btn ret" onclick="GQ.baRetreat()">🚪 GERİ ÇEKİL</button>
       </div>
     </div>
   </div>
-  <div id="boss-result" style="display:none;position:absolute;inset:0;z-index:32;align-items:center;justify-content:center;background:#000000bb;">
-    <div class="br-box" id="br-box"><h2 id="br-title">Sonuç</h2><div class="br-txt" id="br-txt"></div><button class="br-btn" onclick="GQ.closeBR()">TAMAM</button></div>
+
+  <!-- BOSS RESULT -->
+  <div id="boss-result">
+    <div class="br-box" id="br-box">
+      <h2 id="br-title">Sonuç</h2>
+      <div class="br-txt" id="br-txt"></div>
+      <button class="br-btn" onclick="GQ.closeBR()">TAMAM</button>
+    </div>
   </div>
+
+  <!-- MARKET MODAL -->
   <div id="mkt-modal" class="modal-ov" style="display:none">
-    <div class="mbox"><button class="m-close" onclick="GQ.closeMkt()">✕</button><h2>🏪 QUANTUM MARKET</h2>
-    <div style="font-size:9px;color:var(--dm);margin-bottom:7px;">💠 GQT: <b id="m-gqt" style="color:var(--cy)">0</b> &nbsp; 💰: <b id="m-gold" style="color:var(--gd)">0</b></div>
-    <div id="mkt-c"></div></div>
+    <div class="mbox">
+      <button class="m-close" onclick="GQ.closeMkt()">✕</button>
+      <h2>🏪 QUANTUM MARKET</h2>
+      <div style="font-size:9px;color:var(--dm);margin-bottom:8px;">
+        💠 GQT: <b id="m-gqt" style="color:var(--cy)">0</b> &nbsp; 💰: <b id="m-gold" style="color:var(--gd)">0</b>
+      </div>
+      <div id="mkt-c"></div>
+    </div>
   </div>
+
+  <!-- SHIP UPGRADE MODAL -->
   <div id="slvl-modal" class="modal-ov" style="display:none">
-    <div class="slbox"><h2>🚀 GEMİ YÜKSELTİLİYOR</h2><p id="sl-desc" style="font-size:9px;color:var(--tx);margin-bottom:4px;"></p>
-    <div class="sltimer" id="sl-timer">0:00</div><p style="font-size:8px;color:var(--dm);">Hızlandırıcı: <b id="sl-sp" style="color:var(--cy)">0</b> adet</p>
-    <button class="slbtn mg" onclick="GQ.useSpeed()">⚡ 1 HIZLANDIRICI (-30dk)</button>
-    <button class="slbtn gr" onclick="GQ.closeSlvl()">KAPAT</button></div>
+    <div class="slbox">
+      <h2>🚀 GEMİ YÜKSELTİLİYOR</h2>
+      <p id="sl-desc" style="font-size:9px;color:var(--tx);margin-bottom:4px;"></p>
+      <div class="sltimer" id="sl-timer">0:00</div>
+      <p style="font-size:8px;color:var(--dm);">Hızlandırıcı: <b id="sl-sp" style="color:var(--cy)">0</b> adet</p>
+      <button class="slbtn mg" onclick="GQ.useSpeed()">⚡ 1 HIZLANDIRICI (-30dk)</button>
+      <button class="slbtn gr" onclick="GQ.closeSlvl()">KAPAT</button>
+    </div>
   </div>
-</div>
+</div><!-- /czone -->
+
+<!-- SIDEBAR -->
 <div id="sidebar">
-<div id="tabbar">
-  <button class="tb on" onclick="GQ.tab(event,'stats')">STAT</button>
-  <button class="tb" onclick="GQ.tab(event,'inv')">GEMİ</button>
-  <button class="tb" onclick="GQ.tab(event,'quest')">GÖREV</button>
-  <button class="tb" onclick="GQ.tab(event,'box')">KUTU</button>
-  <button class="tb" onclick="GQ.tab(event,'ability')">YETENEKLEr</button>
-  <button class="tb" onclick="GQ.tab(event,'passive')">PASİF</button>
-  <button class="tb" onclick="GQ.tab(event,'boss')">BOSS</button>
-</div>
-<div class="tpanel on" id="panel-stats">
-  <div class="sl">Hayat & Kaynaklar</div>
-  <div class="sr"><span class="la">HP</span><div class="sbg"><div class="sf hp" id="bar-hp" style="width:100%"></div></div><span class="sv2" id="v-hp">100/100</span></div>
-  <div class="sr"><span class="la">GQT ENERJİ</span><div class="sbg"><div class="sf gt" id="bar-gt" style="width:0%"></div></div><span class="sv2" id="v-gt">0/100</span></div>
-  <div class="sr"><span class="la">XP</span><div class="sbg"><div class="sf xp" id="bar-xp" style="width:0%"></div></div><span class="sv2" id="v-xp">0/100</span></div>
-  <div class="sr"><span class="la" style="color:var(--pu)">ÖZ</span><div class="sbg"><div class="sf es" id="bar-es" style="width:0%"></div></div><span class="sv2" id="v-es">0/100</span></div>
-  <div class="sl">İstatistikler</div>
-  <div class="sg">
-    <div>💪 STR:<b id="s-str" style="color:var(--cy)"> 10</b></div><div>🏃 AGI:<b id="s-agi" style="color:var(--cy)"> 10</b></div>
-    <div>🧠 INT:<b id="s-int" style="color:var(--cy)"> 10</b></div><div>🍀 LCK:<b id="s-lck" style="color:var(--cy)"> 5</b></div>
-    <div>⚔️ ATK:<b id="s-atk" style="color:var(--mg)"> 15</b></div><div>🛡️ DEF:<b id="s-def" style="color:var(--mg)"> 5</b></div>
-    <div>💨 SPD:<b id="s-spd" style="color:var(--mg)"> 1.0</b>/s</div><div>🎯 CRIT:<b id="s-crit" style="color:var(--mg)"> 5</b>%</div>
+  <div id="tabbar">
+    <button class="tb on" onclick="GQ.tab(event,'stats')">STAT</button>
+    <button class="tb" onclick="GQ.tab(event,'inv')">GEMİ</button>
+    <button class="tb" onclick="GQ.tab(event,'quest')">GÖREV</button>
+    <button class="tb" onclick="GQ.tab(event,'box')">KUTU</button>
+    <button class="tb" onclick="GQ.tab(event,'ability')">YETENEK</button>
+    <button class="tb" onclick="GQ.tab(event,'passive')">PASİF</button>
+    <button class="tb" onclick="GQ.tab(event,'boss')">BOSS</button>
   </div>
-  <div class="sl">Gemi Yükseltme</div><div id="ship-upg-z"></div>
-  <div class="sl">Yetenek Ağacı</div><div id="skill-tree-z"></div>
-</div>
-<div class="tpanel" id="panel-inv">
-  <div class="sl">Gemi Ekipmanları</div>
-  <div id="ship-prev">
-    <canvas id="sc" width="288" height="130"></canvas>
-    <div class="eqs" id="eq-weapon"  style="left:202px;top:50px" onclick="GQ.unequip('weapon')"  onmouseenter="GQ.eqTip(event,'weapon')"  onmouseleave="GQ.itTipH()">🔫</div>
-    <div class="eqs" id="eq-hull"    style="left:125px;top:46px" onclick="GQ.unequip('hull')"    onmouseenter="GQ.eqTip(event,'hull')"    onmouseleave="GQ.itTipH()">🛡️</div>
-    <div class="eqs" id="eq-engine"  style="left:36px;top:50px"  onclick="GQ.unequip('engine')"  onmouseenter="GQ.eqTip(event,'engine')"  onmouseleave="GQ.itTipH()">⚙️</div>
-    <div class="eqs" id="eq-shield"  style="left:125px;top:8px"  onclick="GQ.unequip('shield')"  onmouseenter="GQ.eqTip(event,'shield')"  onmouseleave="GQ.itTipH()">🔵</div>
-    <div class="eqs" id="eq-reactor" style="left:125px;top:100px" onclick="GQ.unequip('reactor')" onmouseenter="GQ.eqTip(event,'reactor')" onmouseleave="GQ.itTipH()">⚡</div>
-    <div class="eqs" id="eq-sensor"  style="left:167px;top:8px"  onclick="GQ.unequip('sensor')"  onmouseenter="GQ.eqTip(event,'sensor')"  onmouseleave="GQ.itTipH()">📡</div>
-    <div class="eqs" id="eq-armor"   style="left:78px;top:8px"   onclick="GQ.unequip('armor')"   onmouseenter="GQ.eqTip(event,'armor')"   onmouseleave="GQ.itTipH()">🔩</div>
+
+  <!-- STATS -->
+  <div class="tpanel on" id="panel-stats">
+    <div class="sl">Hayat & Kaynaklar</div>
+    <div class="sr"><span class="la">HP</span><div class="sbg"><div class="sf hp" id="bar-hp" style="width:100%"></div></div><span class="sv2" id="v-hp">100/100</span></div>
+    <div class="sr"><span class="la">GQT ENERJİ</span><div class="sbg"><div class="sf gt" id="bar-gt" style="width:0%"></div></div><span class="sv2" id="v-gt">0/100</span></div>
+    <div class="sr"><span class="la">XP</span><div class="sbg"><div class="sf xp" id="bar-xp" style="width:0%"></div></div><span class="sv2" id="v-xp">0/100</span></div>
+    <div class="sr"><span class="la" style="color:var(--pu)">ÖZ</span><div class="sbg"><div class="sf es" id="bar-es" style="width:0%"></div></div><span class="sv2" id="v-es">0/100</span></div>
+    <div class="sl">İstatistikler</div>
+    <div class="sg">
+      <div>💪 STR:<b id="s-str" style="color:var(--cy)"> 10</b></div>
+      <div>🏃 AGI:<b id="s-agi" style="color:var(--cy)"> 10</b></div>
+      <div>🧠 INT:<b id="s-int" style="color:var(--cy)"> 10</b></div>
+      <div>🍀 LCK:<b id="s-lck" style="color:var(--cy)"> 5</b></div>
+      <div>⚔️ ATK:<b id="s-atk" style="color:var(--mg)"> 15</b></div>
+      <div>🛡️ DEF:<b id="s-def" style="color:var(--mg)"> 5</b></div>
+      <div>💨 SPD:<b id="s-spd" style="color:var(--mg)"> 1.0</b>/s</div>
+      <div>🎯 CRIT:<b id="s-crit" style="color:var(--mg)"> 5</b>%</div>
+    </div>
+    <div class="sl">Gemi Yükseltme</div>
+    <div id="ship-upg-z"></div>
+    <div class="sl">Yetenek Ağacı</div>
+    <div id="skill-tree-z"></div>
   </div>
-  <div class="sl">Çanta (20 Slot)</div><div id="inv-grid"></div>
+
+  <!-- SHIP / INVENTORY -->
+  <div class="tpanel" id="panel-inv">
+    <div class="sl">Gemi Ekipmanları</div>
+    <div id="ship-prev">
+      <canvas id="sc" width="292" height="132"></canvas>
+      <div class="eqs" id="eq-weapon"  style="left:204px;top:50px" onclick="GQ.unequip('weapon')"  onmouseenter="GQ.eqTip(event,'weapon')"  onmouseleave="GQ.itTipH()">🔫</div>
+      <div class="eqs" id="eq-hull"    style="left:127px;top:47px" onclick="GQ.unequip('hull')"    onmouseenter="GQ.eqTip(event,'hull')"    onmouseleave="GQ.itTipH()">🛡️</div>
+      <div class="eqs" id="eq-engine"  style="left:38px;top:50px"  onclick="GQ.unequip('engine')"  onmouseenter="GQ.eqTip(event,'engine')"  onmouseleave="GQ.itTipH()">⚙️</div>
+      <div class="eqs" id="eq-shield"  style="left:127px;top:8px"  onclick="GQ.unequip('shield')"  onmouseenter="GQ.eqTip(event,'shield')"  onmouseleave="GQ.itTipH()">🔵</div>
+      <div class="eqs" id="eq-reactor" style="left:127px;top:101px" onclick="GQ.unequip('reactor')" onmouseenter="GQ.eqTip(event,'reactor')" onmouseleave="GQ.itTipH()">⚡</div>
+      <div class="eqs" id="eq-sensor"  style="left:169px;top:8px"  onclick="GQ.unequip('sensor')"  onmouseenter="GQ.eqTip(event,'sensor')"  onmouseleave="GQ.itTipH()">📡</div>
+      <div class="eqs" id="eq-armor"   style="left:80px;top:8px"   onclick="GQ.unequip('armor')"   onmouseenter="GQ.eqTip(event,'armor')"   onmouseleave="GQ.itTipH()">🔩</div>
+    </div>
+    <div class="sl">Çanta (20 Slot)</div>
+    <div id="inv-grid"></div>
+  </div>
+
+  <!-- QUEST -->
+  <div class="tpanel" id="panel-quest">
+    <div class="sl">Günlük Görevler</div>
+    <div id="di" style="font-size:8px;color:var(--dm);margin-bottom:4px;"></div>
+    <div id="quest-list"></div>
+  </div>
+
+  <!-- BOX -->
+  <div class="tpanel" id="panel-box">
+    <div class="sl">Quantum Kutular</div>
+    <div id="box-list"></div>
+  </div>
+
+  <!-- ABILITY -->
+  <div class="tpanel" id="panel-ability">
+    <div class="sl">Yetenek Sayfası</div>
+    <div style="font-size:8px;color:var(--dm);margin-bottom:4px;">Seviye & Nadirliğe göre açılır. Gold ile öğren.</div>
+    <div id="ab-list"></div>
+  </div>
+
+  <!-- PASSIVE -->
+  <div class="tpanel" id="panel-passive">
+    <div class="sl">Pasif Güç Ağacı</div>
+    <div style="font-size:8px;color:var(--dm);margin-bottom:4px;">💎 Pasif Kristal gerekir. Marketten alınabilir.</div>
+    <div id="ptree"></div>
+  </div>
+
+  <!-- BOSS -->
+  <div class="tpanel" id="panel-boss">
+    <div class="sl">Özel Boss Karşılaşmaları</div>
+    <div style="font-size:8px;color:var(--dm);margin-bottom:4px;">Her boss bir kez yenilebilir. Büyük ödüller!</div>
+    <div id="boss-list"></div>
+  </div>
+</div><!-- /sidebar -->
+</div><!-- /main -->
+</div><!-- /root -->
+
+<!-- TOOLTIPS -->
+<div id="sk-tip">
+  <div class="stn" id="stn"></div>
+  <div class="strow"><span class="stl">Bekleme</span><span id="st-cd"></span></div>
+  <div class="strow"><span class="stl">Hasar x</span><span id="st-dm"></span></div>
+  <div class="strow"><span class="stl">Glitch x</span><span id="st-gm"></span></div>
+  <div class="std" id="st-ds"></div>
 </div>
-<div class="tpanel" id="panel-quest"><div class="sl">Günlük Görevler</div><div id="di" style="font-size:8px;color:var(--dm);margin-bottom:4px;"></div><div id="quest-list"></div></div>
-<div class="tpanel" id="panel-box"><div class="sl">Quantum Kutular</div><div id="box-list"></div></div>
-<div class="tpanel" id="panel-ability"><div class="sl">Yetenek Sayfası</div><div style="font-size:8px;color:var(--dm);margin-bottom:4px;">Seviye & Nadirliğe göre açılır. Gold ile öğren.</div><div id="ab-list"></div></div>
-<div class="tpanel" id="panel-passive"><div class="sl">Pasif Güç Ağacı</div><div style="font-size:8px;color:var(--dm);margin-bottom:4px;">💎 Pasif Kristal gerekir.</div><div id="ptree"></div></div>
-<div class="tpanel" id="panel-boss"><div class="sl">Özel Boss Karşılaşmaları</div><div style="font-size:8px;color:var(--dm);margin-bottom:4px;">Her boss bir kez yenilebilir. Büyük ödüller!</div><div id="boss-list"></div></div>
+<div id="it-tip">
+  <div style="font-size:11px" id="it-nm"></div>
+  <div style="font-size:8px;color:var(--dm);margin:2px 0" id="it-sb"></div>
+  <div id="it-st" style="font-size:9px"></div>
+  <div id="it-af" style="font-size:8px;color:var(--gr);margin-top:2px"></div>
 </div>
-</div>
-</div>
-<div id="sk-tip"><div class="stn" id="stn"></div><div class="strow"><span class="stl">Bekleme</span><span id="st-cd"></span></div><div class="strow"><span class="stl">Hasar x</span><span id="st-dm"></span></div><div class="strow"><span class="stl">Glitch x</span><span id="st-gm"></span></div><div class="std" id="st-ds"></div></div>
-<div id="it-tip"><div style="font-size:11px" id="it-nm"></div><div style="font-size:8px;color:var(--dm);margin:2px 0" id="it-sb"></div><div id="it-st" style="font-size:9px"></div><div id="it-af" style="font-size:8px;color:var(--gr);margin-top:2px"></div></div>
 <script>
 const GQ=(()=>{
 'use strict';
+// ── UTILS ───────────────────────────────────────────────────────
 const fmt=n=>{if(n>=1e12)return(n/1e12).toFixed(1)+'T';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return Math.floor(n)+''};
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const fmtD=s=>{if(s<60)return Math.ceil(s)+'s';if(s<3600)return Math.ceil(s/60)+'dk';if(s<86400)return(s/3600).toFixed(1)+'sa';return(s/86400).toFixed(1)+'gün'};
+
+// ── RARITIES ────────────────────────────────────────────────────
 const RARS=['bronze','silver','gold','platinum','diamond','radianium','glitchanium'];
 const RLBL={bronze:'BRONZ',silver:'SİLVER',gold:'ALTIN',platinum:'PLATİNYUM',diamond:'DİAMOND',radianium:'RADİANİUM',glitchanium:'GLİTCHANİUM'};
 const RCOL={bronze:'#cd7f32',silver:'#c0c0c0',gold:'#ffd700',platinum:'#e5e4e2',diamond:'#a8f0ff',radianium:'#ff88ff',glitchanium:'#cc44ff'};
 const RSELL={bronze:5,silver:18,gold:55,platinum:160,diamond:450,radianium:1200,glitchanium:4000};
-const RBASE=[8,22,55,140,380,1000,3000];
+
 function lootW(lvl){
   if(lvl<5)  return[90,10,0,0,0,0,0];
   if(lvl<10) return[60,35,5,0,0,0,0];
@@ -365,187 +567,338 @@ function rollRar(lvl,boost=0){
   for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return RARS[i];}
   return 'bronze';
 }
+
+// ── ITEM SLOTS (multi-stat) ──────────────────────────────────────
 const SLOTS={
-  weapon:{label:'Lazer Silahı',icon:'🔫',sk:'atk',  part:'cannon'},
-  hull:  {label:'Gemi Gövdesi',icon:'🛡️',sk:'hp',   part:'hull'},
-  engine:{label:'Motor',       icon:'⚙️',sk:'spd',  part:'engine'},
-  shield:{label:'Kalkan',      icon:'🔵',sk:'def',  part:'shield'},
-  reactor:{label:'Reaktör',   icon:'⚡',sk:'gqt_m',part:'reactor'},
-  sensor:{label:'Sensör',      icon:'📡',sk:'crit', part:'sensor'},
-  armor: {label:'Zırh',        icon:'🔩',sk:'def2', part:'armor'},
+  weapon: {label:'Lazer Silahı',icon:'🔫',shipPart:'cannon',
+    ratios:{atk:1.0,crit:0.4,spd:0.1,def:0.05,hp:0.05,int:0.2}},
+  hull:   {label:'Gemi Gövdesi',icon:'🛡️',shipPart:'hull',
+    ratios:{hp:1.0,def:0.5,atk:0.1,int:0.15,crit:0.05,spd:0.05}},
+  engine: {label:'Motor',icon:'⚙️',shipPart:'engine',
+    ratios:{spd:1.0,atk:0.2,crit:0.15,hp:0.1,def:0.05,int:0.1}},
+  shield: {label:'Kalkan',icon:'🔵',shipPart:'shield',
+    ratios:{def:1.0,hp:0.6,atk:0.05,crit:0.05,spd:0.05,int:0.1}},
+  reactor:{label:'Reaktör',icon:'⚡',shipPart:'reactor',
+    ratios:{int:1.0,hp:0.3,atk:0.2,def:0.1,spd:0.15,crit:0.1}},
+  sensor: {label:'Sensör',icon:'📡',shipPart:'sensor',
+    ratios:{crit:1.0,spd:0.3,int:0.4,atk:0.15,def:0.05,hp:0.1}},
+  armor:  {label:'Zırh',icon:'🔩',shipPart:'armor',
+    ratios:{def:0.9,hp:0.8,atk:0.05,crit:0.05,spd:0.05,int:0.1}},
 };
-function itemSV(ri,sl,st){return Math.round(RBASE[ri]*Math.pow(sl,1.4)*Math.pow(1.18,st));}
-// Pixel ship rarity tints
-const RT={
-  bronze:   {body:'#3a1a08',bA:'#cd7f32',ck:'#ffbb44',ckG:'#ffeeaa',eg:'#cc5500',grd:'#cd7f32'},
-  silver:   {body:'#1a2535',bA:'#c0c0c0',ck:'#ddeeff',ckG:'#ffffff', eg:'#aaaaff',grd:'#c0c0c0'},
-  gold:     {body:'#1a1500',bA:'#ffd700',ck:'#ffffaa',ckG:'#ffffee', eg:'#ffaa00',grd:'#ffd700'},
-  platinum: {body:'#101820',bA:'#e5e4e2',ck:'#ffffff',ckG:'#ffffff', eg:'#ddddff',grd:'#e5e4e2'},
-  diamond:  {body:'#001520',bA:'#a8f0ff',ck:'#ccffff',ckG:'#efffff', eg:'#66aaff',grd:'#a8f0ff'},
-  radianium:{body:'#1a0018',bA:'#ff88ff',ck:'#ffccff',ckG:'#ffeeff', eg:'#ff00ff',grd:'#ff88ff'},
-  glitchanium:{body:'#0a0012',bA:'#cc44ff',ck:'#ff88ff',ckG:'#ffccff',eg:'#9900ff',grd:'#cc44ff'},
+const SBASE={atk:[6,16,40,105,280,750,2200],def:[4,10,26,70,190,500,1500],
+  hp:[20,55,140,360,960,2500,7500],spd:[0.04,0.1,0.25,0.65,1.7,4.5,13],
+  crit:[1.5,4,10,26,70,185,550],int:[5,14,36,95,255,680,2000]};
+const STATNAME={atk:'⚔️ATK',def:'🛡️DEF',hp:'❤️HP',spd:'💨SPD',crit:'🎯CRIT',int:'🧠INT'};
+
+function itemStats(ri,sl,stars,slotKey){
+  const ratios=SLOTS[slotKey].ratios;
+  const scale=Math.pow(sl,1.35)*Math.pow(1.16,stars);
+  const out={};
+  Object.keys(ratios).forEach(s=>{out[s]=Math.round(SBASE[s][ri]*ratios[s]*scale);});
+  return out;
+}
+function mainStatVal(stats,slotKey){
+  const ratios=SLOTS[slotKey].ratios;
+  return stats[Object.keys(ratios).reduce((a,b)=>ratios[a]>ratios[b]?a:b)]||0;
+}
+
+// ── SHIP VISUAL: pixel art colors by part×rarity ─────────────────
+const PDEF={body:'#1e2a4a',bAcc:'#00f5ff',grid:'#00f5ff44',ck:'#00ccff',ckG:'#aaeeff',
+  eng:'#ff4422',can:'#00f5ff',wing:'#162040',arm:'#162040',react:'#00f5ff'};
+const RTINT={
+  bronze:   {body:'#3a1a08',bAcc:'#cd7f32',grid:'#cd7f3244',ck:'#ffbb44',ckG:'#ffe8aa',eng:'#cc5500',can:'#cd7f32',wing:'#2a1008',arm:'#2a1008',react:'#cd7f32'},
+  silver:   {body:'#182535',bAcc:'#c0c0c0',grid:'#c0c0c044',ck:'#ddeeff',ckG:'#ffffff', eng:'#aaaaff',can:'#c0c0c0',wing:'#101a26',arm:'#101a26',react:'#c0c0c0'},
+  gold:     {body:'#1a1500',bAcc:'#ffd700',grid:'#ffd70044',ck:'#ffffaa',ckG:'#ffffd0', eng:'#ffaa00',can:'#ffd700',wing:'#0e0e00',arm:'#0e0e00',react:'#ffd700'},
+  platinum: {body:'#101820',bAcc:'#e5e4e2',grid:'#e5e4e244',ck:'#ffffff',ckG:'#ffffff', eng:'#ddddff',can:'#e5e4e2',wing:'#080f18',arm:'#080f18',react:'#e5e4e2'},
+  diamond:  {body:'#001520',bAcc:'#a8f0ff',grid:'#a8f0ff44',ck:'#ccffff',ckG:'#efffff', eng:'#66aaff',can:'#a8f0ff',wing:'#000e10',arm:'#000e10',react:'#a8f0ff'},
+  radianium:{body:'#1a0018',bAcc:'#ff88ff',grid:'#ff88ff44',ck:'#ffccff',ckG:'#ffeeff', eng:'#ff00ff',can:'#ff88ff',wing:'#0e0018',arm:'#0e0018',react:'#ff88ff'},
+  glitchanium:{body:'#0a0012',bAcc:'#cc44ff',grid:'#cc44ff44',ck:'#ff88ff',ckG:'#ffccff',eng:'#9900ff',can:'#cc44ff',wing:'#060010',arm:'#060010',react:'#cc44ff'},
 };
-function getT(slotKey,equipped){const it=equipped[slotKey];return it?RT[it.rar]:null;}
-function TA(slotKey,key,fb,equipped){const t=getT(slotKey,equipped);return(t&&t[key])?t[key]:fb;}
-function drawPixelShip(ctx,cx,cy,equipped,pulse,scale=1){
-  ctx.save();ctx.translate(cx,cy);ctx.scale(scale,scale);
-  const bodyCol =TA('hull','body','#1e2a4a',equipped);
-  const bodyAcc =TA('hull','bA','#00f5ff',equipped);
-  const gridCol =TA('hull','grd','#00f5ff',equipped);
-  const ckCol   =TA('sensor','ck','#00ccff',equipped);
-  const ckGlow  =TA('sensor','ckG','#aaeeff',equipped);
-  const engGlow =TA('engine','eg','#ff4422',equipped);
-  const canCol  =TA('weapon','bA','#00f5ff',equipped);
-  const armorCol=TA('armor','body','#162040',equipped);
-  const reactCol=TA('reactor','bA','#00f5ff',equipped);
-  // ENGINE EXHAUSTS
-  const exLen=28+Math.sin(pulse)*8;
-  [-11,10].forEach((ey,i)=>{
-    const ex=ctx.createLinearGradient(-exLen,0,0,0);
-    ex.addColorStop(0,i===0?'#ff442200':'#ff220000');ex.addColorStop(0.3,engGlow+'88');ex.addColorStop(1,engGlow);
-    ctx.beginPath();ctx.moveTo(-20,ey-5);ctx.lineTo(-20-exLen,ey);ctx.lineTo(-20,ey+5);ctx.closePath();ctx.fillStyle=ex;ctx.fill();
+function T(k,equipped,field){
+  const part=Object.keys(SLOTS).find(s=>SLOTS[s].shipPart===k);
+  if(part&&equipped[part]&&RTINT[equipped[part].rar])return RTINT[equipped[part].rar][field];
+  return PDEF[field];
+}
+
+// ── DRAW PIXEL-ART SHIP ─────────────────────────────────────────
+function drawShip(ctx,cx,cy,equipped,pulse,scale=1,mirrored=false){
+  ctx.save();
+  ctx.translate(cx,cy);
+  ctx.scale(mirrored?-scale:scale,scale);
+
+  const body=T('hull',equipped,'body'), bAcc=T('hull',equipped,'bAcc');
+  const grid=T('hull',equipped,'grid');
+  const ck=T('sensor',equipped,'ck'),   ckG=T('sensor',equipped,'ckG');
+  const eng=T('engine',equipped,'eng');
+  const can=T('cannon',equipped,'can');
+  const wing=T('armor',equipped,'wing');
+  const react=T('reactor',equipped,'react');
+  const sh=equipped.shield;
+
+  // ── ENGINE EXHAUSTS ──
+  const eL=30+Math.sin(pulse)*10;
+  [-12,12].forEach((ey,i)=>{
+    const eg=ctx.createLinearGradient(-eL,0,0,0);
+    eg.addColorStop(0,'rgba(0,0,0,0)');eg.addColorStop(.35,eng+'99');eg.addColorStop(1,eng);
+    ctx.beginPath();ctx.moveTo(-22,ey-5);ctx.lineTo(-22-eL,ey+(i===0?-1:1));ctx.lineTo(-22,ey+5);
+    ctx.closePath();ctx.fillStyle=eg;ctx.fill();
   });
-  // TOP NACELLE
-  const eng1=TA('engine','body','#5a3020',equipped);
-  ctx.fillStyle=eng1;ctx.beginPath();ctx.roundRect(-22,-16,14,10,3);ctx.fill();
-  ctx.fillStyle='#2a1808';ctx.fillRect(-20,-14,10,6);
-  for(let r=0;r<3;r++){ctx.strokeStyle='#1a0c04';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(-8-r*3,-11,4,0,Math.PI*2);ctx.stroke();}
-  ctx.fillStyle=engGlow+'cc';ctx.beginPath();ctx.arc(-9,-11,3,0,Math.PI*2);ctx.fill();
-  // BOTTOM NACELLE
-  ctx.fillStyle=eng1;ctx.beginPath();ctx.roundRect(-22,6,14,10,3);ctx.fill();
-  ctx.fillStyle='#2a1808';ctx.fillRect(-20,8,10,6);
-  for(let r=0;r<3;r++){ctx.strokeStyle='#1a0c04';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(-8-r*3,11,4,0,Math.PI*2);ctx.stroke();}
-  ctx.fillStyle=engGlow+'cc';ctx.beginPath();ctx.arc(-9,11,3,0,Math.PI*2);ctx.fill();
-  // REACTOR CORE
-  ctx.fillStyle='#050d1a';ctx.beginPath();ctx.roundRect(-12,-4,8,8,4);ctx.fill();
-  ctx.beginPath();ctx.arc(-8,0,3.5,0,Math.PI*2);
-  ctx.fillStyle=reactCol;ctx.shadowColor=reactCol;ctx.shadowBlur=6+Math.sin(pulse)*3;ctx.fill();ctx.shadowBlur=0;
-  // MAIN BODY
-  const bGrad=ctx.createLinearGradient(-18,-18,22,18);bGrad.addColorStop(0,bodyCol);bGrad.addColorStop(.4,bodyAcc+'18');bGrad.addColorStop(1,bodyCol);
-  ctx.beginPath();ctx.moveTo(28,0);ctx.bezierCurveTo(24,-7,8,-14,-4,-13);ctx.lineTo(-16,-12);ctx.lineTo(-16,12);ctx.lineTo(-4,13);ctx.bezierCurveTo(8,14,24,7,28,0);ctx.closePath();
-  ctx.fillStyle=bGrad;ctx.fill();ctx.strokeStyle=bodyAcc+'55';ctx.lineWidth=1;ctx.stroke();
-  // GRID LINES
-  ctx.strokeStyle=gridCol+'44';ctx.lineWidth=0.5;
-  [-5,0,5].forEach(gy=>{ctx.beginPath();ctx.moveTo(-14,gy);ctx.lineTo(24,gy);ctx.stroke();});
-  [-8,0,8,16].forEach(gx=>{ctx.beginPath();ctx.moveTo(gx,-12+Math.abs(gx)*.3);ctx.lineTo(gx,12-Math.abs(gx)*.3);ctx.stroke();});
-  ctx.strokeStyle=bodyAcc+'88';ctx.lineWidth=0.8;
-  ctx.beginPath();ctx.moveTo(28,0);ctx.bezierCurveTo(24,-7,8,-14,-4,-13);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(28,0);ctx.bezierCurveTo(24,7,8,14,-4,13);ctx.stroke();
-  // ARMOR PANELS
-  ctx.fillStyle=armorCol;ctx.strokeStyle=TA('armor','bA',bodyAcc,equipped)+'55';ctx.lineWidth=0.6;
-  ctx.beginPath();ctx.roundRect(4,-6,10,4,1);ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.roundRect(4,2,10,4,1);ctx.fill();ctx.stroke();
-  // TOP FIN
-  const wGrad=ctx.createLinearGradient(0,-14,0,-28);wGrad.addColorStop(0,armorCol);wGrad.addColorStop(1,armorCol+'88');
-  ctx.beginPath();ctx.moveTo(6,-12);ctx.lineTo(4,-26);ctx.lineTo(-2,-24);ctx.lineTo(-10,-12);ctx.closePath();
-  ctx.fillStyle=wGrad;ctx.fill();ctx.strokeStyle=TA('armor','bA',bodyAcc,equipped)+'55';ctx.lineWidth=0.6;ctx.stroke();
-  ctx.strokeStyle=gridCol+'33';ctx.lineWidth=0.4;
-  [[4,-14,-1,-13],[2,-18,-2,-17],[0,-22,-2,-21]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();});
-  // BOTTOM FIN
-  ctx.beginPath();ctx.moveTo(6,12);ctx.lineTo(4,26);ctx.lineTo(-2,24);ctx.lineTo(-10,12);ctx.closePath();
-  ctx.fillStyle=wGrad;ctx.fill();ctx.strokeStyle=TA('armor','bA',bodyAcc,equipped)+'55';ctx.lineWidth=0.6;ctx.stroke();
-  ctx.strokeStyle=gridCol+'33';ctx.lineWidth=0.4;
-  [[4,14,-1,13],[2,18,-2,17],[0,22,-2,21]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();});
-  // DOME COCKPIT
-  ctx.strokeStyle=gridCol+'66';ctx.lineWidth=0.8;
-  for(let a=0;a<6;a++){const ang=(a/6)*Math.PI*2;ctx.beginPath();ctx.moveTo(6,0);ctx.lineTo(6+Math.cos(ang)*8,Math.sin(ang)*6);ctx.stroke();}
-  const dGrad=ctx.createRadialGradient(6,-1,1,6,-1,8);
-  dGrad.addColorStop(0,ckGlow);dGrad.addColorStop(0.5,ckCol+'cc');dGrad.addColorStop(1,ckCol+'44');
-  ctx.beginPath();ctx.ellipse(6,-.5,8.5,6,0,0,Math.PI*2);
-  ctx.fillStyle=dGrad;ctx.shadowColor=ckCol;ctx.shadowBlur=8+Math.sin(pulse)*4;ctx.fill();ctx.shadowBlur=0;
-  ctx.strokeStyle=ckCol+'aa';ctx.lineWidth=0.8;ctx.beginPath();ctx.ellipse(6,-.5,8.5,6,0,0,Math.PI*2);ctx.stroke();
-  ctx.beginPath();ctx.ellipse(4,-2,4,2,-.4,0,Math.PI*2);ctx.fillStyle='rgba(220,250,255,0.5)';ctx.fill();
-  // UPPER CANNON
-  ctx.fillStyle='#0a1828';ctx.strokeStyle=gridCol+'44';ctx.lineWidth=0.6;
-  ctx.beginPath();ctx.roundRect(8,-15,12,4,2);ctx.fill();ctx.stroke();
-  ctx.fillStyle=canCol+'88';ctx.beginPath();ctx.rect(14,-14,10,2);ctx.fill();
-  ctx.fillStyle=canCol+'66';ctx.beginPath();ctx.rect(10,-9,8,1.5);ctx.fill();
-  ctx.beginPath();ctx.arc(24,-13,2,0,Math.PI*2);
-  ctx.fillStyle=canCol;ctx.shadowColor=canCol;ctx.shadowBlur=5+Math.sin(pulse)*2;ctx.fill();ctx.shadowBlur=0;
-  ctx.fillStyle='#0a1828';ctx.beginPath();ctx.roundRect(8,11,10,3,1.5);ctx.fill();
-  ctx.fillStyle=canCol+'66';ctx.beginPath();ctx.rect(12,12,8,1.5);ctx.fill();
-  // SHIELD RING
-  const shIt=equipped.shield;
-  if(shIt){
-    const shC=RCOL[shIt.rar];
-    ctx.beginPath();ctx.ellipse(4,0,36,26,0,0,Math.PI*2);ctx.strokeStyle=shC+'44';ctx.lineWidth=1.5+Math.sin(pulse);ctx.stroke();
-    ctx.beginPath();ctx.ellipse(4,0,36,26,0,0,Math.PI*2);ctx.strokeStyle=shC+'22';ctx.lineWidth=3+Math.sin(pulse)*1.5;ctx.stroke();
+  // extra inner glow
+  const ig=ctx.createLinearGradient(-15,0,0,0);ig.addColorStop(0,eng+'00');ig.addColorStop(1,eng+'55');
+  ctx.beginPath();ctx.moveTo(-22,-3);ctx.lineTo(-28,0);ctx.lineTo(-22,3);ctx.closePath();
+  ctx.fillStyle=ig;ctx.fill();
+
+  // ── NACELLE PODS (2 engine cylinders) ──
+  const engBody=T('engine',equipped,'body')||'#3a2010';
+  [[-12,-16,16],[ 12,6,16]].forEach(([ey,ex,w])=>{
+    // pod body gradient
+    const pg=ctx.createLinearGradient(ex,ey-5,ex,ey+5);
+    pg.addColorStop(0,engBody+'cc');pg.addColorStop(.5,engBody);pg.addColorStop(1,'#1a0a04');
+    ctx.fillStyle=pg;
+    ctx.beginPath();ctx.rect(-22,ey-5,w,10);ctx.fill();
+    // ring details
+    for(let r=0;r<3;r++){
+      ctx.strokeStyle='#0a0502';ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.rect(-22+r*4,ey-5,3,10);ctx.stroke();
+    }
+    // glowing nozzle
+    const ng=ctx.createRadialGradient(-8,ey,0,-8,ey,5);
+    ng.addColorStop(0,eng+'ff');ng.addColorStop(.5,eng+'88');ng.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(-8,ey,5,0,Math.PI*2);ctx.fillStyle=ng;ctx.fill();
+    // nozzle ring
+    ctx.strokeStyle=eng+'88';ctx.lineWidth=.8;ctx.beginPath();ctx.arc(-8,ey,4,0,Math.PI*2);ctx.stroke();
+  });
+
+  // ── REACTOR CORE ──
+  const rcg=ctx.createRadialGradient(-8,0,0,-8,0,4);
+  rcg.addColorStop(0,react);rcg.addColorStop(.5,react+'88');rcg.addColorStop(1,'transparent');
+  ctx.fillStyle='#050d1a';ctx.beginPath();ctx.rect(-14,-5,10,10);ctx.fill();
+  ctx.beginPath();ctx.arc(-8,0,4.5,0,Math.PI*2);
+  ctx.fillStyle=rcg;ctx.shadowColor=react;ctx.shadowBlur=7+Math.sin(pulse)*3;ctx.fill();ctx.shadowBlur=0;
+
+  // ── SHIELD RING ──
+  if(sh){
+    const sc=RCOL[sh.rar];
+    const rr=42+Math.sin(pulse)*.5;
+    ctx.beginPath();ctx.ellipse(4,0,rr,28,0,0,Math.PI*2);
+    ctx.strokeStyle=sc+'55';ctx.lineWidth=1.5+Math.sin(pulse);ctx.stroke();
+    ctx.beginPath();ctx.ellipse(4,0,rr,28,0,0,Math.PI*2);
+    ctx.strokeStyle=sc+'22';ctx.lineWidth=3.5;ctx.stroke();
   }
-  // RUNNING LIGHTS
-  [[22,-2,'#00ff88'],[22,2,'#ff3355'],[-18,-10,'#aa44ff'],[-18,10,'#aa44ff']].forEach(([lx,ly,lc])=>{
-    ctx.beginPath();ctx.arc(lx,ly,1.5,0,Math.PI*2);ctx.fillStyle=lc;ctx.shadowColor=lc;ctx.shadowBlur=4+Math.sin(pulse)*2;ctx.fill();ctx.shadowBlur=0;
+
+  // ── HULL GLOW ──
+  const hg=ctx.createRadialGradient(6,0,4,6,0,32);
+  hg.addColorStop(0,bAcc+'18');hg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.ellipse(6,0,32,22,0,0,Math.PI*2);ctx.fillStyle=hg;ctx.fill();
+
+  // ── MAIN FUSELAGE ──
+  const bg=ctx.createLinearGradient(-16,-14,26,14);
+  bg.addColorStop(0,body);bg.addColorStop(.4,bAcc+'18');bg.addColorStop(1,body);
+  ctx.beginPath();
+  ctx.moveTo(30,0);
+  ctx.bezierCurveTo(26,-8,8,-16,-6,-14);
+  ctx.lineTo(-20,-12);ctx.lineTo(-20,12);ctx.lineTo(-6,14);
+  ctx.bezierCurveTo(8,16,26,8,30,0);
+  ctx.closePath();
+  ctx.fillStyle=bg;ctx.fill();
+  ctx.strokeStyle=bAcc+'66';ctx.lineWidth=.9;ctx.stroke();
+
+  // ── GRID LINES on hull ──
+  ctx.strokeStyle=grid;ctx.lineWidth=.5;
+  [-6,0,6].forEach(gy=>{ctx.beginPath();ctx.moveTo(-16,gy);ctx.lineTo(26,gy);ctx.stroke();});
+  [-8,0,10,20].forEach(gx=>{ctx.beginPath();ctx.moveTo(gx,-12+Math.abs(gx-4)*.2);ctx.lineTo(gx,12-Math.abs(gx-4)*.2);ctx.stroke();});
+  ctx.strokeStyle=bAcc+'99';ctx.lineWidth=.8;
+  ctx.beginPath();ctx.moveTo(30,0);ctx.bezierCurveTo(26,-8,8,-16,-6,-14);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(30,0);ctx.bezierCurveTo(26,8,8,16,-6,14);ctx.stroke();
+
+  // ── ARMOR PANELS (side plates) ──
+  const armG=ctx.createLinearGradient(4,-6,4,6);armG.addColorStop(0,wing);armG.addColorStop(1,wing+'88');
+  ctx.fillStyle=armG;ctx.strokeStyle=bAcc+'44';ctx.lineWidth=.6;
+  [[4,-7,11,4],[4,3,11,4]].forEach(([x,y,w,h])=>{ctx.beginPath();ctx.rect(x,y,w,h);ctx.fill();ctx.stroke();});
+
+  // ── TOP FIN ──
+  const wgT=ctx.createLinearGradient(0,-14,0,-28);wgT.addColorStop(0,wing);wgT.addColorStop(1,wing+'99');
+  ctx.beginPath();ctx.moveTo(8,-12);ctx.lineTo(6,-28);ctx.lineTo(-2,-26);ctx.lineTo(-12,-12);
+  ctx.closePath();ctx.fillStyle=wgT;ctx.fill();ctx.strokeStyle=bAcc+'44';ctx.lineWidth=.6;ctx.stroke();
+  ctx.strokeStyle=grid;ctx.lineWidth=.4;
+  [[6,-15,-1,-14],[4,-20,-1,-18],[2,-24,-1,-22]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();});
+
+  // ── BOTTOM FIN ──
+  const wgB=ctx.createLinearGradient(0,14,0,28);wgB.addColorStop(0,wing);wgB.addColorStop(1,wing+'99');
+  ctx.beginPath();ctx.moveTo(8,12);ctx.lineTo(6,28);ctx.lineTo(-2,26);ctx.lineTo(-12,12);
+  ctx.closePath();ctx.fillStyle=wgB;ctx.fill();ctx.strokeStyle=bAcc+'44';ctx.lineWidth=.6;ctx.stroke();
+  ctx.strokeStyle=grid;ctx.lineWidth=.4;
+  [[6,15,-1,14],[4,20,-1,18],[2,24,-1,22]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();});
+
+  // ── DOME COCKPIT ──
+  // struts
+  ctx.strokeStyle=bAcc+'55';ctx.lineWidth=.8;
+  for(let a=0;a<6;a++){const ang=(a/6)*Math.PI*2;ctx.beginPath();ctx.moveTo(8,0);ctx.lineTo(8+Math.cos(ang)*9.5,Math.sin(ang)*7);ctx.stroke();}
+  // dome fill
+  const dg=ctx.createRadialGradient(8,-1,1,8,-1,9.5);
+  dg.addColorStop(0,ckG);dg.addColorStop(.45,ck+'cc');dg.addColorStop(1,ck+'44');
+  ctx.beginPath();ctx.ellipse(8,-.5,9.5,7,0,0,Math.PI*2);
+  ctx.fillStyle=dg;ctx.shadowColor=ck;ctx.shadowBlur=9+Math.sin(pulse)*5;ctx.fill();ctx.shadowBlur=0;
+  ctx.strokeStyle=ck+'99';ctx.lineWidth=.9;ctx.beginPath();ctx.ellipse(8,-.5,9.5,7,0,0,Math.PI*2);ctx.stroke();
+  ctx.beginPath();ctx.ellipse(5,-2.5,4.5,2.5,-.4,0,Math.PI*2);ctx.fillStyle='rgba(220,250,255,.52)';ctx.fill();
+
+  // ── TOP CANNON (dual barrel) ──
+  ctx.fillStyle='#0a1828';ctx.strokeStyle=bAcc+'33';ctx.lineWidth=.6;
+  ctx.beginPath();ctx.rect(10,-17,14,5);ctx.fill();ctx.stroke();
+  // barrels
+  ctx.fillStyle=can+'88';ctx.beginPath();ctx.rect(16,-16,14,2);ctx.fill();
+  ctx.fillStyle=can+'55';ctx.beginPath();ctx.rect(14,-11,10,1.8);ctx.fill();
+  // cannon tip glow
+  const ctg=ctx.createRadialGradient(30,-15,0,30,-15,3);
+  ctg.addColorStop(0,can+'ff');ctg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(30,-15,3,0,Math.PI*2);ctx.fillStyle=ctg;
+  ctx.shadowColor=can;ctx.shadowBlur=6+Math.sin(pulse)*3;ctx.fill();ctx.shadowBlur=0;
+  // lower gun pod
+  ctx.fillStyle='#0a1828';ctx.beginPath();ctx.rect(10,12,12,4);ctx.fill();
+  ctx.fillStyle=can+'66';ctx.beginPath();ctx.rect(15,13,10,2);ctx.fill();
+
+  // ── RUNNING LIGHTS ──
+  [[22,-3,'#00ff88'],[22,3,'#ff3355'],[-19,-11,'#aa44ff'],[-19,11,'#aa44ff']].forEach(([lx,ly,lc])=>{
+    ctx.beginPath();ctx.arc(lx,ly,1.8,0,Math.PI*2);
+    ctx.fillStyle=lc;ctx.shadowColor=lc;ctx.shadowBlur=5+Math.sin(pulse)*2;ctx.fill();ctx.shadowBlur=0;
   });
+
   ctx.restore();
 }
-  const SKILLS=[
-  {name:'PULSE', icon:'⚡',cd:3, dm:1.8,gm:3.2,desc:'Hızlı enerji atışı.'},
-  {name:'VORTEX',icon:'🌀',cd:7, dm:2.4,gm:4.2,desc:'Tüm düşmanlara girdap.'},
-  {name:'NOVA',  icon:'💥',cd:13,dm:3.5,gm:6.0,desc:'Devasa patlama dalgası.'},
-  {name:'ULTI',  icon:'🔮',cd:28,dm:6.0,gm:10.0,desc:'Gerçekliği parçalar.'},
+
+// ── ENEMY SHIP DRAW (hostile design) ───────────────────────────
+function drawEnemyShip(ctx,ex,ey,col,scale,pulse,isBoss){
+  ctx.save();ctx.translate(ex,ey);ctx.scale(-scale,scale);
+  if(isBoss)ctx.scale(1.7,1.7);
+
+  // exhaust
+  const eL=14+Math.sin(pulse*1.3)*4;
+  const eg=ctx.createLinearGradient(-eL,0,0,0);eg.addColorStop(0,col+'00');eg.addColorStop(1,col+'cc');
+  ctx.beginPath();ctx.moveTo(-12,-4);ctx.lineTo(-12-eL,0);ctx.lineTo(-12,4);ctx.closePath();ctx.fillStyle=eg;ctx.fill();
+
+  // secondary exhausts
+  [-7,7].forEach(ey2=>{
+    const eg2=ctx.createLinearGradient(-eL*.6,0,0,0);eg2.addColorStop(0,col+'00');eg2.addColorStop(1,col+'88');
+    ctx.beginPath();ctx.moveTo(-9,ey2-2.5);ctx.lineTo(-9-eL*.6,ey2);ctx.lineTo(-9,ey2+2.5);ctx.closePath();ctx.fillStyle=eg2;ctx.fill();
+  });
+
+  // hull glow
+  const hg=ctx.createRadialGradient(0,0,2,0,0,16);hg.addColorStop(0,col+'22');hg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.ellipse(0,0,16,12,0,0,Math.PI*2);ctx.fillStyle=hg;ctx.fill();
+
+  // main body
+  const bg=ctx.createLinearGradient(-12,-7,14,7);
+  bg.addColorStop(0,'#160312');bg.addColorStop(.5,col+'18');bg.addColorStop(1,'#0a0210');
+  ctx.beginPath();
+  ctx.moveTo(14,0);ctx.bezierCurveTo(10,-5,2,-8,-8,-6);ctx.lineTo(-12,-3.5);ctx.lineTo(-12,3.5);ctx.lineTo(-8,6);ctx.bezierCurveTo(2,8,10,5,14,0);
+  ctx.closePath();ctx.fillStyle=bg;ctx.fill();ctx.strokeStyle=col+'77';ctx.lineWidth=.8;ctx.stroke();
+
+  // grid lines on enemy hull
+  ctx.strokeStyle=col+'33';ctx.lineWidth=.4;
+  [-3,0,3].forEach(gy=>{ctx.beginPath();ctx.moveTo(-10,gy);ctx.lineTo(12,gy);ctx.stroke();});
+  [0,5,10].forEach(gx=>{ctx.beginPath();ctx.moveTo(gx,-5);ctx.lineTo(gx,5);ctx.stroke();});
+
+  // fins
+  [[-5,-7,0,-16,-5,-14,-8,-7],[-5,7,0,16,-5,14,-8,7]].forEach(p=>{
+    const fg=ctx.createLinearGradient(0,p[1]*.5,0,p[3]*.5);fg.addColorStop(0,'#1a0520');fg.addColorStop(1,'#0a0110');
+    ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(p[2],p[3]);ctx.lineTo(p[4],p[5]);ctx.lineTo(p[6],p[7]);ctx.closePath();
+    ctx.fillStyle=fg;ctx.fill();ctx.strokeStyle=col+'44';ctx.lineWidth=.5;ctx.stroke();
+  });
+
+  // cockpit/eye glow
+  const cg=ctx.createRadialGradient(4,0,0,4,0,5);cg.addColorStop(0,col+'ff');cg.addColorStop(.5,col+'88');cg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.ellipse(4,0,5,3.5,0,0,Math.PI*2);ctx.fillStyle=cg;ctx.shadowColor=col;ctx.shadowBlur=5;ctx.fill();ctx.shadowBlur=0;
+
+  // cannon
+  ctx.fillStyle='#200830';ctx.beginPath();ctx.rect(10,-2,8,4);ctx.fill();
+  ctx.strokeStyle=col+'88';ctx.lineWidth=.6;ctx.beginPath();ctx.rect(10,-2,8,4);ctx.stroke();
+  const ctg=ctx.createRadialGradient(18,0,0,18,0,2.5);ctg.addColorStop(0,col+'ff');ctg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(18,0,2.5,0,Math.PI*2);ctx.fillStyle=ctg;ctx.shadowColor=col;ctx.shadowBlur=4;ctx.fill();ctx.shadowBlur=0;
+
+  // boss crown (extra detail for bosses)
+  if(isBoss){
+    ctx.strokeStyle=col+'99';ctx.lineWidth=1;
+    for(let a=0;a<8;a++){const ang=(a/8)*Math.PI*2;ctx.beginPath();ctx.moveTo(Math.cos(ang)*6,Math.sin(ang)*4.5);ctx.lineTo(Math.cos(ang)*10,Math.sin(ang)*7.5);ctx.stroke();}
+  }
+
+  ctx.restore();
+}
+
+// ── GAME CONSTANTS ──────────────────────────────────────────────
+const SKILLS=[
+  {name:'PULSE', icon:'⚡',cd:3, dm:1.8,gm:3.2,desc:'Hızlı enerji atışı — kısa bekleme.'},
+  {name:'VORTEX',icon:'🌀',cd:7, dm:2.4,gm:4.2,desc:'Tüm düşmanlara girdap hasarı.'},
+  {name:'NOVA',  icon:'💥',cd:13,dm:3.5,gm:6.0,desc:'Devasa patlama — tüm alan.'},
+  {name:'ULTI',  icon:'🔮',cd:28,dm:6.0,gm:10.0,desc:'Gerçekliği parçalar — ULTI.'},
 ];
+
 const ABILITIES=[
-  {id:'turret',  name:'Oto-Top',           rarReq:'bronze',   lvlReq:1,  cost:200,   eff:'auto_dmg',  val:0.10,icon:'🔰',desc:'Auto saldırı +%10',         label:'ATK +%10'},
-  {id:'odrive',  name:'Aşırı İtim',        rarReq:'silver',   lvlReq:5,  cost:600,   eff:'spd_boost', val:0.15,icon:'💨',desc:'Saldırı hızı +%15',         label:'SPD +%15'},
-  {id:'crit_s',  name:'Kritik Gözetleme',  rarReq:'silver',   lvlReq:8,  cost:900,   eff:'crit_boost',val:5,   icon:'🎯',desc:'Kritik şansı +5',           label:'CRIT +5'},
-  {id:'qlens',   name:'Kuantum Merceği',   rarReq:'gold',     lvlReq:12, cost:2000,  eff:'atk_pct',   val:0.20,icon:'🔭',desc:'Tüm hasar +%20',            label:'ALL DMG +%20'},
-  {id:'snova',   name:'Kalkan Novas',       rarReq:'gold',     lvlReq:15, cost:3000,  eff:'def_boost', val:25,  icon:'🌐',desc:'Savunma +25',               label:'DEF +25'},
-  {id:'vtap',    name:'Void Kanalı',        rarReq:'platinum', lvlReq:20, cost:8000,  eff:'ess_gain',  val:2,   icon:'🌀',desc:'Öz kazanım x2',             label:'ÖZ x2'},
-  {id:'mlaser',  name:'Erime Lazeri',       rarReq:'platinum', lvlReq:25, cost:12000, eff:'atk_flat',  val:500, icon:'🔥',desc:'Sabit ATK +500',            label:'ATK +500'},
-  {id:'pdash',   name:'Faz Koşusu',         rarReq:'diamond',  lvlReq:35, cost:50000, eff:'spd_flat',  val:0.5, icon:'⚡',desc:'Hız +0.5/s',               label:'SPD +0.5'},
-  {id:'dark_m',  name:'Karanlık Madde',     rarReq:'diamond',  lvlReq:40, cost:80000, eff:'all_pct',   val:0.35,icon:'🌑',desc:'Tüm istatistikler +%35',   label:'ALL +%35'},
-  {id:'rad_c',   name:'Radyanium Çekirdeği',rarReq:'radianium',lvlReq:55,cost:500000, eff:'double_atk',val:1,   icon:'☢️',desc:'Çift vuruş',               label:'DOUBLE HIT'},
-  {id:'ggod',    name:'Glitch Tanrısı',     rarReq:'glitchanium',lvlReq:80,cost:5e6,  eff:'godmode',   val:1,   icon:'👾',desc:'Hasar milyonlarla çarpılır',label:'GOD MODE'},
+  {id:'turret',  name:'Oto-Top',           rarReq:'bronze',   lvlReq:1,  cost:200,   eff:'auto_dmg',  val:.10,icon:'🔰',desc:'Auto ATK +%10',        label:'ATK +%10'},
+  {id:'odrive',  name:'Aşırı İtim',        rarReq:'silver',   lvlReq:5,  cost:600,   eff:'spd_boost', val:.15,icon:'💨',desc:'SPD +%15',              label:'SPD +%15'},
+  {id:'crits',   name:'Kritik Gözetleme',  rarReq:'silver',   lvlReq:8,  cost:900,   eff:'crit_b',    val:5,  icon:'🎯',desc:'CRIT +5',               label:'CRIT +5'},
+  {id:'qlens',   name:'Kuantum Merceği',   rarReq:'gold',     lvlReq:12, cost:2000,  eff:'atk_pct',   val:.20,icon:'🔭',desc:'ALL DMG +%20',          label:'ALL DMG +%20'},
+  {id:'snova',   name:'Kalkan Novas',       rarReq:'gold',     lvlReq:15, cost:3000,  eff:'def_b',     val:25, icon:'🌐',desc:'DEF +25',               label:'DEF +25'},
+  {id:'vtap',    name:'Void Kanalı',        rarReq:'platinum', lvlReq:20, cost:8000,  eff:'ess_x2',    val:2,  icon:'🌀',desc:'Öz x2',                label:'ÖZ x2'},
+  {id:'mlaser',  name:'Erime Lazeri',       rarReq:'platinum', lvlReq:25, cost:12000, eff:'atk_flat',  val:500,icon:'🔥',desc:'ATK +500',              label:'ATK +500'},
+  {id:'pdash',   name:'Faz Koşusu',         rarReq:'diamond',  lvlReq:35, cost:50000, eff:'spd_flat',  val:.5, icon:'⚡',desc:'SPD +0.5',              label:'SPD +0.5'},
+  {id:'dark_m',  name:'Karanlık Madde',     rarReq:'diamond',  lvlReq:40, cost:80000, eff:'all_pct',   val:.35,icon:'🌑',desc:'ALL STATS +%35',       label:'ALL +%35'},
+  {id:'rad_c',   name:'Radyanium Çekirdeği',rarReq:'radianium',lvlReq:55,cost:500000, eff:'double_atk',val:1,  icon:'☢️',desc:'Çift vuruş',           label:'DOUBLE HIT'},
+  {id:'ggod',    name:'Glitch Tanrısı',     rarReq:'glitchanium',lvlReq:80,cost:5e6,  eff:'godmode',   val:1,  icon:'👾',desc:'Hasar milyonlarla',   label:'GOD MODE'},
 ];
-function highRi(eq){const ri=Object.values(eq).filter(Boolean).map(i=>RARS.indexOf(i.rar));return ri.length?Math.max(...ri):-1;}
+
 const PASSIVE=[
   {id:'atk',name:'Saldırı',icon:'⚔️',nodes:[
     {nm:'Temel Ateş',   sk:'atk', base:5,  per:3,   cc:[1,3,8,20,50,120,300]},
-    {nm:'Kritik Fırtına',sk:'crit',base:2, per:1.5, cc:[2,5,12,30,75,180,450]},
+    {nm:'Kritik Fırt.', sk:'crit',base:2,  per:1.5, cc:[2,5,12,30,75,180,450]},
   ]},
   {id:'def',name:'Savunma',icon:'🛡️',nodes:[
     {nm:'Zırh Takviye', sk:'def', base:4,  per:2.5, cc:[1,3,8,20,50,120,300]},
     {nm:'Can Yenile',   sk:'hp',  base:20, per:15,  cc:[2,5,12,30,75,180,450]},
   ]},
   {id:'spd',name:'Hız',icon:'💨',nodes:[
-    {nm:'Reaktif Motor',sk:'spd', base:0.05,per:0.03,cc:[1,3,8,20,50,120,300]},
-    {nm:'Şans Avcısı',  sk:'lck', base:1,  per:0.8, cc:[2,5,12,30,75,180,450]},
+    {nm:'Reaktif Motor',sk:'spd', base:.05,per:.03, cc:[1,3,8,20,50,120,300]},
+    {nm:'Şans Avcısı',  sk:'lck', base:1,  per:.8,  cc:[2,5,12,30,75,180,450]},
   ]},
 ];
+
 const SP_BOSSES=[
-  {id:0,name:'PRIME ANOMALİ',  req:1,  hp:5000,    dmg:50,    rw:{gold:500,  gqt:0,  boxes:5,  rar:'silver'}},
-  {id:1,name:'VOID EMPEROR',   req:5,  hp:80000,   dmg:800,   rw:{gold:3000, gqt:10, boxes:10, rar:'gold'}},
-  {id:2,name:'NEXUS OVERLORD', req:10, hp:2000000, dmg:15000, rw:{gold:20000,gqt:50, boxes:20, rar:'platinum'}},
-  {id:3,name:'GLITCH TITAN',   req:20, hp:5e7,     dmg:200000,rw:{gold:1e5,  gqt:200,boxes:50, rar:'diamond'}},
-  {id:4,name:'RADİANT YIKICI', req:35, hp:2e9,     dmg:5e6,   rw:{gold:5e5, gqt:1000,boxes:100,rar:'radianium'}},
-  {id:5,name:'GLİTCHANİUM TANRI',req:55,hp:1e12,  dmg:5e8,   rw:{gold:5e6, gqt:5000,boxes:300,rar:'glitchanium'}},
+  {id:0,name:'PRIME ANOMALİ',  req:1,  hp:5000,   dmg:50,   rw:{gold:500,  gqt:0,  boxes:5,  rar:'silver'}},
+  {id:1,name:'VOID EMPEROR',   req:5,  hp:80000,  dmg:800,  rw:{gold:3000, gqt:10, boxes:10, rar:'gold'}},
+  {id:2,name:'NEXUS OVERLORD', req:10, hp:2e6,    dmg:15000,rw:{gold:20000,gqt:50, boxes:20, rar:'platinum'}},
+  {id:3,name:'GLITCH TITAN',   req:20, hp:5e7,    dmg:200000,rw:{gold:1e5, gqt:200,boxes:50, rar:'diamond'}},
+  {id:4,name:'RADİANT YIKICI', req:35, hp:2e9,    dmg:5e6,  rw:{gold:5e5, gqt:1000,boxes:100,rar:'radianium'}},
+  {id:5,name:'GLİTCH TANRI',   req:55, hp:1e12,   dmg:5e8,  rw:{gold:5e6, gqt:5000,boxes:300,rar:'glitchanium'}},
 ];
+
 const MKT=[
-  {id:'l100',name:'100 GQT Yükle',icon:'💠',desc:'100 GQT token eklenir (simülasyon).',realMoney:true,realAmt:100},
-  {id:'l500',name:'500 GQT Yükle',icon:'💠',desc:'500 GQT token eklenir (simülasyon).',realMoney:true,realAmt:500},
-  {id:'qbg', name:'Quantum Box x10',icon:'📦',desc:'GQT ile. Günde 999 limit.',gqtP:50, goldP:0, gqtL:999,goldL:0, eff:'boxes',amt:10},
-  {id:'qbgd',name:'Quantum Box x1', icon:'📦',desc:'Gold ile. Günde 100 limit.',gqtP:0,  goldP:200,gqtL:0,goldL:100,eff:'boxes',amt:1},
-  {id:'pcg', name:'Pasif Kristal x100',icon:'💎',desc:'GQT ile.',gqtP:100,goldP:0,gqtL:9999,goldL:0,eff:'pcryst',amt:100},
-  {id:'pcgd',name:'Pasif Kristal x1', icon:'💎',desc:'Gold ile. Günde 10 limit.',gqtP:0,goldP:500,gqtL:0,goldL:10,eff:'pcryst',amt:1},
-  {id:'spg', name:'Hızlandırıcı x10',icon:'⚡',desc:'Her biri -30dk. GQT ile.',gqtP:80,goldP:0,gqtL:9999,goldL:0,eff:'speedup',amt:10},
-  {id:'spgd',name:'Hızlandırıcı x1', icon:'⚡',desc:'Gold ile. Günde 2 limit.',gqtP:0,goldP:1000,gqtL:0,goldL:2,eff:'speedup',amt:1},
+  {id:'l100',name:'100 GQT Yükle',icon:'💠',desc:'Hesabınıza 100 GQT eklenir.',realMoney:true,realAmt:100},
+  {id:'l500',name:'500 GQT Yükle',icon:'💠',desc:'Hesabınıza 500 GQT eklenir.',realMoney:true,realAmt:500},
+  {id:'qbg', name:'Quantum Box x10',icon:'📦',desc:'GQT ile. Günde 999 limit.',  gqtP:50, goldP:0,  gqtL:999, goldL:0,  eff:'boxes',  amt:10},
+  {id:'qbgd',name:'Quantum Box x1', icon:'📦',desc:'Gold ile. Günde 100 limit.', gqtP:0,  goldP:200,gqtL:0,   goldL:100, eff:'boxes',  amt:1},
+  {id:'pcg', name:'Pasif Kristal x100',icon:'💎',desc:'GQT ile.',                 gqtP:100,goldP:0,  gqtL:9999,goldL:0,  eff:'pcryst', amt:100},
+  {id:'pcgd',name:'Pasif Kristal x1', icon:'💎',desc:'Gold ile. Günde 10 limit.',gqtP:0,  goldP:500,gqtL:0,   goldL:10, eff:'pcryst', amt:1},
+  {id:'spg', name:'Hızlandırıcı x10',icon:'⚡',desc:'Her biri -30dk. GQT ile.',  gqtP:80, goldP:0,  gqtL:9999,goldL:0,  eff:'speedup',amt:10},
+  {id:'spgd',name:'Hızlandırıcı x1', icon:'⚡',desc:'Gold ile. Günde 2 limit.',  gqtP:0,  goldP:1000,gqtL:0,  goldL:2,  eff:'speedup',amt:1},
 ];
+
 const UPTIMES=[30,60,240,480,1800,3600,14400,28800,86400,172800,345600,604800,1209600,1814400];
-function upTime(sl){return UPTIMES[Math.min(sl-1,UPTIMES.length-1)];}
-function essCost(sl){return Math.ceil(50*Math.pow(1.8,sl-1));}
+const upTime=sl=>UPTIMES[Math.min(sl-1,UPTIMES.length-1)];
+const essCost=sl=>Math.ceil(50*Math.pow(1.8,sl-1));
+
 const ETYPES=[
-  {name:'Anomali', col:'#ff3355',xm:1, gm:1,  em:0.2},
-  {name:'Glitchör',col:'#ff00aa',xm:2, gm:2,  em:0.5},
+  {name:'Anomali', col:'#ff3355',xm:1, gm:1,  em:.2},
+  {name:'Glitchör',col:'#ff00aa',xm:2, gm:2,  em:.5},
   {name:'Voidar',  col:'#aa44ff',xm:4, gm:4,  em:1},
   {name:'Nexus',   col:'#ffd700',xm:10,gm:10, em:3},
 ];
-const AFFIXES=['+5% Crit','+HP/öldürme','+ATK %8','Güç+','Şans+','+GQT %15','Yavaşlatma','Savunma+'];
+const AFFIXES=['+5% Crit','+HP/öldürme','+ATK Hızı','Güç+','Şans+','+GQT%','Yavaşlatma','Savunma+'];
+
 function waveBossStats(wave,sl){
   const sc=Math.pow(1.18,wave-1)*Math.pow(1.28,sl-1)*6;
   return{name:`WAVE ${wave} BOSS`,col:'#ffd700',isBoss:true,
     hp:Math.ceil(500*sc),maxHp:Math.ceil(500*sc),
     dmg:Math.ceil(20*Math.pow(1.12,wave-1)*Math.pow(1.2,sl-1)),
-    xp:Math.ceil(200*sc),gold:Math.ceil(100*Math.pow(1.08,wave-1)),
-    ess:Math.ceil(15*Math.pow(1.05,wave-1))};
+    xp:Math.ceil(200*sc),gold:Math.ceil(100*Math.pow(1.08,wave-1)),ess:Math.ceil(15*Math.pow(1.03,wave-1))};
 }
 function mkEnemy(wave,sl){
   const ti=Math.min(Math.floor((wave-1)/3),ETYPES.length-1);
@@ -554,465 +907,6 @@ function mkEnemy(wave,sl){
   return{name:et.name,col:et.col,isBoss:false,
     hp:Math.ceil(20*sc),maxHp:Math.ceil(20*sc),
     dmg:Math.ceil(3*Math.pow(1.1,wave-1)*Math.pow(1.18,sl-1)),
-    xp:Math.ceil(5*et.xm*sc),gold:Math.ceil(2*et.gm*Math.pow(1.05,wave-1)),
-    ess:Math.ceil(et.em*Math.pow(1.03,wave-1)),
+    xp:Math.ceil(5*et.xm*sc),gold:Math.ceil(2*et.gm*Math.pow(1.05,wave-1)),ess:Math.ceil(et.em*Math.pow(1.03,wave-1)),
     x:0,y:0,stopX:0,spd:50+rnd(0,35),shootT:rnd(.8,2),hitFlash:0,dead:false};
 }
-  const SKEY='gqv4';
-let gs;
-function defState(){
-  return{charLvl:1,charXp:0,charXpNext:100,shipLvl:1,essence:0,essenceMax:100,
-    upgrading:false,upgradeEnd:null,hp:100,maxHp:100,gqtE:0,maxGqtE:100,
-    stats:{str:10,agi:10,int:10,lck:5},kills:0,gqt:50,gold:0,pCrystals:0,speedups:0,
-    wave:1,subWave:1,boxes:10,
-    equipped:{weapon:null,hull:null,engine:null,shield:null,reactor:null,sensor:null,armor:null},
-    bag:new Array(20).fill(null),
-    glitchSkills:[],skillCDs:[0,0,0,0],
-    passive:{atk:[0,0],def:[0,0],spd:[0,0]},
-    abilities:[],abilityBonuses:{},
-    lastDaily:null,marketDaily:{},bossBeaten:[],
-    autoSettings:{autoOpen:false,autoEquip:false,autoSell:false,autoSellBag:false},
-    lastOnline:Date.now()};
-}
-function save(){try{localStorage.setItem(SKEY,btoa(JSON.stringify(gs)));}catch(e){}}
-function load(){
-  try{const r=localStorage.getItem(SKEY);if(r){gs=JSON.parse(atob(r));mig();return;}}catch(e){}
-  gs=defState();
-}
-function mig(){
-  const d=defState();
-  ['equipped','bag','passive','marketDaily','abilities','abilityBonuses','autoSettings','bossBeaten'].forEach(k=>{if(!gs[k])gs[k]=d[k];});
-  if(!gs.bossBeaten)gs.bossBeaten=[];
-  if(!gs.autoSettings)gs.autoSettings=d.autoSettings;
-  if(gs.boxes===undefined)gs.boxes=10;
-  if(!gs.glitchSkills)gs.glitchSkills=[];
-  if(!gs.skillCDs)gs.skillCDs=[0,0,0,0];
-  if(gs.subWave===undefined)gs.subWave=1;
-  if(!gs.abilityBonuses)gs.abilityBonuses={};
-}
-function checkDaily(){
-  const today=new Date().toDateString();
-  if(gs.lastDaily!==today){gs.lastDaily=today;gs.marketDaily={};gs.boxes+=100;addLog('🎁 Günlük giriş: +100 Quantum Box!','#ffd700');}
-}
-function calcIdle(){
-  const now=Date.now(),away=Math.min((now-gs.lastOnline)/1000,3600);
-  if(away<30)return null;
-  const g=Math.floor(away*.2),e=Math.floor(away*.05);
-  gs.gold+=g;gs.essence=Math.min(gs.essenceMax,gs.essence+e);
-  gs.lastOnline=now;return{gold:g,ess:e,secs:Math.floor(away)};
-}
-function cStats(){
-  const ab=gs.abilityBonuses||{};
-  let atk=10+gs.stats.str*1.5,def=3+gs.stats.str*.3,spd=.5+gs.stats.agi*.05,crit=5+gs.stats.lck*.5,maxHp=gs.maxHp,maxGqt=gs.maxGqtE;
-  PASSIVE.forEach(br=>{
-    br.nodes.forEach((nd,ni)=>{
-      const lvl=(gs.passive[br.id]||[])[ni]||0;if(!lvl)return;
-      const v=nd.base+nd.per*(lvl-1);
-      if(nd.sk==='atk')atk+=v;if(nd.sk==='def')def+=v;if(nd.sk==='spd')spd+=v;
-      if(nd.sk==='crit')crit+=v;if(nd.sk==='hp')maxHp+=v;
-    });
-  });
-  Object.values(gs.equipped).forEach(it=>{
-    if(!it)return;
-    if(it.sk==='atk')atk+=it.sv;if(it.sk==='def'||it.sk==='def2')def+=it.sv;
-    if(it.sk==='spd')spd+=it.sv;if(it.sk==='crit')crit+=it.sv;
-    if(it.sk==='hp')maxHp+=it.sv;if(it.sk==='gqt_m')maxGqt+=it.sv;
-  });
-  if(ab.auto_dmg)atk*=(1+ab.auto_dmg);
-  if(ab.spd_boost)spd*=(1+ab.spd_boost);
-  if(ab.crit_boost)crit+=ab.crit_boost;
-  if(ab.atk_pct)atk*=(1+ab.atk_pct);
-  if(ab.def_boost)def+=ab.def_boost;
-  if(ab.atk_flat)atk+=ab.atk_flat;
-  if(ab.spd_flat)spd+=ab.spd_flat;
-  if(ab.all_pct){const m=1+ab.all_pct;atk*=m;def*=m;spd*=m;crit*=m;}
-  if(ab.godmode)atk*=1e6;
-  return{atk,def,spd,crit,maxHp,maxGqt};
-}
-function mkItem(boost=0){
-  const rar=rollRar(gs.charLvl,boost);const ri=RARS.indexOf(rar);
-  const stars=Math.floor(rnd(1,6));
-  const slotKey=Object.keys(SLOTS)[Math.floor(rnd(0,Object.keys(SLOTS).length))];
-  const sv=itemSV(ri,gs.shipLvl,stars);
-  const ac=ri>=5?3:ri>=3?2:ri>=2?1:0;
-  const afs=[];const pool=[...AFFIXES];
-  for(let i=0;i<ac;i++){const ai=Math.floor(rnd(0,pool.length));afs.push(pool.splice(ai,1)[0]);}
-  return{slotKey,rar,ri,stars,sk:SLOTS[slotKey].sk,name:`${RLBL[rar]} ${SLOTS[slotKey].label}`,icon:SLOTS[slotKey].icon,sv,afs,sellVal:Math.ceil(RSELL[rar]*Math.pow(gs.shipLvl,.8))};
-}
-// ENEMIES
-let enemies=[],particles=[],projs=[],pProjs=[];
-let bgStars=[],bgX=0,lastT=0,aaTimer=0,pyPos=0;
-let shipPulse=0,glitchT=0;
-let waveActive=false,paused=false,lootQueue=[];
-let pendingLoot=null,autoSellTO=null;
-let uiTick=0,saveTick=0;
-let gc=null,gctx=null,sc=null,sctx=null;
-const PX=120;
-const CW=()=>gc?gc.width:800;
-const CH=()=>gc?gc.height:500;
-function initBg(){bgStars=Array.from({length:90},()=>({x:rnd(0,CW()),y:rnd(0,CH()*.88),spd:rnd(.3,1.5),r:rnd(.4,1.8),a:rnd(.3,.9)}));}
-function setAuto(key,val){gs.autoSettings[key]=val;save();}
-function startWithBox(){
-  if(gs.boxes<=0){addLog('📦 Box yok! Marketten al.','#ff3355');return;}
-  gs.boxes--;waveActive=true;paused=false;lootQueue=[];
-  document.getElementById('idle-sc').style.display='none';
-  spawnWave();save();
-}
-function spawnWave(){
-  enemies=[];projs=[];
-  const isBW=(gs.subWave===10);
-  const cnt=isBW?1:3+Math.min(gs.wave,12);
-  for(let i=0;i<cnt;i++){
-    const e=isBW?{...waveBossStats(gs.wave,gs.shipLvl)}:mkEnemy(gs.wave,gs.shipLvl);
-    e.x=CW()+50+i*75+rnd(0,50);
-    e.y=CH()*.10+rnd(0,CH()*.76);
-    e.stopX=CW()*(isBW?.65:.70);
-    if(!e.shootT)e.shootT=rnd(.8,2);
-    enemies.push(e);
-  }
-  document.getElementById('wb-w').textContent=gs.wave;
-  document.getElementById('wb-s').textContent=gs.subWave;
-  document.getElementById('wb-k').textContent=cnt+' düşman';
-  addLog(`🌊 ${gs.wave}-${gs.subWave}${isBW?' ⭐ BOSS!':''} — ${cnt} düşman`,'#ff00aa');
-}
-function autoAtk(dt){
-  if(paused)return;
-  aaTimer-=dt;if(aaTimer>0)return;
-  const cs=cStats();aaTimer=1/cs.spd;
-  const alive=enemies.filter(e=>!e.dead);if(!alive.length)return;
-  const tgt=alive.sort((a,b)=>a.x-b.x)[0];
-  const isCrit=rnd(0,100)<cs.crit;
-  let dmg=Math.ceil(cs.atk*(isCrit?2:1)*rnd(.88,1.12));
-  if(gs.abilityBonuses?.double_atk)dmg*=2;
-  const dx=tgt.x-PX,dy=tgt.y-pyPos,dist=Math.sqrt(dx*dx+dy*dy)||1;
-  pProjs.push({x:PX+28,y:pyPos,vx:(dx/dist)*440,vy:(dy/dist)*440,dmg,isCrit,life:1.2});
-}
-function autoSkills(dt){
-  if(paused)return;
-  SKILLS.forEach((_,i)=>{if(gs.skillCDs[i]<=0&&enemies.filter(e=>!e.dead).length)fireSkill(i);});
-}
-function fireSkill(i){
-  const sk=SKILLS[i];if(gs.skillCDs[i]>0)return;
-  gs.skillCDs[i]=sk.cd;
-  const isG=gs.glitchSkills.includes(i);const mult=isG?sk.gm:sk.dm;
-  const cs=cStats();
-  enemies.filter(e=>!e.dead).forEach(e=>{
-    let dmg=Math.ceil(cs.atk*mult*rnd(.85,1.3));if(gs.abilityBonuses?.double_atk)dmg*=2;
-    hitEnemy(e,dmg,true);
-  });
-  addLog(`🔥 ${sk.name}${isG?' [G]':''} ×${mult}`,isG?'#ff00aa':'#00f5ff');
-  if(i===3||isG)glitchT=.45;
-  spawnBurst(i,mult);
-}
-function useSkill(i){fireSkill(i);}
-function hitEnemy(e,dmg,isCrit=false){
-  e.hp-=dmg;e.hitFlash=.25;spawnDmgP(e.x,e.y,dmg,isCrit);
-  if(e.hp<=0&&!e.dead)killEnemy(e);
-}
-function killEnemy(e){
-  e.dead=true;gs.charXp+=e.xp;gs.gold+=e.gold;
-  gs.essence=Math.min(gs.essenceMax,gs.essence+(e.ess||0));gs.kills++;
-  spawnDeathP(e.x,e.y,e.col);addLog(`💀 ${e.name} +${fmt(e.xp)}XP +${fmt(e.gold)}💰`,e.col);
-  checkCharXp();
-  if(enemies.every(e2=>e2.dead))checkWaveEnd();
-}
-function checkWaveEnd(){
-  // Only drop loot when wave fully cleared
-  const isBW=(gs.subWave===10);
-  const dropChance=isBW?0.9:0.20+gs.stats.lck*.005;
-  const numDrops=Math.max(0,Math.ceil(enemies.length*(isBW?1:dropChance)));
-  for(let i=0;i<numDrops;i++)lootQueue.push(mkItem(isBW?2:0));
-  processLoot();
-}
-function processLoot(){
-  if(lootQueue.length>0){
-    pendingLoot=lootQueue.shift();
-    if(handleAutoLoot(pendingLoot)){pendingLoot=null;setTimeout(()=>processLoot(),80);return;}
-    showLootPop(pendingLoot);paused=true;
-    return;
-  }
-  advanceSubWave();
-}
-function handleAutoLoot(item){
-  const eq=gs.equipped[item.slotKey];
-  if(gs.autoSettings.autoEquip&&(!eq||item.sv>eq.sv)){
-    if(eq){gs.gold+=eq.sellVal;addLog(`🤖 Old sold: ${eq.name} +${fmt(eq.sellVal)}💰`,RCOL[eq.rar]);}
-    gs.equipped[item.slotKey]=item;
-    addLog(`🤖 Auto-equipped: ${item.name}`,RCOL[item.rar]);
-    renderInv();renderShipPrev();return true;
-  }
-  if(gs.autoSettings.autoSell&&eq&&item.sv<=eq.sv){
-    gs.gold+=item.sellVal;addLog(`🤖 Auto-sold (zayıf): +${fmt(item.sellVal)}💰`,RCOL[item.rar]);return true;
-  }
-  return false;
-}
-function startAutoSellTimer(){
-  const bar=document.getElementById('as-bar');bar.style.display='block';bar.style.transition='none';bar.style.width='100%';
-  setTimeout(()=>{bar.style.transition='width 5s linear';bar.style.width='0%';},50);
-  autoSellTO=setTimeout(()=>{if(pendingLoot)lootSell();},5000);
-}
-function clearAutoTimer(){
-  if(autoSellTO){clearTimeout(autoSellTO);autoSellTO=null;}
-  const bar=document.getElementById('as-bar');bar.style.display='none';bar.style.transition='';bar.style.width='100%';
-}
-function advanceSubWave(){
-  gs.subWave++;
-  if(gs.subWave>10){gs.subWave=1;gs.wave++;}
-  document.getElementById('wb-w').textContent=gs.wave;
-  document.getElementById('wb-s').textContent=gs.subWave;
-  addLog(`✅ Dalga temizlendi! ${gs.wave}-${gs.subWave} hazırlanıyor`,'#00ff88');
-  if(gs.autoSettings.autoSellBag)doAutoSellBag();
-  if(gs.boxes>0){gs.boxes--;setTimeout(()=>spawnWave(),1200);save();}
-  else{
-    waveActive=false;enemies=[];projs=[];pProjs=[];
-    document.getElementById('idle-sc').style.display='flex';
-    document.getElementById('idle-cnt').textContent=gs.boxes;
-    addLog('📦 Box bitti. Yeni box açarak devam et.','#ffd700');save();
-  }
-}
-function doAutoSellBag(){
-  gs.bag.forEach((it,i)=>{
-    if(!it)return;const eq=gs.equipped[it.slotKey];
-    if(eq&&it.sv<eq.sv){gs.gold+=it.sellVal;gs.bag[i]=null;addLog(`🤖 Bag sold: ${it.name}`,RCOL[it.rar]);}
-  });renderInv();
-}
-function checkCharXp(){
-  while(gs.charXp>=gs.charXpNext){
-    gs.charXp-=gs.charXpNext;gs.charLvl++;
-    gs.charXpNext=Math.ceil(120*Math.pow(1.3,gs.charLvl-1));
-    gs.stats.str++;gs.stats.agi++;gs.stats.int++;
-    if(gs.charLvl%5===0)gs.stats.lck++;
-    gs.maxHp+=15;gs.hp=gs.maxHp;
-    addLog(`✨ KARAKTER Lvl ${gs.charLvl}!`,'#ffd700');
-  }
-}
-function tryShipUpgrade(){
-  if(gs.upgrading){openSlvl();return;}
-  const cost=essCost(gs.shipLvl);
-  if(gs.essence<cost){addLog(`⚠️ Öz yetersiz: ${fmt(cost)} gerekli`,'#ff3355');return;}
-  gs.essence-=cost;gs.upgrading=true;
-  gs.upgradeEnd=Date.now()+upTime(gs.shipLvl)*1000;
-  addLog(`⚙️ Gemi geliştirme başladı! ${fmtD(upTime(gs.shipLvl))}`,'#00f5ff');
-  renderShipUpgZ();save();
-}
-function checkUpgrade(){
-  if(!gs.upgrading)return;
-  if(Date.now()>=gs.upgradeEnd){
-    gs.upgrading=false;gs.upgradeEnd=null;gs.shipLvl++;
-    gs.essenceMax=Math.ceil(100*Math.pow(1.6,gs.shipLvl-1));gs.maxGqtE+=10;
-    addLog(`🚀 GEMİ SEVİYE ${gs.shipLvl}!`,'#ffd700');
-    renderShipUpgZ();renderShipPrev();save();
-  }
-}
-function useSpeed(){
-  if(!gs.speedups){addLog('⚠️ Hızlandırıcı yok!','#ff3355');return;}
-  if(!gs.upgrading){addLog('Yükseltme aktif değil.','#ff3355');return;}
-  gs.speedups--;gs.upgradeEnd=Math.max(Date.now(),gs.upgradeEnd-30*60*1000);
-  addLog('⚡ Hızlandırıcı: -30dk!','#ffd700');
-  document.getElementById('sl-sp').textContent=gs.speedups;save();
-}
-function respawn(){
-  gs.hp=gs.maxHp;if(gs.subWave>1)gs.subWave--;else if(gs.wave>1){gs.wave--;gs.subWave=10;}
-  enemies=[];projs=[];pProjs=[];lootQueue=[];paused=false;clearAutoTimer();
-  addLog('💔 Yenildin! Respawn.','#ff3355');
-  if(waveActive&&gs.boxes>0){gs.boxes--;setTimeout(()=>spawnWave(),1200);}
-  else{waveActive=false;document.getElementById('idle-sc').style.display='flex';}
-}
-function spawnBurst(i,m){const c=['#00f5ff','#aa44ff','#ff8800','#ff00aa'][i];for(let j=0;j<8;j++){const a=rnd(0,Math.PI*2),s=rnd(60,120);particles.push({x:PX+26,y:pyPos,vx:Math.cos(a)*s,vy:Math.sin(a)*s,txt:'✦',col:c,life:.6,ml:.6,sz:7+m});}}
-function spawnDmgP(x,y,d,ic,ip=false){particles.push({x,y:y-16,vx:rnd(-25,25),vy:rnd(-65,-38),txt:(ic?'CRIT! ':'')+fmt(d),col:ip?'#ff3355':ic?'#ffd700':'#00f5ff',life:1.5,ml:1.5,sz:ic?13:10});}
-function spawnDeathP(x,y,col){for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2;particles.push({x,y,vx:Math.cos(a)*80,vy:Math.sin(a)*80,txt:'✦',col,life:.7,ml:.7,sz:11});}}
-  function spawnDeathP(x,y,col){for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2;particles.push({x,y,vx:Math.cos(a)*80,vy:Math.sin(a)*80,txt:'✦',col,life:.7,ml:.7,sz:11});}}
-
-// --- BUNDAN SONRASINI TAMAMEN AŞAĞIDAKİYLE DEĞİŞTİR ---
-
-function showLootPop(item){
-  document.getElementById('loot-ov').style.display='block';
-  const pop=document.getElementById('loot-pop');pop.style.display='block';pop.classList.add('open');
-  document.getElementById('lp-ic').textContent=item.icon;
-  document.getElementById('lp-rar').textContent=RLBL[item.rar];
-  document.getElementById('lp-rar').style.color=RCOL[item.rar];
-  document.getElementById('lp-nm').textContent=item.name;
-  document.getElementById('lp-st').textContent=`Güç Değeri: ${item.sv}`;
-  document.getElementById('lp-sell-btn').textContent=`💰 SAT (${item.sellVal})`;
-  if(gs.autoSettings.autoSell) startAutoSellTimer();
-}
-
-function lootEq(){
-  clearAutoTimer();
-  const slot=pendingLoot.slotKey;const old=gs.equipped[slot];
-  if(old){gs.gold+=old.sellVal;addLog(`🎒 Eski eşya satıldı: +${fmt(old.sellVal)}💰`)}
-  gs.equipped[slot]=pendingLoot;pendingLoot=null;
-  document.getElementById('loot-ov').style.display='none';
-  document.getElementById('loot-pop').style.display='none';
-  paused=false;renderInv();renderShipPrev();processLoot();
-}
-
-function lootSell(){
-  clearAutoTimer();gs.gold+=pendingLoot.sellVal;
-  addLog(`💰 Satıldı: +${fmt(pendingLoot.sellVal)}💰`);pendingLoot=null;
-  document.getElementById('loot-ov').style.display='none';
-  document.getElementById('loot-pop').style.display='none';
-  paused=false;processLoot();
-}
-
-function lootBag(){
-  clearAutoTimer();
-  const emptyIdx=gs.bag.findIndex(x=>x===null);
-  if(emptyIdx===-1){addLog('⚠️ Çanta dolu! Satmak zorundasın.','#ff3355');return;}
-  gs.bag[emptyIdx]=pendingLoot;pendingLoot=null;
-  document.getElementById('loot-ov').style.display='none';
-  document.getElementById('loot-pop').style.display='none';
-  paused=false;renderInv();processLoot();
-}
-
-function addLog(txt,col='#tx'){
-  const clog=document.getElementById('clog');
-  const d=document.createElement('div');d.className='cl';d.style.color=col;d.textContent=txt;
-  clog.insertBefore(d,clog.firstChild);if(clog.children.length>8)clog.removeChild(clog.lastChild);
-}
-
-function renderInv(){
-  const grid=document.getElementById('inv-grid');grid.innerHTML='';
-  gs.bag.forEach((it,i)=>{
-    const slot=document.createElement('div');slot.className='isl'+(it?'':' empty');
-    if(it){
-      slot.textContent=it.icon;slot.style.borderColor=RCOL[it.rar];
-      slot.onclick=()=>{
-        const eq=gs.equipped[it.slotKey];gs.equipped[it.slotKey]=it;gs.bag[i]=eq;
-        renderInv();renderShipPrev();addLog(`⚔️ Kuşanıldı: ${it.name}`);
-      };
-    }
-    grid.appendChild(slot);
-  });
-  document.getElementById('h-gold').textContent=fmt(gs.gold);
-  document.getElementById('h-gqt').textContent=fmt(gs.gqt);
-  document.getElementById('h-boxes').textContent=fmt(gs.boxes);
-  document.getElementById('h-ess').textContent=fmt(gs.essence);
-}
-
-function renderShipPrev(){
-  if(!sctx)return;
-  sctx.clearRect(0,0,288,130);
-  drawPixelShip(sctx,144,65,gs.equipped,shipPulse,1.8);
-  Object.keys(SLOTS).forEach(sk=>{
-    const el=document.getElementById(`eq-${sk}`);
-    if(el){
-      if(gs.equipped[sk]){el.textContent=gs.equipped[sk].icon;el.style.borderColor=RCOL[gs.equipped[sk].rar];}
-      else{el.textContent=SLOTS[sk].icon;el.style.borderColor='var(--brd)';}
-    }
-  });
-}
-
-function loop(t){
-  if(!lastT)lastT=t;let dt=(t-lastT)/1000;lastT=t;
-  if(dt>0.1)dt=0.1;
-  
-  shipPulse+=dt*5;
-  gctx.clearRect(0,0,CW(),CH());
-  
-  // Arkaplan Yıldızları
-  gctx.fillStyle='#fff';
-  bgStars.forEach(s=>{
-    s.x-=s.spd*dt*20;if(s.x<0)s.x=CW();
-    gctx.globalAlpha=s.a;gctx.fillRect(s.x,s.y,s.r,s.r);
-  });
-  gctx.globalAlpha=1;
-
-  // Oyuncu Gemisi Çizimi
-  pyPos=CH()/2+Math.sin(shipPulse)*15;
-  drawPixelShip(gctx,PX,pyPos,gs.equipped,shipPulse,1.3);
-
-  if(waveActive && !paused){
-    autoAtk(dt);
-    
-    // Düşmanlar
-    enemies.forEach(e=>{
-      if(e.dead)return;
-      if(e.x > e.stopX) e.x -= e.spd*dt;
-      gctx.fillStyle=e.hitFlash>0?'#fff':e.col;
-      if(e.hitFlash>0)e.hitFlash-=dt;
-      gctx.fillRect(e.x-10,e.y-10,20,20);
-    });
-
-    // Oyuncu Mermileri
-    pProjs.forEach((p,pi)=>{
-      p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
-      gctx.fillStyle=p.isCrit?'var(--gd)':'var(--cy)';
-      gctx.fillRect(p.x,p.y,4,2);
-      
-      enemies.forEach(e=>{
-        if(!e.dead && Math.abs(p.x-e.x)<15 && Math.abs(p.y-e.y)<15){
-          hitEnemy(e,p.dmg,p.isCrit);p.life=0;
-        }
-      });
-      if(p.life<=0)pProjs.splice(pi,1);
-    });
-
-    // Partiküller
-    particles.forEach((p,pi)=>{
-      p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
-      gctx.fillStyle=p.col;gctx.font=`${p.sz}px monospace`;
-      gctx.fillText(p.txt,p.x,p.y);
-      if(p.life<=0)particles.splice(pi,1);
-    });
-  }
-
-  // Arayüz Değerlerini Güncelleme
-  uiTick+=dt;
-  if(uiTick>0.2){
-    uiTick=0;
-    const cs=cStats();
-    document.getElementById('h-lvl').textContent=gs.charLvl;
-    document.getElementById('h-slvl').textContent=gs.shipLvl;
-    document.getElementById('v-hp').textContent=`${Math.floor(gs.hp)}/${cs.maxHp}`;
-    document.getElementById('bar-hp').style.width=(gs.hp/cs.maxHp)*100+'%';
-    document.getElementById('s-atk').textContent=Math.floor(cs.atk);
-    document.getElementById('s-def').textContent=Math.floor(cs.def);
-    document.getElementById('s-spd').textContent=cs.spd.toFixed(1);
-    document.getElementById('s-crit').textContent=Math.floor(cs.crit);
-    document.getElementById('idle-cnt').textContent=gs.boxes;
-  }
-
-  requestAnimationFrame(loop);
-}
-
-function init(){
-  gc=document.getElementById('gc');gctx=gc.getContext('2d');
-  sc=document.getElementById('sc');sctx=sc.getContext('2d');
-  
-  const resize=()=>{
-    gc.width=gc.parentElement.clientWidth;
-    gc.height=gc.parentElement.clientHeight;
-    initBg();
-  };
-  window.addEventListener('resize',resize);resize();
-  
-  load();
-  checkDaily();
-  renderInv();
-  renderShipPrev();
-  
-  requestAnimationFrame(loop);
-}
-
-window.addEventListener('DOMContentLoaded', init);
-
-// Kritik Bölge: HTML butonlarının erişebilmesi için fonksiyonları dışarı aktarıyoruz
-return {
-  startWithBox,
-  setAuto,
-  lootEq,
-  lootSell,
-  lootBag,
-  tab:(e,id)=>{
-    document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
-    e.target.classList.add('on');
-    document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
-    document.getElementById(`panel-${id}`).classList.add('on');
-  },
-  openMkt:()=>{},closeMkt:()=>{},useSkill:()=>{},skTip:()=>{},skTipH:()=>{},eqTip:()=>{},itTipH:()=>{},unequip:()=>{}
-};
-})();
-</script>
-</body>
-</html>
