@@ -3,51 +3,42 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<title>Glitch Quantum — split v3 (part 1)</title>
+<title>GLITCH QUANTUM — Fixed single file</title>
 <style>
-  /* Core styles: header, layout, sidebar, canvas, popups */
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
-  :root{
-    --bg:#020418; --panel:#03061a; --border:#182050;
-    --cyan:#00f5ff; --mag:#ff00aa; --gold:#ffd700; --tx:#cfe;
-    --dim:#6f7aa0;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;font-family:'Share Tech Mono',monospace;background:var(--bg);color:var(--tx);overflow:hidden}
-  #root{display:flex;flex-direction:column;height:100vh}
-  #hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border);background:#02041a}
-  #logo{font-family:Orbitron,sans-serif;color:var(--cyan);letter-spacing:2px}
-  #hdr .controls{display:flex;gap:10px;align-items:center}
-  .btn{font-family:'Share Tech Mono',monospace;padding:6px 10px;border-radius:6px;border:none;cursor:pointer}
-  .btn.cyan{background:var(--cyan);color:#021}
-  .btn.mag{background:var(--mag);color:#fff}
-  #main{display:flex;flex:1;min-height:0}
-  #czone{flex:1;position:relative;overflow:hidden}
-  canvas{display:block;width:100%;height:100%}
-  #sidebar{width:320px;border-left:1px solid var(--border);background:#050616;padding:10px;overflow:auto}
-  .slabel{color:var(--dim);font-size:12px;margin:8px 0 6px}
-  #clog{position:absolute;top:8px;left:8px;z-index:60;pointer-events:none}
-  .clog-line{font-size:11px;margin-bottom:6px}
-  /* Loot popup */
-  #loot-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:140;display:none}
-  #loot-pop{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);z-index:150;display:none;
-            background:#06101a;border:2px solid var(--mag);padding:16px;border-radius:10px;min-width:260px;text-align:center}
-  #loot-pop .lp-ic{font-size:38px}
-  #loot-pop .lp-nm{font-family:Orbitron, sans-serif;margin-top:6px;color:var(--tx)}
-  #loot-pop .lp-rar{margin-top:6px}
-  /* modal overlay (boss) */
-  .modal-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:200}
-  .modal-box{background:#021028;padding:16px;border-radius:8px;border:1px solid #223;color:var(--tx);min-width:320px}
-  /* small UI */
-  #upg-bar{position:absolute;bottom:86px;left:50%;transform:translateX(-50%);display:none;background:#07101d;border:1px solid var(--cyan);padding:6px 12px;border-radius:20px;z-index:80}
-  #wave-badge{position:absolute;top:8px;right:8px;background:#07101d;border:1px solid var(--mag);padding:6px 10px;border-radius:6px;z-index:80;color:var(--mag)}
-  /* sidebar items */
-  .equip-slot{display:flex;align-items:center;justify-content:space-between;padding:8px;background:#071028;border-radius:6px;border:1px solid var(--border);margin-bottom:8px}
-  .inv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-  .inv-slot{background:#051025;border-radius:6px;height:58px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);font-size:18px;cursor:pointer}
-  .inv-slot.empty{opacity:0.25}
-  /* responsive */
-  @media (max-width:900px){#sidebar{width:300px}}
+/* Core layout & styles (compact) */
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+:root{
+  --bg:#020418;--panel:#03061a;--border:#182050;
+  --cyan:#00f5ff;--mag:#ff00aa;--gold:#ffd700;--tx:#cfe;--dim:#6f7aa0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Share Tech Mono',monospace;background:var(--bg);color:var(--tx);overflow:hidden}
+#root{display:flex;flex-direction:column;height:100vh}
+#hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border);background:#02041a}
+#logo{font-family:Orbitron,sans-serif;color:var(--cyan);letter-spacing:2px}
+.controls{display:flex;gap:10px;align-items:center}
+.btn{font-family:'Share Tech Mono',monospace;padding:6px 10px;border-radius:6px;border:none;cursor:pointer}
+.btn.cyan{background:var(--cyan);color:#021}
+.btn.mag{background:var(--mag);color:#fff}
+#main{display:flex;flex:1;min-height:0}
+#czone{flex:1;position:relative;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+#sidebar{width:320px;border-left:1px solid var(--border);background:#050616;padding:10px;overflow:auto}
+.slabel{color:var(--dim);font-size:12px;margin:8px 0 6px}
+#clog{position:absolute;top:8px;left:8px;z-index:60;pointer-events:none}
+.clog-line{font-size:11px;margin-bottom:6px}
+#loot-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:140;display:none}
+#loot-pop{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:150;display:none;
+  background:#06101a;border:2px solid var(--mag);padding:16px;border-radius:10px;min-width:260px;text-align:center}
+#upg-bar{position:absolute;bottom:86px;left:50%;transform:translateX(-50%);display:none;background:#07101d;border:1px solid var(--cyan);padding:6px 12px;border-radius:20px;z-index:80}
+#wave-badge{position:absolute;top:8px;right:8px;background:#07101d;border:1px solid var(--mag);padding:6px 10px;border-radius:6px;z-index:80;color:var(--mag)}
+.modal-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:200}
+.modal-box{background:#021028;padding:16px;border-radius:8px;border:1px solid #223;color:var(--tx);min-width:320px}
+.inv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.inv-slot{background:#051025;border-radius:6px;height:58px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);font-size:18px;cursor:pointer}
+.inv-slot.empty{opacity:0.25}
+.equip-slot{display:flex;align-items:center;justify-content:space-between;padding:8px;background:#071028;border-radius:6px;border:1px solid var(--border);margin-bottom:8px}
+@media (max-width:900px){#sidebar{width:300px}}
 </style>
 </head>
 <body>
@@ -88,7 +79,7 @@
         <div class="modal-box">
           <h3 id="boss-title">BOSS</h3>
           <div style="height:12px;background:#081018;border-radius:6px;margin:8px 0">
-            <div id="boss-hp-bar" style="height:100%;width:100%;background:var(--red);border-radius:6px"></div>
+            <div id="boss-hp-bar" style="height:100%;width:100%;background:var(--mag);border-radius:6px"></div>
           </div>
           <div id="boss-log" style="height:120px;overflow:auto;background:#02031a;padding:8px;border-radius:6px;margin-bottom:8px"></div>
           <div style="display:flex;gap:8px;justify-content:center">
@@ -118,7 +109,7 @@
       <div id="inv-grid" class="inv-grid"></div>
 
       <div class="slabel">KUTU</div>
-      <div style="display:flex;gap:8px">
+      <div style="display:flex;gap:8px;margin-top:8px">
         <button class="btn cyan" id="open-1-side">1 AÇ</button>
         <button class="btn cyan" id="open-10-side">10 AÇ</button>
       </div>
@@ -129,20 +120,18 @@
 </div><!-- /root -->
 
 <script>
-/* -------------------------
-   Part 1 JS: shared state, utilities, drawing primitives
-   ------------------------- */
-(function(){
+/* Single-file game engine — corrected scoping and variables */
+
+(() => {
   'use strict';
 
-  // Utilities
+  // Short helpers
   const $ = id => document.getElementById(id);
-  const fmt = n => (n>=1e9?Math.round(n/1e9)+'B':n>=1e6?Math.round(n/1e6)+'M':n>=1e3?Math.round(n/1e3)+'K':''+Math.floor(n));
-  const rnd = (a,b) => a + Math.random()*(b-a);
-  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const fmt = n => (n>=1e9?Math.round(n/1e9)+'B':n>=1e6?Math.round(n/1e6)+'M':n>=1e3?Math.round(n/1e3)+'K':Math.floor(n));
+  const rnd = (a,b)=> a + Math.random()*(b-a);
+  const clamp = (v,a,b)=> Math.max(a,Math.min(b,v));
 
-  // Rarity colors & slot definitions
-  const RARS = ['bronze','silver','gold','platinum','diamond','radianium','glitchanium'];
+  // Constants
   const RCOL = { bronze:'#cd7f32', silver:'#c0c0c0', gold:'#ffd700', platinum:'#e5e4e2', diamond:'#a8f0ff', radianium:'#ff88ff', glitchanium:'#cc44ff' };
   const SLOTS = {
     weapon:{label:'Lazer',icon:'🔫',statKey:'atk'},
@@ -153,8 +142,6 @@
     sensor:{label:'Sensör',icon:'📡',statKey:'crit'},
     armor:{label:'Zırh',icon:'🔩',statKey:'def'}
   };
-
-  // Enemy types used to scale waves
   const ENEMY_TYPES = [
     {name:'Anomali', col:'#ff3355', baseHp:24, baseDmg:4, xp:6, gold:4},
     {name:'Glitchör', col:'#ff00aa', baseHp:72, baseDmg:18, xp:24, gold:18},
@@ -162,484 +149,287 @@
     {name:'Nexus', col:'#ffd700', baseHp:1100, baseDmg:450, xp:420, gold:240}
   ];
 
-  // Game state (persisted)
-  const SKEY = 'gq_split_v3';
-  let gs = {
+  // Central state object (single scope)
+  const state = {
+    // character & ship
     charLvl:1, charXp:0, charXpNext:100,
     shipLvl:1, essence:0, essenceMax:100,
     hp:100, maxHp:100, gqtEnergy:0, maxGqtEnergy:100,
     stats:{str:10,agi:10,int:10,lck:5},
     gold:0, gqt:50, boxes:10,
-    wave:1, subwave:1, // subwave 1..10
-    activeBoxGroups:0,
+    // waves
+    wave:1, subwave:1, activeBoxGroups:0,
+    // inventory
     equipped:{weapon:null,hull:null,engine:null,shield:null,reactor:null,sensor:null,armor:null},
     bag:new Array(20).fill(null),
+    // autos
     autoOpen:false, autoEquip:false, autoSell:false, autoSellBag:false,
-    skillsOwned:[], bossDefeated:[]
+    // gameplay
+    skillsOwned:[],
+    bossDefeated:[],
+    // modal state
+    activeSpecialBoss: null // IMPORTANT: accessible everywhere
   };
 
-  function save(){ try{ localStorage.setItem(SKEY, btoa(JSON.stringify(gs))); }catch(e){} }
-  function load(){ try{ const d=localStorage.getItem(SKEY); if(d) Object.assign(gs, JSON.parse(atob(d))); }catch(e){} }
+  // Save/load
+  const SKEY = 'gq_combined_v1';
+  function save(){ try{ localStorage.setItem(SKEY, btoa(JSON.stringify(state))); }catch(e){} }
+  function load(){ try{ const d = localStorage.getItem(SKEY); if(d) Object.assign(state, JSON.parse(atob(d))); }catch(e){} }
 
-  // Canvas & rendering state
-  let gc, gctx, sc, sctx;
-  let W=1000, H=600, lastT=0, shipPulse=0, playerY=300;
-  let enemies=[], projs=[], pProjs=[], particles=[];
-  let lootPaused=false, pendingLoot=null, bossFightActive=false, activeSpecialBoss=null;
+  // Canvas + lists
+  const canvas = $('gc');
+  const ctx = canvas.getContext('2d');
+  let W=800, H=500, lastT=0, shipPulse=0, playerY=250;
+  let enemies = [], projs = [], pProjs = [], particles = [];
+  load();
 
-  // Expose to window for part2 to use
-  window._GQCORE = {
-    $,$,fmt,rnd,clamp,RCOL,SLOTS,ENEMY_TYPES,
-    gs,enemies,projs,pProjs,particles,
-    load,save,
-    setCanvasRefs
-  };
-
-  // Provide a function for scripts to initialize canvas refs (part2 will call this)
-  function setCanvasRefs(canvas){
-    gc = canvas;
-    gctx = gc.getContext('2d');
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-  }
+  // Resize canvas to container
   function resizeCanvas(){
-    const parent = gc.parentElement;
-    const rect = parent.getBoundingClientRect();
+    const rect = canvas.parentElement.getBoundingClientRect();
     W = Math.max(600, Math.floor(rect.width));
     H = Math.max(360, Math.floor(rect.height));
-    gc.width = W; gc.height = H;
-    playerY = H*0.5;
+    canvas.width = W; canvas.height = H;
+    playerY = H * 0.5;
   }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-  // Ship draw function (improved neon-grid, dual engine, dome cockpit)
-  function drawShip(ctx,x,y,pulse,scale=1, equipped = gs.equipped){
-    ctx.save();
-    ctx.translate(x,y);
-    ctx.scale(scale,scale);
-
-    // choose hull and accent colors depending on equipped hull/weapon
-    const hull = equipped.hull, weapon = equipped.weapon, engine = equipped.engine, shield = equipped.shield;
+  // Drawing helpers
+  function drawShip(ctx,x,y,pulse,scale=1){
+    ctx.save(); ctx.translate(x,y); ctx.scale(scale,scale);
+    const equip = state.equipped;
+    const hull = equip.hull, weapon = equip.weapon, shield = equip.shield;
     const hullCol = hull? (RCOL[hull.rar] || '#1b2b48') : '#1b2b48';
-    const accent  = weapon? (RCOL[weapon.rar] || '#00f5ff') : '#00f5ff';
-    const glow    = shield? (RCOL[shield.rar] || '#00f5ff') : '#00f5ff';
-
-    // outer glow
-    const gr = ctx.createRadialGradient(0,0,4,0,0,48);
-    gr.addColorStop(0, glow+'44'); gr.addColorStop(1,'transparent');
+    const accent = weapon? (RCOL[weapon.rar] || '#00f5ff') : '#00f5ff';
+    const glow = shield? (RCOL[shield.rar] || '#00f5ff') : '#00f5ff';
+    // glow
+    const gr = ctx.createRadialGradient(0,0,4,0,0,48); gr.addColorStop(0, glow+'44'); gr.addColorStop(1,'transparent');
     ctx.beginPath(); ctx.ellipse(0,0,46,28,0,0,Math.PI*2); ctx.fillStyle = gr; ctx.fill();
-
-    // main hull
+    // hull
     const bg = ctx.createLinearGradient(-30,-14,30,14);
     bg.addColorStop(0,hullCol); bg.addColorStop(.4,accent+'12'); bg.addColorStop(1,hullCol);
     ctx.beginPath();
-    ctx.moveTo(40,0);
-    ctx.bezierCurveTo(36,-12,12,-20,-6,-18);
-    ctx.lineTo(-24,-12); ctx.lineTo(-24,12); ctx.lineTo(-6,16);
-    ctx.bezierCurveTo(12,18,36,10,40,0);
-    ctx.closePath();
-    ctx.fillStyle = bg; ctx.fill();
-    ctx.strokeStyle = accent+'66'; ctx.lineWidth = 0.7; ctx.stroke();
-
-    // neon grid lines (approx)
+    ctx.moveTo(40,0); ctx.bezierCurveTo(36,-12,12,-20,-6,-18); ctx.lineTo(-24,-12); ctx.lineTo(-24,12); ctx.lineTo(-6,16);
+    ctx.bezierCurveTo(12,18,36,10,40,0); ctx.closePath();
+    ctx.fillStyle = bg; ctx.fill(); ctx.strokeStyle = accent+'66'; ctx.lineWidth = 0.7; ctx.stroke();
+    // grid
     ctx.strokeStyle = accent+'55'; ctx.lineWidth = 0.7;
     for(let gx=-16; gx<=24; gx+=8){ ctx.beginPath(); ctx.moveTo(gx,-12); ctx.lineTo(gx,12); ctx.stroke(); }
     for(let gy=-8; gy<=8; gy+=4){ ctx.beginPath(); ctx.moveTo(-18,gy); ctx.lineTo(28,gy); ctx.stroke(); }
-
-    // cockpit dome
-    const ck = ctx.createRadialGradient(8,-1,1,8,-1,9);
-    ck.addColorStop(0, '#aaffff'); ck.addColorStop(.45, accent+'cc'); ck.addColorStop(1, '#004a6b00');
-    ctx.beginPath(); ctx.ellipse(8,-1,9.5,7,0,0,Math.PI*2); ctx.fillStyle = ck; ctx.fill();
-    ctx.strokeStyle = accent+'99'; ctx.lineWidth=.9; ctx.stroke();
-
-    // top cannon
-    ctx.fillStyle = '#07101a'; ctx.fillRect(12,-16,14,5);
-    const canG = ctx.createRadialGradient(32,-16,0,32,-16,4); canG.addColorStop(0,accent); canG.addColorStop(1,'transparent');
-    ctx.beginPath(); ctx.arc(32,-16,3,0,Math.PI*2); ctx.fillStyle = canG; ctx.fill();
-
-    // lower gun
-    ctx.fillStyle = '#07101a'; ctx.fillRect(12,12,12,4);
-    ctx.fillStyle = accent+'66'; ctx.fillRect(16,13,8,2);
-
-    // engines (dual) with red exhaust
+    // cockpit
+    const ck = ctx.createRadialGradient(8,-1,1,8,-1,9); ck.addColorStop(0, '#aaffff'); ck.addColorStop(.45, accent+'cc'); ck.addColorStop(1, '#004a6b00');
+    ctx.beginPath(); ctx.ellipse(8,-1,9.5,7,0,0,Math.PI*2); ctx.fillStyle = ck; ctx.fill(); ctx.strokeStyle = accent+'99'; ctx.lineWidth=.9; ctx.stroke();
+    // weapon tip
+    ctx.fillStyle = '#07101a'; ctx.fillRect(12,-16,14,5); const canG = ctx.createRadialGradient(32,-16,0,32,-16,4); canG.addColorStop(0,accent); canG.addColorStop(1,'transparent'); ctx.beginPath(); ctx.arc(32,-16,3,0,Math.PI*2); ctx.fillStyle = canG; ctx.fill();
+    // engines
     const eL = 18 + Math.sin(pulse)*6;
     [-12,12].forEach((ey,i)=>{
       const ex = -22;
-      const pg = ctx.createLinearGradient(ex,ey-5,ex,ey+5);
-      pg.addColorStop(0,'#2a1822'); pg.addColorStop(1,'#0b0510');
+      const pg = ctx.createLinearGradient(ex,ey-5,ex,ey+5); pg.addColorStop(0,'#2a1822'); pg.addColorStop(1,'#0b0510');
       ctx.fillStyle = pg; ctx.beginPath(); ctx.rect(ex,ey-5,16,10); ctx.fill();
-      // exhaust flame
-      const eg = ctx.createLinearGradient(ex - eL, ey, ex, ey);
-      eg.addColorStop(0,'rgba(255,80,80,0)'); eg.addColorStop(.5,'rgba(255,40,60,.45)'); eg.addColorStop(1,'rgba(255,20,40,.65)');
+      const eg = ctx.createLinearGradient(ex-eL,ey,ex,ey); eg.addColorStop(0,'rgba(255,80,80,0)'); eg.addColorStop(.5,'rgba(255,40,60,.45)'); eg.addColorStop(1,'rgba(255,20,40,.65)');
       ctx.beginPath(); ctx.moveTo(ex,ey-6); ctx.lineTo(ex - eL, ey); ctx.lineTo(ex,ey+6); ctx.closePath(); ctx.fillStyle = eg; ctx.fill();
     });
-
-    // small running lights
-    [[22,-3,'#00ff88'],[22,3,'#ff3355'],[-18, -11, accent]].forEach(([lx,ly,lc])=>{
+    // lights
+    [[22,-3,'#00ff88'],[22,3,'#ff3355'],[-18,-11,accent]].forEach(([lx,ly,lc])=>{
       ctx.beginPath(); ctx.arc(lx,ly,1.8,0,Math.PI*2); ctx.fillStyle = lc; ctx.shadowColor = lc; ctx.shadowBlur = 6 + Math.sin(pulse)*2; ctx.fill(); ctx.shadowBlur = 0;
     });
-
     ctx.restore();
   }
 
-  // Enemy draw routine
-  function drawEnemy(ctx,e){
-    ctx.save(); ctx.translate(e.x,e.y);
+  function drawEnemy(e){
+    const ctx2 = ctx;
+    ctx2.save(); ctx2.translate(e.x,e.y);
     const s = e.isBoss? 40 : 14;
-    // body
-    ctx.beginPath();
-    ctx.moveTo(s,0); ctx.bezierCurveTo(s-6,-s/2,2,-s,-(s/2),-s/1.6);
-    ctx.lineTo(-s-6, -s/2); ctx.lineTo(-s-6,s/2); ctx.lineTo(-(s/2), s/1.6);
-    ctx.bezierCurveTo(2,s, s-6,s/2, s,0); ctx.closePath();
-    ctx.fillStyle = e.col; ctx.fill();
-    ctx.strokeStyle = '#00000066'; ctx.lineWidth = .6; ctx.stroke();
-    // cockpit glow
-    ctx.beginPath(); ctx.ellipse(5,0,3.5,2.5,0,0,Math.PI*2); ctx.fillStyle = e.col+'cc'; ctx.fill();
-    ctx.restore();
+    ctx2.beginPath();
+    ctx2.moveTo(s,0); ctx2.bezierCurveTo(s-6,-s/2,2,-s,-s/2,-s/1.6);
+    ctx2.lineTo(-s-4,-s/2); ctx2.lineTo(-s-4,s/2); ctx2.lineTo(-s/2,s/1.6);
+    ctx2.bezierCurveTo(2,s,s-6,s/2,s,0);
+    ctx2.closePath(); ctx2.fillStyle = e.col; ctx2.fill(); ctx2.strokeStyle='#00000066'; ctx2.lineWidth=.6; ctx2.stroke();
+    ctx2.beginPath(); ctx2.ellipse(5,0,3.5,2.5,0,0,Math.PI*2); ctx2.fillStyle = e.col+'cc'; ctx2.fill();
+    ctx2.restore();
   }
 
-  // Expose drawing functions and state to part2
-  window._GQCORE.drawShip = drawShip;
-  window._GQCORE.drawEnemy = drawEnemy;
-  window._GQCORE.setCanvasRefs = setCanvasRefs;
-  window._GQCORE.resizeCanvas = resizeCanvas;
+  function spawnFloatingText(x,y,txt,col='#fff'){ particles.push({x,y,txt:txt.toString(),col,life:1.2}); }
 
-  // load saved state immediately
-  load();
-  // end of part1 IIFE
-})();
-</script>
-<!-- Part 2 (append after index1.html). When concatenated, this completes the application -->
-<script>
-/* -------------------------
-   Part 2 JS: game logic, spawn, combat, UI bindings
-   ------------------------- */
-(function(){
-  'use strict';
-  // grab core
-  const CORE = window._GQCORE;
-  const $ = CORE.$, fmt = CORE.fmt, rnd = CORE.rnd, RCOL = CORE.RCOL, SLOTS = CORE.SLOTS, ENEMY_TYPES = CORE.ENEMY_TYPES;
-  let gs = CORE.gs; // reference to state
-  // canvas refs
-  const canvas = document.getElementById('gc');
-  CORE.setCanvasRefs(canvas);
-  const gctx = canvas.getContext('2d');
-
-  // variables
-  let W = canvas.width, H = canvas.height, lastT = 0, shipPulse = 0;
-  let enemies = CORE.enemies, pProjs = CORE.pProjs, projs = CORE.projs, particles = CORE.particles;
-  let lootPaused = false, pendingLoot = null;
-  let aaTimer = 0;
-
-  // helper: recalc W/H on resize
-  function refreshSize(){ W = canvas.width; H = canvas.height; }
-
-  // spawn one enemy tailored to wave/subwave/ship level
+  // Enemy factory: spawn with good X and Y (right side, Y within 20%-80%)
   function mkEnemy(wave, sub){
-    const tIndex = Math.min(Math.floor((wave-1)/3), ENEMY_TYPES.length-1);
-    const t = ENEMY_TYPES[tIndex];
-    const scale = Math.pow(1.18, wave-1) * (1 + (sub-1)*.06);
+    const typeIndex = Math.min(Math.floor((wave-1)/3), ENEMY_TYPES.length-1);
+    const t = ENEMY_TYPES[typeIndex];
+    const scale = Math.pow(1.18, wave-1) * (1 + (sub-1)*0.05);
     const hp = Math.ceil(t.baseHp * scale);
     const dmg = Math.ceil(t.baseDmg * Math.pow(1.12, wave-1));
-    const startX = W + 80 + Math.random()*120;
+    const startX = W + 80 + Math.random()*140;
     const startY = Math.floor(H*0.2 + Math.random()*H*0.6);
-    return {name:t.name, col:t.col, hp, maxHp:hp, dmg, xp:t.xp, gold:t.gold, x:startX, y:startY, stopX:Math.floor(W*0.65), dead:false, isBoss:false, spd:40 + Math.random()*60};
+    return {name: t.name, col: t.col, hp, maxHp:hp, dmg, xp:t.xp, gold:t.gold, x:startX, y:startY, stopX:Math.floor(W*0.65), dead:false, isBoss:false, spd:40 + Math.random()*60};
   }
 
-  // spawn group for current box (called when a box is opened)
+  // Spawn group for current box (subwave player)
   function spawnGroupForCurrentBox(){
-    refreshSize();
-    enemies.length = 0;
-    const wave = gs.wave, sub = gs.subwave;
+    resizeIfNeeded();
+    enemies.length = 0; projs.length = 0; pProjs.length = 0;
+    const wave = state.wave, sub = state.subwave;
     if(sub < 10){
-      const count = 3 + Math.min(10, Math.floor(gs.wave*0.4) + sub);
-      for(let i=0;i<count;i++){
+      const cnt = 3 + Math.min(10, Math.floor(state.wave*0.4) + sub);
+      for(let i=0;i<cnt;i++){
         const e = mkEnemy(wave, sub);
-        e.x += i*18; e.y = Math.max(80, Math.min(H-80, Math.floor(H*0.25 + (i*(H*0.5/count)) + Math.random()*24)));
+        e.x += i*18; e.y = Math.max(80, Math.min(H-80, Math.floor(H*0.25 + (i*(H*0.5/cnt)) + Math.random()*24)));
         enemies.push(e);
       }
-      addLog(`🌊 Dalga ${wave}-${sub} geldi: ${count} düşman`);
+      addLog(`🌊 Dalga ${wave}-${sub} geldi (${cnt})`, '#ff88ff');
     } else {
       // boss
-      const bossHp = Math.ceil(500 * Math.pow(1.25, wave-1) * Math.pow(1.2, gs.shipLvl-1));
+      const bossHp = Math.ceil(500 * Math.pow(1.25, wave-1) * Math.pow(1.2, state.shipLvl-1));
       const bossDmg = Math.ceil(20 * Math.pow(1.12, wave-1));
-      const boss = {name:`WAVE BOSS ${wave}`, col:'#ffd700', hp:bossHp, maxHp:bossHp, dmg:bossDmg, xp:Math.ceil(200*wave), gold:Math.ceil(100*wave), x:Math.floor(W*0.6), y:Math.floor(H*0.5), stopX:Math.floor(W*0.6), dead:false, isBoss:true, spd:20};
+      const boss = {name:`WAVE BOSS ${wave}`, col:'#ffd700', hp:bossHp, maxHp:bossHp, dmg:bossDmg, xp:Math.ceil(300*wave), gold:Math.ceil(200*wave), x:Math.floor(W*0.6), y:Math.floor(H*0.5), stopX:Math.floor(W*0.6), dead:false, isBoss:true, spd:20};
       enemies.push(boss);
       addLog(`🔥 BOSS DALGA: ${boss.name}`, '#ffd700');
     }
     renderUI();
   }
 
-  // generate item
+  // Item generation & loot popup
   function generateItem(){
     const rarRoll = Math.random();
-    const rarList = ['bronze','silver','gold','platinum','diamond'];
     const rar = rarRoll < 0.6 ? 'bronze' : rarRoll < 0.85 ? 'silver' : rarRoll < 0.95 ? 'gold' : 'platinum';
     const slots = Object.keys(SLOTS);
     const slotKey = slots[Math.floor(Math.random()*slots.length)];
     const sv = Math.round(12 + Math.random()*66);
-    const sellVal = Math.max(5, Math.round((sv/2) + (rarList.indexOf(rar)*12)));
+    const sellVal = Math.max(5, Math.round((sv/2) + (['bronze','silver','gold','platinum'].indexOf(rar)*12)));
     return {slotKey, rar, stars: Math.floor(Math.random()*4)+1, sv, name:`${rar.toUpperCase()} ${SLOTS[slotKey].label}`, icon:SLOTS[slotKey].icon, sellVal, statKey:SLOTS[slotKey].statKey};
   }
 
-  // show loot and pause game
   function showLoot(item){
-    pendingLoot = item;
+    state.pendingLoot = item; // store it for autos if needed
     $('loot-overlay').style.display = 'block';
     $('loot-pop').style.display = 'block';
-    $('lp-ic').textContent = item.icon;
-    $('lp-rar').textContent = item.rar.toUpperCase();
-    $('lp-rar').style.color = RCOL[item.rar] || '#fff';
-    $('lp-nm').textContent = item.name + ' ' + '★'.repeat(item.stars);
-    $('lp-st').textContent = `+${item.sv} ${item.statKey.toUpperCase()}`;
-    lootPaused = true;
-
-    // handle autos
-    if(gs.autoEquip){
-      const cur = gs.equipped[item.slotKey];
-      const curVal = cur?cur.sv:0;
+    $('lp-ic').textContent = item.icon; $('lp-rar').textContent = item.rar.toUpperCase(); $('lp-rar').style.color = RCOL[item.rar] || '#fff';
+    $('lp-nm').textContent = item.name + ' ' + '★'.repeat(item.stars); $('lp-st').textContent = `+${item.sv} ${item.statKey.toUpperCase()}`;
+    // pause game actions
+    state.lootPaused = true;
+    // auto behaviors
+    if(state.autoEquip){
+      const cur = state.equipped[item.slotKey]; const curVal = cur?cur.sv:0;
       if(item.sv > curVal){ setTimeout(()=> equipLoot(), 350); return; }
     }
-    if(gs.autoSell){
-      const cur = gs.equipped[item.slotKey];
-      const curVal = cur?cur.sv:0;
+    if(state.autoSell){
+      const cur = state.equipped[item.slotKey]; const curVal = cur?cur.sv:0;
       if(item.sv <= curVal){ setTimeout(()=> sellLoot(), 700); return; }
     }
   }
 
   function closeLoot(){
-    pendingLoot = null;
-    $('loot-pop').style.display = 'none';
-    $('loot-overlay').style.display = 'none';
-    lootPaused = false;
+    state.pendingLoot = null; $('loot-overlay').style.display = 'none'; $('loot-pop').style.display = 'none'; state.lootPaused = false;
   }
-
   function equipLoot(){
-    if(!pendingLoot) return;
-    const it = pendingLoot;
-    const prev = gs.equipped[it.slotKey];
-    if(prev){
-      const idx = gs.bag.findIndex(x=>x===null);
-      if(idx!==-1) gs.bag[idx] = prev;
-    }
-    gs.equipped[it.slotKey] = it;
-    addLog(`✅ ${it.name} kuşanıldı`, RCOL[it.rar]);
-    closeLoot();
-    finishAfterLoot();
-    renderPanels();
-    CORE.save();
+    const item = state.pendingLoot; if(!item) return;
+    const old = state.equipped[item.slotKey];
+    if(old){ const idx = state.bag.findIndex(x=>x===null); if(idx!==-1) state.bag[idx] = old; }
+    state.equipped[item.slotKey] = item;
+    addLog(`✅ ${item.name} kuşanıldı`, RCOL[item.rar]);
+    closeLoot(); finishAfterLoot();
+    save(); renderPanels();
   }
-  function bagLoot(){
-    if(!pendingLoot) return;
-    const idx = gs.bag.findIndex(x=>x===null);
-    if(idx===-1){ addLog('⚠️ Çanta dolu!', '#ff3355'); return; }
-    gs.bag[idx] = pendingLoot;
-    addLog(`🎒 ${pendingLoot.name} çantaya eklendi`, '#cfe');
-    closeLoot(); finishAfterLoot(); renderPanels(); CORE.save();
-  }
-  function sellLoot(){
-    if(!pendingLoot) return;
-    gs.gold += pendingLoot.sellVal;
-    addLog(`💰 Satıldı: +${fmt(pendingLoot.sellVal)} Gold`, '#ffd700');
-    closeLoot(); finishAfterLoot(); renderPanels(); CORE.save();
-  }
+  function bagLoot(){ const idx = state.bag.findIndex(x=>x===null); if(idx===-1){ addLog('Çanta dolu!','#ff3355'); return; } state.bag[idx] = state.pendingLoot; addLog(`🎒 ${state.pendingLoot.name} çantaya eklendi`,'#cfe'); closeLoot(); finishAfterLoot(); save(); renderPanels(); }
+  function sellLoot(){ state.gold += state.pendingLoot.sellVal; addLog(`💰 Satıldı: +${state.pendingLoot.sellVal} Gold`,'#ffd700'); closeLoot(); finishAfterLoot(); save(); renderPanels(); }
 
   function finishAfterLoot(){
-    gs.activeBoxGroups = Math.max(0, gs.activeBoxGroups - 1);
-    // increment subwave/wave
-    if(gs.subwave < 10) gs.subwave++;
-    else { gs.subwave = 1; gs.wave++; }
-    if(gs.activeBoxGroups > 0){
-      // spawn next queued group
-      spawnGroupForCurrentBox();
-    } else {
-      addLog('⏸️ Grup tamamlandı, sıra bitti', '#88a');
-    }
+    state.activeBoxGroups = Math.max(0, state.activeBoxGroups - 1);
+    if(state.subwave < 10) state.subwave++; else { state.subwave = 1; state.wave++; }
+    if(state.activeBoxGroups > 0) spawnGroupForCurrentBox();
+    else addLog('⏸️ Grup tamamlandı, sıra bitti', '#88a');
     renderUI();
   }
 
-  // open boxes - each box queues a group
   function openBox(count=1){
-    if(gs.boxes < 1){ addLog('⚠️ Kutunuz yok', '#ff3355'); return; }
-    const use = Math.min(gs.boxes, count);
-    gs.boxes -= use; gs.activeBoxGroups += use;
-    addLog(`📦 ${use} Box açıldı — ${gs.activeBoxGroups} grup kuyruğunda`, '#00f5ff');
+    if(state.boxes < 1){ addLog('⚠️ Kutunuz yok','#ff3355'); return; }
+    const use = Math.min(state.boxes, count);
+    state.boxes -= use; state.activeBoxGroups += use;
+    addLog(`📦 ${use} Box açıldı — ${state.activeBoxGroups} grup kuyruğunda`, '#00f5ff');
     if(enemies.length === 0) spawnGroupForCurrentBox();
-    renderPanels(); CORE.save();
+    renderPanels(); save();
   }
 
-  // small logging helper
-  function addLog(msg, color='#cfe'){
-    const el = document.createElement('div');
-    el.className = 'clog-line'; el.textContent = msg; el.style.color = color;
-    $('clog').appendChild(el);
-    setTimeout(()=>{ try{ $('clog').removeChild(el);}catch(e){} }, 6000);
-  }
-
-  // projectile & combat logic
+  // projectile handling & collisions
   function updateProjectiles(dt){
-    // player projectiles
     for(let i=pProjs.length-1;i>=0;i--){
-      const p = pProjs[i];
-      p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt;
+      const p = pProjs[i]; p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt;
       for(let j=0;j<enemies.length;j++){
         const e = enemies[j]; if(e.dead) continue;
         const dx = p.x - e.x, dy = p.y - e.y;
         if(Math.hypot(dx,dy) < 18){
-          e.hp -= p.dmg;
-          spawnFloatingText(e.x, e.y-10, p.dmg, '#fff');
-          pProjs.splice(i,1);
-          if(e.hp <= 0 && !e.dead){
-            e.dead = true;
-            addLog(`💀 ${e.name} yok edildi! +${e.xp||0}XP +${e.gold||0}G`, e.col);
-            gs.gold += e.gold||0;
-          }
+          e.hp -= p.dmg; spawnFloatingText(e.x, e.y-10, p.dmg, '#fff'); pProjs.splice(i,1);
+          if(e.hp <= 0 && !e.dead){ e.dead = true; addLog(`💀 ${e.name} yok edildi! +${e.xp||0}XP +${e.gold||0}G`, e.col); state.gold += e.gold||0; }
           break;
         }
       }
-      if(p && (p.life<=0 || p.x < -50 || p.x>W+50)) pProjs.splice(i,1);
+      if(p && (p.life <= 0 || p.x < -50 || p.x > W+50)) pProjs.splice(i,1);
     }
-    // enemy projectiles -> player (we just spawn effect)
     for(let i=projs.length-1;i>=0;i--){
-      const p = projs[i];
-      p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt;
-      if(Math.hypot(p.x - 130, p.y - H*0.5) < 20){
-        spawnFloatingText(130, H*0.5, Math.max(1,p.dmg - 1), '#f55');
-        projs.splice(i,1);
-      }
-      if(p && (p.life<=0 || p.x<-50 || p.x>W+50)) projs.splice(i,1);
+      const p = projs[i]; p.x += p.vx*dt; p.y += p.vy*dt; p.life -= dt;
+      if(Math.hypot(p.x - 130, p.y - H*0.5) < 20){ spawnFloatingText(130,H*0.5, Math.max(1,p.dmg - 1),'#f55'); projs.splice(i,1); }
+      if(p && (p.life <= 0 || p.x < -50 || p.x > W+50)) projs.splice(i,1);
     }
   }
 
-  function spawnFloatingText(x,y,txt,col='#fff'){
-    particles.push({x,y,txt:txt.toString(),col,life:1.2});
-  }
+  function spawnFloatingText(x,y,txt,col='#fff'){ particles.push({x,y,txt:txt.toString(),col,life:1.2}); }
 
-  // main update
+  // main update per frame
+  let aaTimer = 0;
   function update(dt){
     shipPulse += dt*3.5;
-    // auto-open if enabled
-    if(gs.autoOpen && gs.boxes > 0 && !lootPaused && !bossFightActive){
-      // simple timer using Math.random to spread opens over time
-      if(Math.random() < dt*0.5) openBox(1);
+    // auto-open
+    if(state.autoOpen && state.boxes > 0 && !state.lootPaused && !state.activeSpecialBoss){ if(Math.random() < dt*0.6) openBox(1); }
+    // auto-sell bag
+    if(state.autoSellBag && Math.random() < dt*0.05){ let worstIdx=-1, worstVal=1e9; for(let i=0;i<state.bag.length;i++){ const it=state.bag[i]; if(it && it.sv < worstVal){ worstVal=it.sv; worstIdx=i; } } if(worstIdx!==-1){ state.gold += state.bag[worstIdx].sellVal; addLog(`♻️ Otomatik satıldı: ${state.bag[worstIdx].name} +${state.bag[worstIdx].sellVal}G`,'#ffd700'); state.bag[worstIdx]=null; save(); renderPanels(); } }
+    // auto-attack only if enemies present and not paused and not in boss modal
+    if(!state.lootPaused && !state.activeSpecialBoss && enemies.length>0){
+      aaTimer -= dt; const atkSPD = 0.9 + state.stats.agi*0.04;
+      if(aaTimer <= 0){ aaTimer = 1 / atkSPD; const tgt = enemies.filter(e=>!e.dead).sort((a,b)=>a.x-b.x)[0]; if(tgt){ const dx=tgt.x-130, dy=tgt.y - H*0.5; const dist = Math.hypot(dx,dy)||1; pProjs.push({x:130+22,y:H*0.5,vx:(dx/dist)*420,vy:(dy/dist)*420,dmg:Math.ceil(10 + state.charLvl*1.6),life:1.6}); } }
     }
-    // auto-sell bag occasionally
-    if(gs.autoSellBag && Math.random() < dt*0.08){
-      // find weak items
-      let worstIdx=-1, worstVal=1e9;
-      for(let i=0;i<gs.bag.length;i++){ const it=gs.bag[i]; if(it && it.sv < worstVal){ worstVal = it.sv; worstIdx = i; } }
-      if(worstIdx!==-1){ gs.gold += gs.bag[worstIdx].sellVal; addLog(`♻️ Otomatik satıldı: ${gs.bag[worstIdx].name} +${gs.bag[worstIdx].sellVal}G`,'#ffd700'); gs.bag[worstIdx] = null; CORE.save(); renderPanels(); }
-    }
-
-    // auto attack if enemies exist
-    if(!lootPaused && !bossFightActive && enemies.length>0){
-      aaTimer -= dt;
-      const cs = 0.9 + gs.stats.agi*0.04;
-      if(aaTimer <= 0){
-        aaTimer = 1 / cs;
-        // fire projectile to nearest enemy
-        const alive = enemies.filter(e=>!e.dead);
-        if(alive.length){
-          const tgt = alive.reduce((a,b)=> a.x<b.x ? a : b );
-          const dx = tgt.x - 130, dy = tgt.y - H*0.5; const dist = Math.hypot(dx,dy)||1;
-          pProjs.push({x:130+22,y:H*0.5,vx:(dx/dist)*420,vy:(dy/dist)*420,dmg:Math.ceil(10 + gs.charLvl*1.8),life:1.6});
-        }
-      }
-    }
-
-    // update projectiles
+    // projectiles
     updateProjectiles(dt);
-
-    // update enemies movement & shooting
+    // enemies movement & shooting
     for(let e of enemies){
       if(e.dead) continue;
       if(e.x > e.stopX) e.x -= (e.spd||50)*dt;
-      else{
-        if(!lootPaused && Math.random() < dt*0.6){
-          const dx = 130 - e.x, dy = H*0.5 - e.y; const dist = Math.hypot(dx,dy)||1;
-          projs.push({x:e.x-10,y:e.y,vx:(dx/dist)*260,vy:(dy/dist)*260,dmg:Math.ceil(e.dmg),life:1.6});
-        }
-      }
+      else { if(!state.lootPaused && Math.random() < dt*0.6){ const dx=130-e.x, dy=H*0.5-e.y, dist=Math.hypot(dx,dy)||1; projs.push({x:e.x-10,y:e.y,vx:(dx/dist)*260,vy:(dy/dist)*260,dmg:Math.ceil(e.dmg),life:1.6}); } }
     }
-
-    // particles reduce life
-    for(let i=particles.length-1;i>=0;i--){
-      particles[i].life -= dt;
-      particles[i].y -= dt * 12;
-      if(particles[i].life <= 0) particles.splice(i,1);
-    }
-
-    // check group clear and drops
-    if(!lootPaused && enemies.length>0 && enemies.every(x=>x.dead)){
-      enemies = []; // clear
-      // handle drop or advance
-      if(gs.activeBoxGroups > 0){
-        // 30..55% drop chance based on luck
-        const dropChance = 0.25 + Math.min(0.3, gs.stats.lck * 0.01);
-        if(Math.random() < dropChance){
-          const item = generateItem();
-          showLoot(item);
-          // keep activeBoxGroups until handled to allow autos to work
-        } else {
-          // no drop: group finished
-          gs.activeBoxGroups = Math.max(0, gs.activeBoxGroups - 1);
-          if(gs.subwave < 10) gs.subwave++; else { gs.subwave = 1; gs.wave++; }
-          if(gs.activeBoxGroups > 0) spawnGroupForCurrentBox();
-        }
-      } else {
-        // nothing queued
+    // particles
+    for(let i=particles.length-1;i>=0;i--){ particles[i].life -= dt; particles[i].y -= dt*12; if(particles[i].life <= 0) particles.splice(i,1); }
+    // clear-check
+    if(!state.lootPaused && enemies.length>0 && enemies.every(x=>x.dead)){
+      enemies = [];
+      if(state.activeBoxGroups > 0){
+        const dropChance = 0.25 + Math.min(0.3, state.stats.lck * 0.01);
+        if(Math.random() < dropChance){ const it = generateItem(); showLoot(it); } else { state.activeBoxGroups = Math.max(0, state.activeBoxGroups - 1); if(state.subwave < 10) state.subwave++; else { state.subwave = 1; state.wave++; } if(state.activeBoxGroups > 0) spawnGroupForCurrentBox(); }
       }
       renderUI();
     }
   }
 
-  // render entire scene
+  // render frame
   function render(){
-    gctx.clearRect(0,0,W,H);
-    // background
-    const g = gctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'#010516'); g.addColorStop(1,'#041028');
-    gctx.fillStyle = g; gctx.fillRect(0,0,W,H);
-
+    ctx.clearRect(0,0,W,H);
+    const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#010516'); g.addColorStop(1,'#041028'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     // stars
-    for(let i=0;i<64;i++){
-      gctx.fillStyle = 'rgba(180,200,255,0.03)';
-      gctx.fillRect((i*47 + Math.sin(shipPulse + i)*6) % W, (i*37) % H, 2, 2);
-    }
-
-    // draw player ship (left)
-    CORE.drawShip(gctx, 130, H*0.5, shipPulse, 1.0, gs.equipped);
-
-    // draw enemies
+    for(let i=0;i<64;i++){ ctx.fillStyle='rgba(255,255,255,0.03)'; ctx.fillRect((i*47 + Math.sin(shipPulse + i)*6) % W, (i*37) % H, 2,2); }
+    // ship
+    drawShip(ctx,130,H*0.5,shipPulse,1);
+    // enemies
     for(let e of enemies){
-      if(!e.dead) CORE.drawEnemy(gctx, e);
-      // healthbar
-      const w = e.isBoss ? 70 : 36;
-      const h = 4;
-      gctx.fillStyle = '#071028';
-      gctx.fillRect(e.x - w/2, e.y - (e.isBoss? 60:28), w, h);
+      if(!e.dead) drawEnemy(e);
+      // hp bar
+      const w = e.isBoss? 70:36; const h = 4;
+      ctx.fillStyle = '#071028'; ctx.fillRect(e.x - w/2, e.y - (e.isBoss?60:28), w, h);
       const pct = Math.max(0, e.hp / (e.maxHp || 1));
-      gctx.fillStyle = e.isBoss ? '#ffd700' : e.col;
-      gctx.fillRect(e.x - w/2, e.y - (e.isBoss? 60:28), w*pct, h);
+      ctx.fillStyle = e.isBoss? '#ffd700' : e.col; ctx.fillRect(e.x - w/2, e.y - (e.isBoss?60:28), w*pct, h);
     }
-
-    // projectiles
-    for(let p of pProjs){
-      gctx.fillStyle = '#00f5ff';
-      gctx.beginPath(); gctx.arc(p.x, p.y, 3, 0, Math.PI*2); gctx.fill();
-    }
-    for(let p of projs){
-      gctx.fillStyle = '#ff3344';
-      gctx.beginPath(); gctx.arc(p.x, p.y, 3, 0, Math.PI*2); gctx.fill();
-    }
-
-    // particles / floating text
-    gctx.textAlign = 'center';
-    for(let pp of particles){
-      gctx.fillStyle = pp.col || '#fff';
-      gctx.globalAlpha = Math.max(0, pp.life);
-      gctx.fillText(pp.txt, pp.x, pp.y);
-      gctx.globalAlpha = 1;
-    }
+    // projs & particles
+    for(let p of pProjs){ ctx.fillStyle = '#00f5ff'; ctx.beginPath(); ctx.arc(p.x,p.y,3,0,Math.PI*2); ctx.fill(); }
+    for(let p of projs){ ctx.fillStyle = '#ff3344'; ctx.beginPath(); ctx.arc(p.x,p.y,3,0,Math.PI*2); ctx.fill(); }
+    ctx.textAlign = 'center';
+    for(let pp of particles){ ctx.fillStyle = pp.col || '#fff'; ctx.globalAlpha = Math.max(0, pp.life); ctx.fillText(pp.txt, pp.x, pp.y); ctx.globalAlpha = 1; }
   }
 
   // main loop
@@ -647,53 +437,65 @@
     if(!lastT) lastT = ts;
     const dt = Math.min((ts - lastT)/1000, 0.05);
     lastT = ts;
-    update(dt);
-    render();
-    renderUI();
+    update(dt); render(); renderUI();
     requestAnimationFrame(loop);
   }
 
-  // UI controls and renderers
+  // UI helpers
+  function addLog(msg, color='#cfe'){ const el = document.createElement('div'); el.className='clog-line'; el.textContent = msg; el.style.color = color; $('clog').appendChild(el); setTimeout(()=>{ try{ $('clog').removeChild(el);}catch(e){} },6000); }
   function renderPanels(){
-    // boxes / inventory / equips
-    $('box-count').textContent = gs.boxes;
-    // equip list
-    const el = $('equip-list'); el.innerHTML = '';
-    Object.keys(SLOTS).forEach(k=>{
-      const s = SLOTS[k];
-      const it = gs.equipped[k];
-      const row = document.createElement('div'); row.className='equip-slot';
-      const left = document.createElement('div'); left.innerHTML = `<div style="font-size:14px">${s.icon} ${s.label}</div><div style="color:var(--dim);font-size:12px">${it?it.name:'Boş'}</div>`;
-      const btn = document.createElement('button'); btn.className='btn'; btn.textContent = it ? 'Çıkart' : '—';
-      btn.addEventListener('click', ()=> { if(it){ unequip(k); } });
-      row.appendChild(left); row.appendChild(btn); el.appendChild(row);
-    });
-    // inventory grid
+    $('box-count').textContent = state.boxes;
+    // equips
+    const eq = $('equip-list'); eq.innerHTML = '';
+    Object.keys(SLOTS).forEach(k=>{ const s = SLOTS[k]; const it = state.equipped[k]; const row = document.createElement('div'); row.className='equip-slot'; const left = document.createElement('div'); left.innerHTML = `<div style="font-size:14px">${s.icon} ${s.label}</div><div style="color:var(--dim);font-size:12px">${it?it.name:'Boş'}</div>`; const btn = document.createElement('button'); btn.className='btn'; btn.textContent = it? 'Çıkart':'—'; btn.addEventListener('click', ()=>{ if(it) unequip(k); }); row.appendChild(left); row.appendChild(btn); eq.appendChild(row); });
+    // inv
     const grid = $('inv-grid'); grid.innerHTML = '';
-    for(let i=0;i<20;i++){
-      const slot = document.createElement('div'); slot.className = 'inv-slot';
-      const it = gs.bag[i];
-      if(!it){ slot.classList.add('empty'); slot.textContent = ''; } else { slot.textContent = it.icon; slot.title = it.name + ' +' + it.sv; slot.addEventListener('click', ()=> equipFromBag(i)); }
-      grid.appendChild(slot);
-    }
+    for(let i=0;i<20;i++){ const slot = document.createElement('div'); slot.className='inv-slot'; const it = state.bag[i]; if(!it){ slot.classList.add('empty'); slot.textContent = ''; } else { slot.textContent = it.icon; slot.title = it.name + ' +' + it.sv; slot.addEventListener('click', ()=> equipFromBag(i)); } grid.appendChild(slot); }
   }
 
   function renderUI(){
-    refreshSize();
-    $('wb-wave').textContent = gs.wave;
-    $('wb-sub').textContent = gs.subwave;
-    $('h-gold').textContent = fmt(gs.gold);
-    $('h-gqt').textContent = fmt(gs.gqt);
-    $('h-lvl').textContent = gs.charLvl;
-    // update boss hp bar if active
-    if(activeSpecialBoss && $('boss-hp-bar')){
-      const pct = Math.max(0, activeSpecialBoss.hp / activeSpecialBoss.maxHp * 100);
-      $('boss-hp-bar').style.width = pct + '%';
-    }
+    $('wb-wave').textContent = state.wave; $('wb-sub').textContent = state.subwave;
+    $('h-gold').textContent = fmt(state.gold); $('h-gqt').textContent = fmt(state.gqt); $('h-lvl').textContent = state.charLvl;
+    // boss hp bar if activeSpecialBoss present
+    if(state.activeSpecialBoss){ $('boss-hp-bar').style.width = Math.max(0, Math.round(state.activeSpecialBoss.hp / state.activeSpecialBoss.maxHp * 100)) + '%'; }
     renderPanels();
   }
 
-  // event bindings
+  // equip/from bag
+  function equipFromBag(i){
+    const it = state.bag[i]; if(!it) return;
+    const old = state.equipped[it.slotKey]; if(old){ const idx = state.bag.findIndex(x=>x===null); if(idx===-1){ addLog('Çanta dolu!','#ff3355'); return; } state.bag[idx] = old; }
+    state.equipped[it.slotKey] = it; state.bag[i] = null; addLog(`✅ ${it.name} kuşanıldı`,'#cfe'); renderPanels(); save();
+  }
+  function unequip(slotKey){ const it = state.equipped[slotKey]; if(!it) return; const idx = state.bag.findIndex(x=>x===null); if(idx===-1){ addLog('Çanta dolu!','#ff3355'); return; } state.bag[idx] = it; state.equipped[slotKey] = null; addLog(`🔓 ${it.name} çıkarıldı`,'#cfe'); renderPanels(); save(); }
+
+  // Special challenge bosses
+  const CH_BOSSES = [
+    {id:0,name:'PRIME ANOMALI', req:1, hp:5000, dmg:50, reward:{gold:500,gqt:0,boxes:5}},
+    {id:1,name:'VOID EMPEROR', req:5, hp:80000, dmg:800, reward:{gold:3000,gqt:10,boxes:10}}
+  ];
+  function startSpecialBoss(id){
+    const b = CH_BOSSES.find(x=>x.id===id); if(!b) return; if(state.charLvl < b.req){ addLog(`Gerekli seviye ${b.req}`,'#ff3355'); return; }
+    state.activeSpecialBoss = { ...b, hp:b.hp, maxHp:b.hp }; $('boss-title').textContent = b.name; $('boss-hp-bar').style.width = '100%'; $('boss-log').innerHTML = ''; $('boss-modal').style.display = 'flex';
+    addLog(`⚠️ ÖZEL BOSS: ${b.name} ile karşılaşma başladı`, '#ffd700');
+  }
+  function endSpecialBoss(won){
+    if(won){ addLog('🏆 ÖZEL BOSS yenildi!', '#ffd700'); state.gold += state.activeSpecialBoss.reward.gold; state.gqt += state.activeSpecialBoss.reward.gqt; state.boxes += state.activeSpecialBoss.reward.boxes; }
+    else addLog('❌ Boss karşılaşması sona erdi (yenilgi/geri çekilme).', '#ff3355');
+    state.activeSpecialBoss = null; $('boss-modal').style.display = 'none'; save(); renderPanels();
+  }
+  $('boss-attack').addEventListener('click', ()=>{
+    if(!state.activeSpecialBoss) return;
+    const dmg = Math.ceil(15 + state.charLvl*1.6);
+    state.activeSpecialBoss.hp -= dmg; $('boss-log').innerHTML += `<div style="color:#0ff">▶ Sen: ${dmg} hasar</div>`;
+    if(state.activeSpecialBoss.hp <= 0){ $('boss-log').innerHTML += `<div style="color:#ffd700">🏆 Boss öldürüldü!</div>`; endSpecialBoss(true); return; }
+    const bdmg = Math.ceil(state.activeSpecialBoss.dmg * (0.8 + Math.random()*0.5));
+    $('boss-log').innerHTML += `<div style="color:#f55">◀ Boss: ${bdmg} hasar</div>`;
+    $('boss-hp-bar').style.width = Math.max(0, Math.round(state.activeSpecialBoss.hp / state.activeSpecialBoss.maxHp * 100)) + '%';
+  });
+  $('boss-retreat').addEventListener('click', ()=> endSpecialBoss(false));
+
+  // Input bindings
   $('open-1').addEventListener('click', ()=> openBox(1));
   $('open-10').addEventListener('click', ()=> openBox(10));
   $('open-1-side').addEventListener('click', ()=> openBox(1));
@@ -702,77 +504,22 @@
   $('lp-bag').addEventListener('click', bagLoot);
   $('lp-sell').addEventListener('click', sellLoot);
 
-  $('auto-open').addEventListener('change', e=>{ gs.autoOpen = e.target.checked; CORE.save(); });
-  $('auto-equip').addEventListener('change', e=>{ gs.autoEquip = e.target.checked; CORE.save(); });
-  $('auto-sell').addEventListener('change', e=>{ gs.autoSell = e.target.checked; CORE.save(); });
+  $('auto-open').addEventListener('change', e=>{ state.autoOpen = e.target.checked; save(); });
+  $('auto-equip').addEventListener('change', e=>{ state.autoEquip = e.target.checked; save(); });
+  $('auto-sell').addEventListener('change', e=>{ state.autoSell = e.target.checked; save(); });
 
-  // equip from bag quick action
-  window.equipFromBag = function(i){
-    const it = gs.bag[i]; if(!it) return;
-    const old = gs.equipped[it.slotKey];
-    if(old){
-      const idx = gs.bag.findIndex(x=>x===null); if(idx===-1){ addLog('Çanta dolu!','#ff3355'); return; } gs.bag[idx] = old;
-    }
-    gs.equipped[it.slotKey] = it; gs.bag[i] = null; addLog(`✅ ${it.name} kuşanıldı`,'#cfe'); renderPanels(); CORE.save();
-  };
-  window.unequip = function(slotKey){
-    const it = gs.equipped[slotKey]; if(!it) return;
-    const idx = gs.bag.findIndex(x=>x===null); if(idx===-1){ addLog('Çanta dolu!','#ff3355'); return; }
-    gs.bag[idx] = it; gs.equipped[slotKey] = null; addLog(`🔓 ${it.name} çıkarıldı`,'#cfe'); renderPanels(); CORE.save();
-  };
+  // helpers
+  function resizeIfNeeded(){ resizeCanvas(); }
+  function addLog(msg,color='#cfe'){ const el = document.createElement('div'); el.className='clog-line'; el.textContent = msg; el.style.color = color; $('clog').appendChild(el); setTimeout(()=>{ try{ $('clog').removeChild(el);}catch(e){} },6000); }
 
-  // special boss (challenge) starter (simple)
-  const CH_BOSSES = [
-    {id:0,name:'PRIME ANOMALI', req:1, hp:5000, dmg:50, reward:{gold:500,gqt:0,boxes:5}},
-    {id:1,name:'VOID EMPEROR', req:5, hp:80000, dmg:800, reward:{gold:3000,gqt:10,boxes:10}}
-  ];
-  // boss modal actions
-  $('boss-attack').addEventListener('click', ()=> {
-    if(!activeSpecialBoss) return;
-    const dmg = Math.ceil(15 + gs.charLvl*1.8);
-    activeSpecialBoss.hp -= dmg; $('boss-log').innerHTML += `<div style="color:#0ff">▶ Sen: ${dmg} hasar</div>`;
-    // boss counterattack
-    if(activeSpecialBoss.hp > 0){
-      const bdmg = Math.ceil(activeSpecialBoss.dmg * (0.8 + Math.random()*0.5));
-      $('boss-log').innerHTML += `<div style="color:#f55">◀ Boss: ${bdmg} hasar</div>`;
-      // no player hp tracking, just show
-    } else {
-      $('boss-log').innerHTML += `<div style="color:#ffd700">🏆 Boss öldü! Ödüller verildi</div>`;
-      // give rewards
-      gs.gold += activeSpecialBoss.reward.gold; gs.gqt += activeSpecialBoss.reward.gqt; gs.boxes += activeSpecialBoss.reward.boxes;
-      CORE.save(); renderPanels();
-      endSpecialBoss(true);
-    }
-    $('boss-hp-bar').style.width = Math.max(0, Math.round(activeSpecialBoss.hp / activeSpecialBoss.maxHp * 100)) + '%';
-  });
-  $('boss-retreat').addEventListener('click', ()=> endSpecialBoss(false));
-
-  function startSpecialBoss(id){
-    const b = CH_BOSSES.find(x=>x.id===id); if(!b) return;
-    if(gs.charLvl < b.req){ addLog(`Gerekli seviye ${b.req}`,'#ff3355'); return; }
-    activeSpecialBoss = { ...b, hp:b.hp, maxHp:b.hp };
-    $('boss-title').textContent = b.name;
-    $('boss-hp-bar').style.width = '100%';
-    $('boss-log').innerHTML = '';
-    $('boss-modal').style.display = 'flex';
-    bossFightActive = true;
-  }
-  function endSpecialBoss(won){
-    $('boss-modal').style.display = 'none';
-    bossFightActive = false;
-    if(!won) addLog('❌ Boss karşılaşması tamamlandı (yenilgi/geri çekilme)','#ff3355');
-    activeSpecialBoss = null;
-    CORE.save(); renderPanels();
-  }
-
-  // collision detection & floaters exist above
-
-  // spawnGroupForCurrentBox exported for console use
-  window.spawnGroupForCurrentBox = spawnGroupForCurrentBox;
-
-  // initial render & start
+  // initial spawn & panels
+  function renderPanels(){ $('box-count').textContent = state.boxes; const eq = $('equip-list'); eq.innerHTML = ''; Object.keys(SLOTS).forEach(k=>{ const s=SLOTS[k], it=state.equipped[k]; const row=document.createElement('div'); row.className='equip-slot'; const left=document.createElement('div'); left.innerHTML = `<div style="font-size:14px">${s.icon} ${s.label}</div><div style="color:var(--dim);font-size:12px">${it?it.name:'Boş'}</div>`; const btn=document.createElement('button'); btn.className='btn'; btn.textContent=it? 'Çıkart':'—'; btn.addEventListener('click', ()=>{ if(it) unequip(k); }); row.appendChild(left); row.appendChild(btn); eq.appendChild(row); }); const grid=$('inv-grid'); grid.innerHTML=''; for(let i=0;i<20;i++){ const slot = document.createElement('div'); slot.className='inv-slot'; const it = state.bag[i]; if(!it){ slot.classList.add('empty'); slot.textContent=''; } else { slot.textContent = it.icon; slot.title = it.name + ' +' + it.sv; slot.addEventListener('click', ()=> equipFromBag(i)); } grid.appendChild(slot); } }
   renderPanels();
-  spawnGroupForCurrentBox();
+
+  // start a first group if boxes exist
+  if(state.boxes > 0) spawnGroupForCurrentBox();
+
+  // Start animation loop
   requestAnimationFrame(function start(ts){ lastT = ts; requestAnimationFrame(loop); });
 
 })();
