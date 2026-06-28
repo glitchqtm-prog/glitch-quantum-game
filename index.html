@@ -132,6 +132,10 @@
             padding: 10px;
         }
 
+        .drawn-card.negative-card {
+            border-color: #e74c3c;
+        }
+
         .drawn-card .icon {
             font-size: 50px;
             margin-bottom: 10px;
@@ -308,29 +312,54 @@
     </div>
 
     <script>
-        // En az 10 kartlık deste tanımlaması
+        // 26 Kartlık Genişletilmiş Deste
         const deck = [
-            { id: 1, title: "Aşk", icon: "❤️", meaning: "tarifsiz bir bağla birbirimize kenetlendiğimizi" },
-            { id: 2, title: "Sadakat", icon: "💍", meaning: "gözümüzün birbirinden başkasını görmeyeceğini" },
-            { id: 3, title: "Güneş", icon: "☀️", meaning: "ilişkimizin her zaman sımsıcak ve aydınlık kalacağını" },
-            { id: 4, title: "Gelecek", icon: "🔮", meaning: "birlikte yaşlanacağımız harika yılların bizi beklediğini" },
-            { id: 5, title: "Tutku", icon: "🔥", meaning: "aradaki çekimin hiçbir zaman sönmeyeceğini" },
-            { id: 6, title: "Huzur", icon: "🕊️", meaning: "kollarımda her zaman güvende ve huzurlu olacağını" },
-            { id: 7, title: "Sonsuzluk", icon: "♾️", meaning: "bu aşkın bir ömür boyu, sonsuza dek süreceğini" },
-            { id: 8, title: "Yıldız", icon: "⭐", meaning: "dileklerimizin ve hayallerimizin bir bir gerçek olacağını" },
-            { id: 9, title: "Şans", icon: "🍀", meaning: "hayatımdaki en büyük şansımın sen olduğunu" },
-            { id: 10, title: "Kader", icon: "🌌", meaning: "yollarımızın ilahi bir şekilde sonsuza dek birleştiğini" },
-            { id: 11, title: "Neşe", icon: "🎭", meaning: "birlikte her zaman çocuk gibi eğlenip güleceğimizi" },
-            { id: 12, title: "Ev", icon: "🏡", meaning: "yakında sıcacık yuvamızı kuracağımızı" }
+            { id: 1, title: "Aşk", icon: "❤️", meaning: "tarifsiz bir bağla birbirimize kenetlendiğimizi", type: "positive" },
+            { id: 2, title: "Sadakat", icon: "💍", meaning: "gözümüzün birbirinden başkasını görmeyeceğini", type: "positive" },
+            { id: 3, title: "Güneş", icon: "☀️", meaning: "ilişkimizin her zaman sımsıcak ve aydınlık kalacağını", type: "positive" },
+            { id: 4, title: "Gelecek", icon: "🔮", meaning: "birlikte yaşlanacağımız harika yılların bizi beklediğini", type: "positive" },
+            { id: 5, title: "Tutku", icon: "🔥", meaning: "aradaki çekimin hiçbir zaman sönmeyeceğini", type: "positive" },
+            { id: 6, title: "Huzur", icon: "🕊️", meaning: "kollarımda her zaman güvende ve huzurlu olacağını", type: "positive" },
+            { id: 7, title: "Sonsuzluk", icon: "♾️", meaning: "bu aşkın bir ömür boyu, sonsuza dek süreceğini", type: "positive" },
+            { id: 8, title: "Yıldız", icon: "⭐", meaning: "dileklerimizin ve hayallerimizin bir bir gerçek olacağını", type: "positive" },
+            { id: 9, title: "Şans", icon: "🍀", meaning: "hayatımdaki en büyük şansımın sen olduğunu", type: "positive" },
+            { id: 10, title: "Kader", icon: "🌌", meaning: "yollarımızın ilahi bir şekilde sonsuza dek birleştiğini", type: "positive" },
+            { id: 11, title: "Neşe", icon: "🎭", meaning: "birlikte her zaman çocuk gibi eğlenip güleceğimizi", type: "positive" },
+            { id: 12, title: "Ev", icon: "🏡", meaning: "yakında sıcacık yuvamızı kuracağımızı", type: "positive" },
+            { id: 13, title: "Güven", icon: "🤝", meaning: "birbirimize gözü kapalı güvenebileceğimiz bir sığınağımız olduğunu", type: "positive" },
+            { id: 14, title: "Şefkat", icon: "🧸", meaning: "her anımızda birbirimize pamuk gibi yumuşacık davranacağımızı", type: "positive" },
+            { id: 15, title: "Macera", icon: "🌍", meaning: "dünyayı el ele gezip harika anılar biriktireceğimizi", type: "positive" },
+            { id: 16, title: "Büyü", icon: "🪄", meaning: "aramızdaki bu tılsımlı bağın kimse tarafından bozulamayacağını", type: "positive" },
+            { id: 17, title: "Bereket", icon: "🌾", meaning: "yuvamızın her zaman bolluk ve bereket içinde olacağını", type: "positive" },
+            { id: 18, title: "Sabır", icon: "⏳", meaning: "birbirimizi her halimizle kabul edip sevgiyle büyüteceğimizi", type: "positive" },
+            { id: 19, title: "Tutulma", icon: "🌒", meaning: "senin o güzel yüzün karşısında her gün yeniden tutulacağımı", type: "positive" },
+            { id: 20, title: "Mucize", icon: "✨", meaning: "bu dünyada başıma gelen en güzel mucizenin sen olduğunu", type: "positive" },
+            { id: 21, title: "Başarı", icon: "🏆", meaning: "birbirimize destek olarak hayattaki tüm hedeflerimize ulaşacağımızı", type: "positive" },
+            { id: 22, title: "Fırtına", icon: "⛈️", meaning: "zaman zaman ufak tartışmalar ve fırtınalar kopabileceğini", type: "negative" },
+            { id: 23, title: "Engel", icon: "🧱", meaning: "bazen yolumuza beklenmedik tümseklerin çıkabileceğini", type: "negative" },
+            { id: 24, title: "Mesafe", icon: "🛤️", meaning: "bazen araya fiziksel ya da duygusal mesafeler girmeye çalışacağını", type: "negative" },
+            { id: 25, title: "Kule", icon: "🏰", meaning: "yaptığımız planların bazen aniden yıkılıp değişebileceğini", type: "negative" },
+            { id: 26, title: "Kıskançlık", icon: "🧿", meaning: "birbirimizi çok sevdiğimizden bazen deliler gibi kıskanacağımızı", type: "negative" }
         ];
 
         // Olumlu bitiş cümleleri (Rastgele seçilecek)
-        const endings = [
+        const finalEndings = [
             "Şunu asla unutma: Ümit seni çok seviyor.",
             "Zaten bunu kartlara sormaya gerek yok, Ümit sana sırılsıklam aşık.",
-            "Kısacası bu kartlar diyor ki: Ümit kocan olacak!",
+            "Kısacası bu kartlar bas bas bağırıyor: Ümit kocan olacak!",
             "Her şey çok net bebeğim, Ümit seni çok seviyor ve Ümit kocan olacak.",
-            "Tüm evrenin ortak mesajı şu: Ümit sana aşık ve hep seninle kalacak."
+            "Tüm evrenin ortak mesajı şu: Ümit sana aşık ve hep seninle kalacak.",
+            "Ve en önemlisi: Ümit seni her gün daha çok seviyor.",
+            "Şunu da eklemeden geçemeyeceğim, Ümit seni her gün daha çok seviyor.",
+            "Kısacası, Ümit kocan olacak ve seni her gün dünden daha çok sevecek."
+        ];
+
+        // Kötü kart çıkarsa araya girecek bağlayıcı güven cümleleri
+        const negativeResolutions = [
+            "Ama hiç merak etme, karşımıza ne tür engeller çıkarsa çıksın tüm bu zorlukları birlikte atlatıp ömür boyu mutlu olacağız.",
+            "Fakat sakın unutma, aşkımız tüm bu zorlukları yenecek kadar kudretli. Biz el ele verdiğimiz sürece hiçbir şey bizi yıkamaz.",
+            "Yine de hiç korkma bebeğim, ne olursa olsun tüm bunları omuz omuza verip atlatacağız ve çok mutlu olacağız.",
+            "Ama sen içini ferah tut, karşımıza hangi engel çıkarsa çıksın sevgimizle hepsini aşıp sonsuza dek mutlu yaşayacağız."
         ];
 
         let drawnCards = [];
@@ -340,20 +369,19 @@
         function drawCard() {
             if (drawnCards.length >= 3 || !canDraw) return;
 
-            // Rastgele kart seç
             const randomIndex = Math.floor(Math.random() * availableCards.length);
             const card = availableCards[randomIndex];
             
-            // Seçilen kartı desteden çıkar
             availableCards.splice(randomIndex, 1);
             drawnCards.push(card);
 
-            // Kartı ekranda göster
             const slotIndex = drawnCards.length - 1;
             const slot = document.getElementById(`slot${slotIndex}`);
             
+            const cardClass = card.type === 'negative' ? 'drawn-card negative-card' : 'drawn-card';
+
             slot.innerHTML = `
-                <div class="drawn-card">
+                <div class="${cardClass}">
                     <div class="icon">${card.icon}</div>
                     <div class="title">${card.title}</div>
                 </div>
@@ -361,7 +389,6 @@
             slot.style.border = "none";
             slot.style.background = "transparent";
 
-            // Eğer 3 kart çekildiyse sohbeti başlat
             if (drawnCards.length === 3) {
                 canDraw = false;
                 document.getElementById('deck').style.opacity = '0.5';
@@ -373,15 +400,12 @@
         }
 
         function startChatProcess() {
-            // Sohbet ekranını aç
             const chatContainer = document.getElementById('chat');
             chatContainer.style.display = 'flex';
             
-            // "yazıyor..." efektini başlat
             const typingIndicator = document.getElementById('typing');
             typingIndicator.style.display = 'block';
 
-            // 5 Saniye bekle ve mesajı gönder
             setTimeout(() => {
                 typingIndicator.style.display = 'none';
                 generateAndShowMessage();
@@ -391,14 +415,22 @@
         function generateAndShowMessage() {
             const messageElement = document.getElementById('finalMessage');
             
-            // Anlamlı ve 2-3 cümlelik bir paragraf oluşturma
             const card1 = drawnCards[0];
             const card2 = drawnCards[1];
             const card3 = drawnCards[2];
             
-            const randomEnding = endings[Math.floor(Math.random() * endings.length)];
+            const hasNegative = drawnCards.some(card => card.type === 'negative');
+            
+            const randomEnding = finalEndings[Math.floor(Math.random() * finalEndings.length)];
+            
+            let finalText = "";
 
-            const finalText = `Aşkım çektiğin ${card1.title}, ${card2.title} ve ${card3.title} kartları yan yana geldiğinde harika bir anlama çıkıyor. Bu harika kombinasyon bize; ${card1.meaning}, ${card2.meaning} ve ${card3.meaning} fısıldıyor. ${randomEnding} ❤️`;
+            if (hasNegative) {
+                const randomResolution = negativeResolutions[Math.floor(Math.random() * negativeResolutions.length)];
+                finalText = `Aşkım çektiğin ${card1.title}, ${card2.title} ve ${card3.title} kartları yan yana geldiğinde çok gerçekçi ve güçlü bir mesaj veriyor. Kartlar bize; ${card1.meaning}, ${card2.meaning} ve ${card3.meaning} söylüyor. ${randomResolution} ${randomEnding} ❤️`;
+            } else {
+                finalText = `Aşkım çektiğin ${card1.title}, ${card2.title} ve ${card3.title} kartları yan yana geldiğinde harika bir anlama çıkıyor. Bu güzel kombinasyon bize; ${card1.meaning}, ${card2.meaning} ve ${card3.meaning} fısıldıyor. ${randomEnding} ❤️`;
+            }
 
             messageElement.innerText = finalText;
             messageElement.style.display = 'inline-block';
@@ -406,12 +438,10 @@
         }
 
         function resetGame() {
-            // Oyun verilerini sıfırla
             drawnCards = [];
             availableCards = [...deck];
             canDraw = true;
 
-            // Görselleri sıfırla
             for (let i = 0; i < 3; i++) {
                 const slot = document.getElementById(`slot${i}`);
                 slot.innerHTML = '';
@@ -423,7 +453,6 @@
             document.getElementById('deck').style.cursor = 'pointer';
             document.getElementById('instructionText').innerText = "Aşkımızın destesine tıkla ve 3 kart seç hayatım...";
             
-            // Sohbeti gizle
             document.getElementById('chat').style.display = 'none';
             document.getElementById('finalMessage').style.display = 'none';
             document.getElementById('finalMessage').innerText = '';
