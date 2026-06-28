@@ -1,1146 +1,1919 @@
-<!DOCTYPE html>
+cat > /tmp/gq_build.py << 'PYEOF'
+content = r"""<!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>GLITCH QUANTUM</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
-:root {
-  --bg:#05060f; --bg2:#080c1a; --panel:#0b1025cc; --border:#1a2a5e;
-  --cyan:#00f5ff; --magenta:#ff00aa; --gold:#ffd700; --green:#00ff88;
-  --red:#ff3355; --text:#c8d8ff; --dim:#5060a0;
-  --glow-c:0 0 8px #00f5ff88,0 0 24px #00f5ff33;
-  --glow-m:0 0 8px #ff00aa88,0 0 24px #ff00aa33;
+:root{
+  --bg:#04050e;--bg2:#060818;--brd:#182050;
+  --cy:#00f5ff;--mg:#ff00aa;--gd:#ffd700;--gr:#00ff88;
+  --rd:#ff3355;--tx:#c0d0ff;--dm:#4a5888;--pu:#aa44ff;
+  --sc:0 0 10px #00f5ff88,0 0 28px #00f5ff22;
+  --sm:0 0 10px #ff00aa88,0 0 28px #ff00aa22;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Share Tech Mono',monospace;}
+#root{display:flex;flex-direction:column;height:100vh;}
 /* HEADER */
-#header{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;border-bottom:1px solid var(--border);background:#060918;z-index:10;flex-shrink:0;}
-#logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:18px;color:var(--cyan);text-shadow:var(--glow-c);letter-spacing:4px;}
-#logo span{color:var(--magenta);text-shadow:var(--glow-m);}
-#hud-stats{display:flex;gap:20px;font-size:11px;}
-.hud-item label{color:var(--dim);}.hud-item span{color:var(--cyan);font-weight:bold;}
-/* MAIN */
+#hdr{display:flex;align-items:center;gap:8px;padding:4px 12px;border-bottom:1px solid var(--brd);background:#030410;flex-shrink:0;flex-wrap:wrap;}
+#logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;color:var(--cy);text-shadow:var(--sc);letter-spacing:3px;white-space:nowrap;}
+#logo em{color:var(--mg);font-style:normal;}
+#hud{display:flex;gap:8px;font-size:9px;flex:1;flex-wrap:wrap;}
+.hi label{color:var(--dm);}.hi b{color:var(--cy);}
+.hi.gd b{color:var(--gd);}.hi.mg b{color:var(--mg);}
+#mkt-btn{background:linear-gradient(135deg,var(--mg),#880044);border:none;color:#fff;font-family:'Share Tech Mono',monospace;font-size:9px;padding:4px 9px;cursor:pointer;border-radius:4px;white-space:nowrap;}
+/* LAYOUT */
 #main{display:flex;flex:1;overflow:hidden;}
-#canvas-zone{flex:1;position:relative;overflow:hidden;background:var(--bg2);}
+#czone{flex:1;position:relative;overflow:hidden;background:var(--bg2);}
 canvas{display:block;}
-/* SIDEBAR */
-#sidebar{width:280px;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
-#tab-bar{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;}
-.tab-btn{flex:1;padding:6px 2px;background:none;border:none;color:var(--dim);font-family:'Share Tech Mono',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;border-bottom:2px solid transparent;transition:all .2s;}
-.tab-btn.active{color:var(--cyan);border-bottom-color:var(--cyan);text-shadow:var(--glow-c);}
-.tab-btn:hover:not(.active){color:var(--text);}
-.tab-panel{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:8px;}
-.tab-panel.active{display:flex;}
-.tab-panel::-webkit-scrollbar{width:3px;}.tab-panel::-webkit-scrollbar-thumb{background:var(--border);}
-.sec-label{font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin:6px 0 4px;border-bottom:1px solid var(--border);padding-bottom:2px;}
-/* STAT BARS */
-.stat-row{display:flex;align-items:center;margin-bottom:4px;gap:5px;font-size:10px;}
-.stat-row .lbl{width:72px;color:var(--dim);}
-.stat-bar-bg{flex:1;height:5px;background:#111827;border-radius:3px;overflow:hidden;}
-.stat-bar-fill{height:100%;border-radius:3px;transition:width .4s;}
-.bar-hp{background:linear-gradient(90deg,#ff3355,#ff6680);box-shadow:0 0 5px #ff335566;}
-.bar-gqt{background:linear-gradient(90deg,#00f5ff,#00aaff);box-shadow:0 0 5px #00f5ff66;}
-.bar-xp{background:linear-gradient(90deg,#ffd700,#ffaa00);box-shadow:0 0 5px #ffd70066;}
-.stat-val{width:48px;text-align:right;font-size:9px;color:var(--text);}
-/* SKILL BAR (bottom of canvas) */
-#skill-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5;}
-.skill-btn{width:58px;height:58px;background:#060c1acc;border:1px solid var(--border);border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:border-color .2s;overflow:hidden;}
-.skill-btn:hover{border-color:var(--cyan);}
-.skill-btn .s-icon{font-size:18px;line-height:1;}
-.skill-btn .s-name{font-size:7px;color:var(--dim);margin-top:1px;}
-.skill-btn .s-cd-overlay{position:absolute;inset:0;background:#000000bb;display:flex;align-items:center;justify-content:center;pointer-events:none;border-radius:6px;}
-.skill-btn .s-cd-overlay span{font-size:13px;font-weight:bold;color:var(--cyan);}
-.skill-btn .s-cd-bar{position:absolute;bottom:0;left:0;height:3px;background:var(--cyan);transition:width .1s linear;border-radius:0 0 6px 6px;}
-.skill-btn.glitch-mode{border-color:var(--magenta);}
-.skill-btn.glitch-mode .s-icon{filter:drop-shadow(0 0 4px var(--magenta));}
-.skill-btn.glitch-mode .s-cd-bar{background:var(--magenta);}
-/* INVENTORY PANEL */
-#inv-panel-wrap{display:flex;flex-direction:column;gap:0;}
-/* Ship preview area */
-#ship-preview{position:relative;width:100%;height:130px;background:#06080f;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;}
-#ship-preview canvas{display:block;}
-/* Equipment slots on ship preview */
-.eq-slot{position:absolute;width:24px;height:24px;background:#0a1428cc;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:border-color .15s;}
-.eq-slot:hover{border-color:var(--cyan);}
-.eq-slot.has-item{border-color:var(--dim);}
-.eq-slot .eq-rarity{position:absolute;bottom:1px;right:1px;width:4px;height:4px;border-radius:50%;}
-/* Inventory bag grid */
-#inv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-top:2px;}
-.inv-slot{aspect-ratio:1;background:#0b1025;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative;transition:border-color .2s;}
-.inv-slot:hover{border-color:var(--cyan);}
-.inv-slot.empty{opacity:.25;}
-.inv-slot .rarity-dot{position:absolute;bottom:2px;right:2px;width:4px;height:4px;border-radius:50%;}
-/* QUEST */
-.quest-item{background:#0b1025;border:1px solid var(--border);border-radius:5px;padding:7px;margin-bottom:5px;font-size:10px;}
-.quest-item .q-title{color:var(--cyan);margin-bottom:3px;font-size:11px;}
-.quest-item .q-prog{color:var(--dim);margin-bottom:3px;}
-.q-bar-bg{height:3px;background:#111827;border-radius:2px;overflow:hidden;}
-.q-bar-fill{height:100%;background:var(--green);border-radius:2px;transition:width .4s;box-shadow:0 0 4px var(--green);}
-.quest-item .q-reward{color:var(--gold);margin-top:3px;font-size:9px;}
-/* BOXES */
-#box-panel{display:flex;flex-direction:column;gap:7px;}
-.box-item{background:#0b1025;border:1px solid var(--border);border-radius:5px;padding:9px;display:flex;align-items:center;gap:9px;}
-.box-open-btn{background:linear-gradient(135deg,#1a2a5e,#0b1025);border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:9px;padding:5px 9px;cursor:pointer;border-radius:4px;transition:all .2s;}
-.box-open-btn:hover{background:var(--cyan);color:var(--bg);}
-.box-open-btn:disabled{opacity:.3;cursor:default;}
+/* IDLE SCREEN */
+#idle-sc{position:absolute;inset:0;background:#04081099;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:15;backdrop-filter:blur(3px);}
+#idle-sc h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:20px;margin-bottom:6px;text-shadow:var(--sc);}
+#idle-sc .sub{font-size:10px;color:var(--dm);margin-bottom:14px;text-align:center;max-width:280px;line-height:1.6;}
+.idle-box-cnt{font-size:10px;color:var(--dm);margin-top:8px;}
+/* AUTO OPTIONS PANEL inside idle screen */
+#auto-panel{background:#07101ecc;border:1px solid var(--brd);border-radius:10px;padding:12px 16px;margin-bottom:14px;min-width:280px;}
+#auto-panel .ap-title{font-size:9px;letter-spacing:2px;color:var(--dm);margin-bottom:8px;text-align:center;}
+.ao-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:10px;}
+.ao-row input[type=checkbox]{accent-color:var(--cy);width:14px;height:14px;cursor:pointer;}
+.ao-row label{cursor:pointer;color:var(--tx);}
+/* MAIN START BTN */
+#start-btn{background:linear-gradient(135deg,var(--cy),#0088cc);border:none;color:#020810;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;padding:12px 26px;cursor:pointer;border-radius:8px;letter-spacing:2px;box-shadow:var(--sc);transition:transform .1s;}
+#start-btn:hover{transform:scale(1.04);}
+#start-btn:disabled{opacity:.4;cursor:default;transform:none;}
+/* LOOT OVERLAY */
+#loot-ov{position:absolute;inset:0;background:#020408cc;z-index:18;display:none;}
+#loot-pop{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.88);background:#03060cfa;border:2px solid var(--mg);border-radius:14px;padding:16px 22px;text-align:center;z-index:19;display:none;min-width:265px;box-shadow:var(--sm);}
+@keyframes pIn{to{transform:translate(-50%,-50%) scale(1);}}
+#loot-pop.open{animation:pIn .2s forwards;}
+.lp-ic{font-size:38px;margin-bottom:3px;}
+.lp-rar{font-size:9px;letter-spacing:3px;text-transform:uppercase;}
+.lp-stars{color:var(--gd);font-size:13px;margin:2px 0;}
+.lp-nm{font-size:13px;font-family:'Orbitron',sans-serif;margin:2px 0;}
+.lp-sub{font-size:8px;color:var(--dm);margin-bottom:3px;}
+.lp-st{font-size:10px;color:var(--tx);margin-bottom:2px;}
+.lp-af{font-size:8px;color:var(--gr);margin-bottom:3px;line-height:1.5;}
+.lp-cmp{font-size:9px;padding:4px 8px;border-radius:4px;background:#070e1e;margin:3px 0;border:1px solid var(--brd);}
+.lp-cmp.up{border-color:var(--gr);color:var(--gr);}
+.lp-cmp.dn{border-color:var(--rd);color:var(--rd);}
+.lp-cmp.eq{border-color:var(--dm);color:var(--dm);}
+.lp-auto-note{font-size:8px;color:var(--cy);margin-top:3px;min-height:12px;}
+.lp-btns{display:flex;gap:6px;margin-top:8px;}
+.lp-btn{flex:1;padding:6px 0;border:none;font-family:'Share Tech Mono',monospace;font-size:9px;cursor:pointer;border-radius:5px;transition:opacity .2s;}
+.lp-btn:hover{opacity:.82;}
+.btn-eq{background:var(--cy);color:#020810;}
+.btn-sell{background:#12243a;color:var(--gd);border:1px solid var(--gd);}
+.btn-bag{background:#0f1e38;color:var(--tx);border:1px solid var(--brd);}
+/* AUTO SELL COUNTDOWN */
+#auto-sell-bar{height:3px;background:var(--mg);width:100%;margin-top:6px;border-radius:2px;transition:width linear;}
+/* SKILL BAR */
+#skill-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:8;}
+.skb{width:56px;height:56px;background:#06091acc;border:1px solid var(--brd);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s;}
+.skb:hover{border-color:var(--cy);}
+.skb .sic{font-size:17px;line-height:1;}.skb .snm{font-size:7px;color:var(--dm);margin-top:1px;}
+.skb .sov{position:absolute;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.skb .sov span{font-size:12px;font-weight:700;color:var(--cy);}
+.skb .sbar{position:absolute;bottom:0;left:0;height:3px;background:var(--cy);}
+.skb.G{border-color:var(--mg);}.skb.G .sbar{background:var(--mg);}
 /* LOG */
-#combat-log{position:absolute;top:8px;left:8px;width:220px;max-height:130px;overflow:hidden;pointer-events:none;z-index:4;}
-.log-line{font-size:10px;line-height:1.5;animation:logFade 6s forwards;white-space:nowrap;}
-@keyframes logFade{0%{opacity:1}70%{opacity:1}100%{opacity:0}}
+#clog{position:absolute;top:8px;left:8px;width:220px;max-height:110px;overflow:hidden;pointer-events:none;z-index:6;}
+.cl{font-size:9px;line-height:1.5;animation:lf 6s forwards;white-space:nowrap;}
+@keyframes lf{0%{opacity:1}70%{opacity:1}100%{opacity:0}}
 /* WAVE BADGE */
-#wave-badge{position:absolute;top:8px;right:8px;background:#08101ecc;border:1px solid var(--magenta);padding:4px 12px;font-family:'Orbitron',sans-serif;font-size:11px;color:var(--magenta);text-shadow:var(--glow-m);border-radius:4px;z-index:4;}
-/* LOOT POPUP */
-#loot-popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);background:#04070dfa;border:2px solid var(--magenta);border-radius:12px;padding:18px 24px;text-align:center;z-index:20;display:none;box-shadow:var(--glow-m);min-width:260px;}
-@keyframes popIn{to{transform:translate(-50%,-50%) scale(1);}}
-.lp-anim{animation:popIn .25s forwards;}
-#loot-popup .lp-icon{font-size:44px;margin-bottom:4px;}
-#loot-popup .lp-rarity{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-bottom:2px;}
-#loot-popup .lp-name{font-size:15px;font-family:'Orbitron',sans-serif;margin:3px 0;}
-#loot-popup .lp-type{font-size:9px;color:var(--dim);margin-bottom:4px;}
-#loot-popup .lp-stats{font-size:10px;color:var(--text);margin-bottom:3px;}
-#loot-popup .lp-affix{font-size:10px;color:var(--green);margin-bottom:4px;}
-#loot-popup .lp-compare{font-size:10px;padding:5px 8px;border-radius:5px;margin:4px 0;background:#080f1e;}
-#loot-popup .lp-compare.upgrade{border:1px solid var(--green);color:var(--green);}
-#loot-popup .lp-compare.downgrade{border:1px solid var(--red);color:var(--red);}
-#loot-popup .lp-compare.same{border:1px solid var(--dim);color:var(--dim);}
-#loot-popup .lp-btns{display:flex;gap:8px;margin-top:10px;justify-content:center;}
-#loot-popup .lp-btn{flex:1;padding:7px 0;border:none;font-family:'Share Tech Mono',monospace;font-size:10px;cursor:pointer;border-radius:5px;letter-spacing:1px;transition:opacity .2s;}
-#loot-popup .lp-btn:hover{opacity:.8;}
-#loot-popup .btn-equip{background:var(--cyan);color:#020810;}
-#loot-popup .btn-sell{background:#1a3a5e;color:var(--gold);border:1px solid var(--gold);}
-#loot-popup .btn-bag{background:#1a2a5e;color:var(--text);border:1px solid var(--border);}
-/* SKILL TOOLTIP */
-#skill-tooltip{position:fixed;background:#04070dfa;border:1px solid var(--cyan);padding:10px 14px;border-radius:7px;font-size:10px;z-index:200;max-width:200px;display:none;pointer-events:none;}
-#skill-tooltip .st-name{font-size:13px;font-family:'Orbitron',sans-serif;color:var(--cyan);margin-bottom:4px;}
-#skill-tooltip .st-row{display:flex;justify-content:space-between;margin-bottom:2px;}
-#skill-tooltip .st-label{color:var(--dim);}
-#skill-tooltip .st-val{color:var(--text);}
-#skill-tooltip .st-desc{color:var(--green);margin-top:5px;font-size:9px;line-height:1.4;}
-/* ITEM TOOLTIP */
-#item-tooltip{position:fixed;background:#04070dfa;border:1px solid var(--cyan);padding:8px 12px;border-radius:6px;font-size:10px;pointer-events:none;z-index:150;max-width:190px;display:none;}
-#item-tooltip .it-name{font-size:12px;margin-bottom:3px;}
-#item-tooltip .it-sub{font-size:9px;color:var(--dim);margin-bottom:3px;}
-#item-tooltip .it-stat{color:var(--text);margin-bottom:2px;}
-#item-tooltip .it-affix{color:var(--green);font-size:9px;}
-/* RARITY COLORS */
-.r-bronze{background:#cd7f32;}.r-silver{background:#c0c0c0;}.r-gold{background:#ffd700;box-shadow:0 0 4px #ffd700;}
-.r-platinum{background:#e5e4e2;box-shadow:0 0 4px #e5e4e2;}.r-diamond{background:#a8f0ff;box-shadow:0 0 6px #a8f0ff;}
-.r-radianium{background:#ff88ff;box-shadow:0 0 6px #ff88ff;}.r-glitchanium{background:linear-gradient(45deg,#ff00aa,#00f5ff);box-shadow:0 0 8px #aa00ff;}
-/* STATS PANEL */
-#panel-stats .stat-grid{font-size:10px;display:grid;grid-template-columns:1fr 1fr;gap:3px;}
-/* IDLE BADGE */
-#idle-badge{position:absolute;bottom:76px;right:8px;background:#0b1025cc;border:1px solid var(--green);padding:3px 9px;font-size:9px;color:var(--green);border-radius:4px;z-index:4;display:none;}
+#wbadge{position:absolute;top:8px;right:8px;background:#07101dcc;border:1px solid var(--mg);padding:3px 10px;font-family:'Orbitron',sans-serif;font-size:9px;color:var(--mg);border-radius:4px;z-index:6;text-align:right;line-height:1.6;}
+/* UPGRADE BAR */
+#upg-bar{position:absolute;bottom:72px;left:50%;transform:translateX(-50%);background:#07101dcc;border:1px solid var(--cy);border-radius:20px;padding:3px 12px;display:none;font-size:9px;color:var(--cy);white-space:nowrap;z-index:7;}
+/* BOSS ENTER SCREEN */
+#boss-enter{position:absolute;inset:0;z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;}
+#boss-enter canvas{position:absolute;inset:0;width:100%;height:100%;}
+#boss-enter-content{position:relative;z-index:2;text-align:center;}
+#boss-enter-content h1{font-family:'Orbitron',sans-serif;font-size:28px;color:var(--mg);text-shadow:var(--sm);margin-bottom:8px;}
+#boss-enter-content .boss-sub{font-size:11px;color:var(--tx);margin-bottom:4px;}
+#boss-countdown{font-family:'Orbitron',sans-serif;font-size:64px;color:var(--gd);text-shadow:0 0 20px #ffd700aa;margin:8px 0;}
+/* BOSS FIGHT SCREEN */
+#boss-fight{position:absolute;inset:0;z-index:28;display:none;flex-direction:column;}
+#boss-fight canvas{position:absolute;inset:0;width:100%;height:100%;}
+#boss-fight-ui{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;padding:16px;}
+.bf-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.bf-boss-info{flex:1;}
+.bf-boss-name{font-family:'Orbitron',sans-serif;font-size:14px;color:var(--mg);margin-bottom:4px;}
+.bf-hp-bg{height:8px;background:#1a0a0a;border-radius:4px;overflow:hidden;width:200px;}
+.bf-hp-f{height:100%;background:linear-gradient(90deg,var(--rd),#ff6688);border-radius:4px;transition:width .3s;}
+.bf-hp-txt{font-size:8px;color:var(--rd);margin-top:2px;}
+.bf-player-info{text-align:right;font-size:9px;}
+.bf-player-info .phptxt{color:var(--gr);}
+.bf-log{flex:1;overflow-y:auto;background:#02040aaa;border:1px solid var(--brd);border-radius:6px;padding:6px;margin:8px 0;font-size:9px;line-height:1.6;}
+.bf-log::-webkit-scrollbar{width:3px;}.bf-log::-webkit-scrollbar-thumb{background:var(--brd);}
+.bf-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.bf-btn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:8px 18px;border-radius:6px;cursor:pointer;border:none;transition:transform .1s;}
+.bf-btn:hover{transform:scale(1.04);}
+.bf-btn.atk{background:var(--cy);color:#020810;}
+.bf-btn.ret{background:#182050;color:var(--tx);border:1px solid var(--brd);}
+/* BOSS RESULT */
+#boss-result{position:absolute;inset:0;z-index:32;display:none;align-items:center;justify-content:center;background:#000000bb;}
+.br-box{background:#04070dee;border:2px solid var(--mg);border-radius:14px;padding:24px 32px;text-align:center;max-width:300px;box-shadow:var(--sm);}
+.br-box.win{border-color:var(--gd);}
+.br-box h2{font-family:'Orbitron',sans-serif;font-size:18px;margin-bottom:8px;}
+.br-box.win h2{color:var(--gd);}
+.br-box.fail h2{color:var(--rd);}
+.br-txt{font-size:10px;color:var(--tx);margin-bottom:10px;line-height:1.6;}
+.br-btn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:8px 20px;border-radius:6px;cursor:pointer;border:none;background:var(--cy);color:#020810;margin-top:4px;}
+/* SIDEBAR */
+#sidebar{width:288px;border-left:1px solid var(--brd);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+#tabbar{display:flex;border-bottom:1px solid var(--brd);flex-shrink:0;}
+.tb{flex:1;padding:5px 1px;background:none;border:none;color:var(--dm);font-family:'Share Tech Mono',monospace;font-size:8px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.tb.on{color:var(--cy);border-bottom-color:var(--cy);}
+.tb:hover:not(.on){color:var(--tx);}
+.tpanel{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:7px;}
+.tpanel.on{display:flex;}
+.tpanel::-webkit-scrollbar{width:3px;}.tpanel::-webkit-scrollbar-thumb{background:var(--brd);}
+.sl{font-size:8px;letter-spacing:2px;color:var(--dm);text-transform:uppercase;margin:5px 0 3px;border-bottom:1px solid var(--brd);padding-bottom:2px;}
+.sr{display:flex;align-items:center;gap:4px;margin-bottom:3px;font-size:9px;}
+.sr .la{width:70px;color:var(--dm);}
+.sbg{flex:1;height:5px;background:#0d1530;border-radius:3px;overflow:hidden;}
+.sf{height:100%;border-radius:3px;transition:width .3s;}
+.hp{background:linear-gradient(90deg,#ff3355,#ff7788);}
+.gt{background:linear-gradient(90deg,#00f5ff,#0088ff);}
+.xp{background:linear-gradient(90deg,#ffd700,#ff9900);}
+.es{background:linear-gradient(90deg,#aa44ff,#6600cc);}
+.sv2{width:52px;text-align:right;font-size:8px;}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:9px;}
+/* SHIP PREVIEW */
+#ship-prev{position:relative;width:100%;height:130px;background:#03060e;border:1px solid var(--brd);border-radius:6px;margin-bottom:5px;overflow:hidden;}
+#ship-prev canvas{display:block;}
+.eqs{position:absolute;width:22px;height:22px;background:#08102acc;border:1px solid var(--brd);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;transition:border-color .15s;overflow:hidden;}
+.eqs:hover{border-color:var(--cy);}
+.eqs .erd{position:absolute;bottom:1px;right:1px;width:4px;height:4px;border-radius:50%;}
+.eqs .estars{position:absolute;top:0px;left:0;right:0;text-align:center;font-size:5px;color:var(--gd);line-height:1.2;}
+/* INV GRID */
+#inv-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-top:3px;}
+.isl{aspect-ratio:1;background:#07101e;border:1px solid var(--brd);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;position:relative;transition:border-color .15s;}
+.isl:hover{border-color:var(--cy);}
+.isl.empty{opacity:.2;}
+.rdot{position:absolute;bottom:2px;right:2px;width:4px;height:4px;border-radius:50%;}
+.istars{position:absolute;top:1px;left:0;right:0;text-align:center;font-size:5px;color:var(--gd);line-height:1;pointer-events:none;}
+/* QUEST / BOX */
+.qi{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:6px;margin-bottom:4px;font-size:9px;}
+.qi .qt{color:var(--cy);margin-bottom:2px;font-size:10px;}
+.qi .qp{color:var(--dm);margin-bottom:2px;}
+.qbg{height:3px;background:#0d1530;border-radius:2px;overflow:hidden;}
+.qf{height:100%;background:var(--gr);border-radius:2px;transition:width .3s;box-shadow:0 0 3px var(--gr);}
+.qr{color:var(--gd);margin-top:2px;font-size:8px;}
+.bxi{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:8px;display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.bxb{background:linear-gradient(135deg,#182050,#080f20);border:1px solid var(--cy);color:var(--cy);font-family:'Share Tech Mono',monospace;font-size:8px;padding:4px 8px;cursor:pointer;border-radius:4px;}
+.bxb:hover{background:var(--cy);color:#020810;}.bxb:disabled{opacity:.3;cursor:default;}
+/* ABILITY */
+.ab-card{background:#07101e;border:1px solid var(--brd);border-radius:6px;padding:7px;margin-bottom:4px;}
+.ab-title{font-size:10px;font-family:'Orbitron',sans-serif;margin-bottom:2px;}
+.ab-desc{font-size:8px;color:var(--dm);margin-bottom:3px;line-height:1.4;}
+.ab-eff{font-size:9px;color:var(--gr);margin-bottom:3px;}
+.ab-btn{font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;border-radius:4px;cursor:pointer;border:none;background:var(--gd);color:#0a0800;}
+.ab-btn:disabled{opacity:.3;cursor:default;}
+/* PASSIVE */
+.pbr{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:6px;margin-bottom:4px;}
+.pbrt{font-size:10px;color:var(--cy);margin-bottom:3px;}
+.pbn{display:flex;align-items:center;gap:5px;margin-bottom:2px;font-size:9px;padding:3px 4px;background:#04080f;border-radius:3px;}
+.pbb{font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 5px;background:#182050;border:1px solid var(--cy);color:var(--cy);cursor:pointer;border-radius:3px;}
+.pbb:disabled{opacity:.3;cursor:default;}
+/* BOSS LIST */
+.bcard{background:#07101e;border:1px solid var(--brd);border-radius:6px;padding:8px;margin-bottom:4px;}
+.bcard .bct{font-size:10px;font-family:'Orbitron',sans-serif;color:var(--mg);}
+.bcard.done{border-color:var(--gr);}.bcard.done .bct{color:var(--gr);}
+.bcbtn{font-family:'Share Tech Mono',monospace;font-size:9px;padding:5px 11px;border-radius:4px;cursor:pointer;border:none;background:var(--mg);color:#fff;margin-top:5px;}
+/* MARKET */
+.modal-ov{position:absolute;inset:0;background:#000000aa;display:flex;align-items:center;justify-content:center;z-index:25;}
+.mbox{background:#04070dee;border:2px solid var(--cy);border-radius:12px;padding:16px 20px;max-width:390px;width:94%;max-height:86vh;overflow-y:auto;box-shadow:var(--sc);}
+.mbox h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:14px;margin-bottom:7px;}
+.mcat{margin-bottom:9px;}
+.mcat-t{font-size:8px;letter-spacing:2px;color:var(--mg);border-bottom:1px solid #ff00aa22;padding-bottom:2px;margin-bottom:4px;}
+.mit{background:#07101e;border:1px solid var(--brd);border-radius:5px;padding:6px;display:flex;gap:7px;margin-bottom:3px;align-items:flex-start;}
+.mit .mic{font-size:20px;flex-shrink:0;}.mit .min{flex:1;font-size:10px;margin-bottom:2px;}
+.mit .mid{font-size:8px;color:var(--dm);margin-bottom:3px;line-height:1.4;}
+.mit .mibtns{display:flex;gap:4px;flex-wrap:wrap;}
+.mb{font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 6px;border-radius:3px;cursor:pointer;border:none;}
+.mb.cy{background:var(--cy);color:#020810;}.mb.gd{background:var(--gd);color:#0a0800;}
+.mb:disabled{opacity:.3;cursor:default;}
+.mlim{font-size:8px;color:var(--dm);margin-top:2px;}
+.m-close{background:none;border:none;color:var(--dm);font-size:17px;cursor:pointer;float:right;margin-top:-3px;}
+/* SHIP LVL MODAL */
+.slbox{background:#04070dee;border:2px solid var(--cy);border-radius:12px;padding:18px 24px;text-align:center;max-width:300px;box-shadow:var(--sc);}
+.slbox h2{font-family:'Orbitron',sans-serif;color:var(--cy);font-size:14px;margin-bottom:7px;}
+.sltimer{font-size:22px;font-family:'Orbitron',sans-serif;color:var(--gd);margin:7px 0;}
+.slbtn{font-family:'Share Tech Mono',monospace;font-size:9px;padding:6px 14px;border-radius:5px;cursor:pointer;border:none;margin:3px;}
+.slbtn.cy{background:var(--cy);color:#020810;}.slbtn.mg{background:var(--mg);color:#fff;}
+.slbtn.gr{background:#182050;color:var(--tx);border:1px solid var(--brd);}
+/* TOOLTIPS */
+#sk-tip,#it-tip{position:fixed;background:#03060cfa;border:1px solid var(--cy);padding:8px 11px;border-radius:6px;font-size:9px;pointer-events:none;z-index:200;max-width:185px;display:none;}
+#sk-tip .stn{font-size:11px;font-family:'Orbitron',sans-serif;color:var(--cy);margin-bottom:3px;}
+#sk-tip .strow{display:flex;justify-content:space-between;margin-bottom:2px;}
+#sk-tip .stl{color:var(--dm);}
+#sk-tip .std{color:var(--gr);margin-top:3px;font-size:8px;line-height:1.4;}
+/* RARITY */
+.r-bronze{background:#cd7f32;}.r-silver{background:#aaa;}
+.r-gold{background:#ffd700;box-shadow:0 0 3px #ffd700;}
+.r-platinum{background:#ddd;box-shadow:0 0 3px #ddd;}
+.r-diamond{background:#a8f0ff;box-shadow:0 0 5px #a8f0ff;}
+.r-radianium{background:#ff88ff;box-shadow:0 0 6px #ff88ff;}
+.r-glitchanium{background:linear-gradient(45deg,#ff00aa,#00f5ff);box-shadow:0 0 7px #aa00ff;}
+*::-webkit-scrollbar{width:3px;}*::-webkit-scrollbar-thumb{background:var(--brd);}
 </style>
 </head>
 <body>
-<div id="header">
-  <div id="logo">GLITCH<span>QUANTUM</span></div>
-  <div id="hud-stats">
-    <div class="hud-item"><label>LVL </label><span id="h-lvl">1</span></div>
-    <div class="hud-item"><label>GQT </label><span id="h-gqt">0</span></div>
-    <div class="hud-item"><label>KILL </label><span id="h-kills">0</span></div>
-    <div class="hud-item"><label>WAVE </label><span id="h-wave">1</span></div>
+<div id="root">
+<!-- HEADER -->
+<div id="hdr">
+  <div id="logo">GLITCH<em>QUANTUM</em></div>
+  <div id="hud">
+    <div class="hi"><label>LVL </label><b id="h-lvl">1</b></div>
+    <div class="hi"><label>SHIP </label><b id="h-slvl">1</b></div>
+    <div class="hi" style="color:var(--pu)"><label>ÖZ </label><b id="h-ess" style="color:var(--pu)">0</b></div>
+    <div class="hi gd"><label>💰</label><b id="h-gold">0</b></div>
+    <div class="hi"><label>💠GQT </label><b id="h-gqt">50</b></div>
+    <div class="hi"><label>📦</label><b id="h-boxes">10</b></div>
+    <div class="hi"><label>KILL </label><b id="h-kills">0</b></div>
+    <div class="hi"><label>WAVE </label><b id="h-wave">1-1</b></div>
   </div>
+  <button id="mkt-btn" onclick="GQ.openMkt()">🏪 MARKET</button>
 </div>
 <div id="main">
-  <div id="canvas-zone">
-    <canvas id="gameCanvas"></canvas>
-    <div id="skill-bar">
-      <div class="skill-btn" id="sk0" onclick="GQ.useSkill(0)" onmouseenter="GQ.showSkillTip(event,0)" onmouseleave="GQ.hideSkillTip()">
-        <div class="s-icon">⚡</div><div class="s-name">PULSE</div>
-        <div class="s-cd-overlay" id="sk0-ov" style="display:none"><span id="sk0-t">0</span></div>
-        <div class="s-cd-bar" id="sk0-bar" style="width:0%"></div>
+<div id="czone">
+  <canvas id="gc"></canvas>
+
+  <!-- IDLE SCREEN -->
+  <div id="idle-sc">
+    <h2>⚡ GLITCH QUANTUM</h2>
+    <div class="sub">Her Quantum Box bir dalga açar.<br>Dalga temizlenince %ihtimalle eşya düşer.</div>
+    <div id="auto-panel">
+      <div class="ap-title">⚙️ OTOMATİK AYARLAR</div>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-auto" onchange="GQ.setAuto('autoOpen',this.checked)">
+        <label for="ao-auto">Kutular otomatik açılsın</label>
       </div>
-      <div class="skill-btn" id="sk1" onclick="GQ.useSkill(1)" onmouseenter="GQ.showSkillTip(event,1)" onmouseleave="GQ.hideSkillTip()">
-        <div class="s-icon">🌀</div><div class="s-name">VORTEX</div>
-        <div class="s-cd-overlay" id="sk1-ov" style="display:none"><span id="sk1-t">0</span></div>
-        <div class="s-cd-bar" id="sk1-bar" style="width:0%"></div>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-eq" onchange="GQ.setAuto('autoEquip',this.checked)">
+        <label for="ao-eq">Daha iyi ekipmanı otomatik kuşan</label>
       </div>
-      <div class="skill-btn" id="sk2" onclick="GQ.useSkill(2)" onmouseenter="GQ.showSkillTip(event,2)" onmouseleave="GQ.hideSkillTip()">
-        <div class="s-icon">💥</div><div class="s-name">NOVA</div>
-        <div class="s-cd-overlay" id="sk2-ov" style="display:none"><span id="sk2-t">0</span></div>
-        <div class="s-cd-bar" id="sk2-bar" style="width:0%"></div>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-sell" onchange="GQ.setAuto('autoSell',this.checked)">
+        <label for="ao-sell">Kötü ekipmanları otomatik sat</label>
       </div>
-      <div class="skill-btn" id="sk3" onclick="GQ.useSkill(3)" onmouseenter="GQ.showSkillTip(event,3)" onmouseleave="GQ.hideSkillTip()">
-        <div class="s-icon">🔮</div><div class="s-name">ULTI</div>
-        <div class="s-cd-overlay" id="sk3-ov" style="display:none"><span id="sk3-t">0</span></div>
-        <div class="s-cd-bar" id="sk3-bar" style="width:0%"></div>
-      </div>
-    </div>
-    <div id="combat-log"></div>
-    <div id="wave-badge">WAVE <span id="wb-num">1</span></div>
-    <!-- LOOT POPUP -->
-    <div id="loot-popup">
-      <div class="lp-icon" id="lp-icon">⚔️</div>
-      <div class="lp-rarity" id="lp-rarity">BRONZE</div>
-      <div class="lp-name" id="lp-name">Item</div>
-      <div class="lp-type" id="lp-type">Lazer Silahı</div>
-      <div class="lp-stats" id="lp-stats"></div>
-      <div class="lp-affix" id="lp-affix"></div>
-      <div class="lp-compare" id="lp-compare" style="display:none"></div>
-      <div class="lp-btns">
-        <button class="lp-btn btn-equip" onclick="GQ.lootEquip()">⚔️ KUŞAN</button>
-        <button class="lp-btn btn-sell" onclick="GQ.lootSell()">💰 SAT</button>
-        <button class="lp-btn btn-bag" onclick="GQ.lootBag()">🎒 ÇANTA</button>
+      <div class="ao-row">
+        <input type="checkbox" id="ao-sellbag" onchange="GQ.setAuto('autoSellBag',this.checked)">
+        <label for="ao-sellbag">Çantadaki düşük eşyaları otomatik sat</label>
       </div>
     </div>
-    <div id="idle-badge">💤 IDLE KAZANIM AKTİF</div>
+    <button id="start-btn" onclick="GQ.startWithBox()">📦 QUANTUM BOX AÇ</button>
+    <div class="idle-box-cnt">📦 <span id="idle-box-cnt">10</span> Box mevcut</div>
   </div>
-  <!-- SIDEBAR -->
-  <div id="sidebar">
-    <div id="tab-bar">
-      <button class="tab-btn active" onclick="GQ.switchTab(event,'stats')">STAT</button>
-      <button class="tab-btn" onclick="GQ.switchTab(event,'inv')">ENVANTER</button>
-      <button class="tab-btn" onclick="GQ.switchTab(event,'quests')">GÖREV</button>
-      <button class="tab-btn" onclick="GQ.switchTab(event,'boxes')">KUTU</button>
+
+  <!-- LOOT OVERLAY -->
+  <div id="loot-ov"></div>
+  <div id="loot-pop">
+    <div class="lp-ic" id="lp-ic">🔫</div>
+    <div class="lp-rar" id="lp-rar"></div>
+    <div class="lp-stars" id="lp-stars"></div>
+    <div class="lp-nm" id="lp-nm"></div>
+    <div class="lp-sub" id="lp-sub"></div>
+    <div class="lp-st" id="lp-st"></div>
+    <div class="lp-af" id="lp-af"></div>
+    <div class="lp-cmp" id="lp-cmp" style="display:none"></div>
+    <div class="lp-auto-note" id="lp-auto-note"></div>
+    <div id="auto-sell-bar" style="display:none;width:100%"></div>
+    <div class="lp-btns">
+      <button class="lp-btn btn-eq" onclick="GQ.lootEq()">⚔️ KUŞAN</button>
+      <button class="lp-btn btn-sell" id="lp-sell-btn" onclick="GQ.lootSell()">💰 SAT</button>
+      <button class="lp-btn btn-bag" onclick="GQ.lootBag()">🎒 ÇANTA</button>
     </div>
-    <!-- STATS -->
-    <div class="tab-panel active" id="panel-stats">
-      <div class="sec-label">Hayat & Kaynaklar</div>
-      <div class="stat-row"><span class="lbl">HP</span><div class="stat-bar-bg"><div class="stat-bar-fill bar-hp" id="bar-hp" style="width:100%"></div></div><span class="stat-val" id="val-hp">100/100</span></div>
-      <div class="stat-row"><span class="lbl">GQT ENERJİ</span><div class="stat-bar-bg"><div class="stat-bar-fill bar-gqt" id="bar-gqt" style="width:0%"></div></div><span class="stat-val" id="val-gqt">0/100</span></div>
-      <div class="stat-row"><span class="lbl">XP</span><div class="stat-bar-bg"><div class="stat-bar-fill bar-xp" id="bar-xp" style="width:0%"></div></div><span class="stat-val" id="val-xp">0/100</span></div>
-      <div class="sec-label">Birincil İstatistikler</div>
-      <div class="stat-grid">
-        <div>💪 STR: <span id="s-str" style="color:var(--cyan)">10</span></div>
-        <div>🏃 AGI: <span id="s-agi" style="color:var(--cyan)">10</span></div>
-        <div>🧠 INT: <span id="s-int" style="color:var(--cyan)">10</span></div>
-        <div>🍀 LCK: <span id="s-lck" style="color:var(--cyan)">5</span></div>
-      </div>
-      <div class="sec-label">Savaş İstatistikleri</div>
-      <div class="stat-grid">
-        <div>⚔️ ATK: <span id="s-atk" style="color:var(--magenta)">15</span></div>
-        <div>🛡️ DEF: <span id="s-def" style="color:var(--magenta)">5</span></div>
-        <div>💨 SPD: <span id="s-spd" style="color:var(--magenta)">1.0</span>/s</div>
-        <div>🎯 CRIT: <span id="s-crit" style="color:var(--magenta)">5</span>%</div>
-      </div>
-      <div class="sec-label">Yetenek Ağacı</div>
-      <div id="skill-upgrade-zone" style="display:flex;flex-direction:column;gap:3px;"></div>
+  </div>
+
+  <!-- SKILL BAR -->
+  <div id="skill-bar">
+    <div class="skb" id="sk0" onclick="GQ.useSkill(0)" onmouseenter="GQ.skTip(event,0)" onmouseleave="GQ.skTipH()">
+      <div class="sic">⚡</div><div class="snm">PULSE</div>
+      <div class="sov" id="sk0-ov" style="display:none"><span id="sk0-t">0</span></div>
+      <div class="sbar" id="sk0-bar" style="width:0%"></div>
     </div>
-    <!-- INVENTORY -->
-    <div class="tab-panel" id="panel-inv">
-      <div id="inv-panel-wrap">
-        <div class="sec-label">Gemi Ekipmanları</div>
-        <div id="ship-preview">
-          <canvas id="shipCanvas" width="280" height="130"></canvas>
-          <!-- Equipment slots positioned over ship -->
-          <div class="eq-slot" id="eq-weapon"   style="left:190px;top:50px;"  title="Lazer Silahı"  onclick="GQ.unequipSlot('weapon')"  onmouseenter="GQ.showEqTip(event,'weapon')"  onmouseleave="GQ.hideItemTip()">🔫</div>
-          <div class="eq-slot" id="eq-hull"      style="left:115px;top:46px;" title="Gemi Gövdesi"  onclick="GQ.unequipSlot('hull')"    onmouseenter="GQ.showEqTip(event,'hull')"    onmouseleave="GQ.hideItemTip()">🛡️</div>
-          <div class="eq-slot" id="eq-engine"    style="left:38px;top:50px;"  title="Motor"         onclick="GQ.unequipSlot('engine')"  onmouseenter="GQ.showEqTip(event,'engine')"  onmouseleave="GQ.hideItemTip()">⚙️</div>
-          <div class="eq-slot" id="eq-shield"    style="left:115px;top:10px;" title="Kalkan"        onclick="GQ.unequipSlot('shield')"  onmouseenter="GQ.showEqTip(event,'shield')"  onmouseleave="GQ.hideItemTip()">🔵</div>
-          <div class="eq-slot" id="eq-reactor"   style="left:115px;top:96px;" title="Reaktör"       onclick="GQ.unequipSlot('reactor')" onmouseenter="GQ.showEqTip(event,'reactor')" onmouseleave="GQ.hideItemTip()">⚡</div>
-          <div class="eq-slot" id="eq-sensor"    style="left:160px;top:10px;" title="Sensör"        onclick="GQ.unequipSlot('sensor')"  onmouseenter="GQ.showEqTip(event,'sensor')"  onmouseleave="GQ.hideItemTip()">📡</div>
-          <div class="eq-slot" id="eq-armor"     style="left:72px;top:10px;"  title="Zırh"          onclick="GQ.unequipSlot('armor')"   onmouseenter="GQ.showEqTip(event,'armor')"   onmouseleave="GQ.hideItemTip()">🔩</div>
+    <div class="skb" id="sk1" onclick="GQ.useSkill(1)" onmouseenter="GQ.skTip(event,1)" onmouseleave="GQ.skTipH()">
+      <div class="sic">🌀</div><div class="snm">VORTEX</div>
+      <div class="sov" id="sk1-ov" style="display:none"><span id="sk1-t">0</span></div>
+      <div class="sbar" id="sk1-bar" style="width:0%"></div>
+    </div>
+    <div class="skb" id="sk2" onclick="GQ.useSkill(2)" onmouseenter="GQ.skTip(event,2)" onmouseleave="GQ.skTipH()">
+      <div class="sic">💥</div><div class="snm">NOVA</div>
+      <div class="sov" id="sk2-ov" style="display:none"><span id="sk2-t">0</span></div>
+      <div class="sbar" id="sk2-bar" style="width:0%"></div>
+    </div>
+    <div class="skb" id="sk3" onclick="GQ.useSkill(3)" onmouseenter="GQ.skTip(event,3)" onmouseleave="GQ.skTipH()">
+      <div class="sic">🔮</div><div class="snm">ULTI</div>
+      <div class="sov" id="sk3-ov" style="display:none"><span id="sk3-t">0</span></div>
+      <div class="sbar" id="sk3-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="clog"></div>
+  <div id="wbadge">WAVE <span id="wb-wave">1</span>-<span id="wb-sub">1</span><br><span id="wb-kills" style="font-size:8px;color:var(--dm)"></span></div>
+  <div id="upg-bar">⚙️ <span id="ub-txt">Gemi Yükseltiliyor</span></div>
+
+  <!-- BOSS ENTER SCREEN -->
+  <div id="boss-enter" style="display:none;flex-direction:column;align-items:center;justify-content:center;">
+    <canvas id="boss-bg-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+    <div id="boss-enter-content" style="position:relative;z-index:2;text-align:center;">
+      <h1 id="be-name">👹 BOSS</h1>
+      <div class="boss-sub" id="be-sub">Hazır ol!</div>
+      <div id="boss-countdown">3</div>
+    </div>
+  </div>
+
+  <!-- BOSS FIGHT SCREEN -->
+  <div id="boss-fight" style="display:none;flex-direction:column;">
+    <canvas id="boss-fight-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+    <div id="boss-fight-ui">
+      <div class="bf-top">
+        <div class="bf-boss-info">
+          <div class="bf-boss-name" id="bf-name">BOSS</div>
+          <div class="bf-hp-bg"><div class="bf-hp-f" id="bf-hpf" style="width:100%"></div></div>
+          <div class="bf-hp-txt" id="bf-hptxt">HP: 0/0</div>
         </div>
-        <div class="sec-label">Çanta (20 Slot)</div>
-        <div id="inv-grid"></div>
+        <div class="bf-player-info">
+          <div style="font-size:8px;color:var(--dm)">Senin HP</div>
+          <div class="phptxt" id="bf-php">0</div>
+          <div style="font-size:8px;color:var(--dm);margin-top:3px">ATK: <span id="bf-patk" style="color:var(--cy)">0</span></div>
+        </div>
+      </div>
+      <div class="bf-log" id="bf-log"></div>
+      <div class="bf-actions">
+        <button class="bf-btn atk" onclick="GQ.bAtk()">⚔️ SALDIRI</button>
+        <button class="bf-btn atk" style="background:var(--pu)" onclick="GQ.bSkill()">🔮 YETENEĞİ KULLAN</button>
+        <button class="bf-btn ret" onclick="GQ.bRet()">🚪 GERİ ÇEKİL</button>
       </div>
     </div>
-    <!-- QUESTS -->
-    <div class="tab-panel" id="panel-quests">
-      <div class="sec-label">Günlük Görevler</div>
-      <div id="quest-list"></div>
+  </div>
+
+  <!-- BOSS RESULT -->
+  <div id="boss-result" style="display:none;position:absolute;inset:0;z-index:32;align-items:center;justify-content:center;background:#000000bb;">
+    <div class="br-box" id="br-box">
+      <h2 id="br-title">Sonuç</h2>
+      <div class="br-txt" id="br-txt"></div>
+      <button class="br-btn" onclick="GQ.closeBossResult()">TAMAM</button>
     </div>
-    <!-- BOXES -->
-    <div class="tab-panel" id="panel-boxes">
-      <div class="sec-label">Kuantum Kutular</div>
-      <div id="box-panel"></div>
+  </div>
+
+  <!-- MARKET -->
+  <div id="mkt-modal" class="modal-ov" style="display:none">
+    <div class="mbox">
+      <button class="m-close" onclick="GQ.closeMkt()">✕</button>
+      <h2>🏪 QUANTUM MARKET</h2>
+      <div style="font-size:9px;color:var(--dm);margin-bottom:7px;">💠 GQT: <b id="m-gqt" style="color:var(--cy)">0</b> &nbsp; 💰: <b id="m-gold" style="color:var(--gd)">0</b></div>
+      <div id="mkt-content"></div>
+    </div>
+  </div>
+
+  <!-- SHIP UPGRADE MODAL -->
+  <div id="slvl-modal" class="modal-ov" style="display:none">
+    <div class="slbox">
+      <h2>🚀 GEMİ YÜKSELTİLİYOR</h2>
+      <p id="sl-desc" style="font-size:9px;color:var(--tx);margin-bottom:4px;"></p>
+      <div class="sltimer" id="sl-timer">0:00</div>
+      <p style="font-size:8px;color:var(--dm);">Hızlandırıcı: <b id="sl-sp" style="color:var(--cy)">0</b> adet</p>
+      <button class="slbtn mg" onclick="GQ.useSpeed()">⚡ 1 HIZLANDIRICI (-30dk)</button>
+      <button class="slbtn gr" onclick="GQ.closeSlvl()">KAPAT</button>
     </div>
   </div>
 </div>
-<!-- TOOLTIPS -->
-<div id="skill-tooltip">
-  <div class="st-name" id="stt-name"></div>
-  <div class="st-row"><span class="st-label">Bekleme Süresi</span><span class="st-val" id="stt-cd"></span></div>
-  <div class="st-row"><span class="st-label">Hasar Çarpanı</span><span class="st-val" id="stt-dmg"></span></div>
-  <div class="st-row"><span class="st-label">Etki Alanı</span><span class="st-val" id="stt-range"></span></div>
-  <div class="st-row"><span class="st-label">Glitch Çarpanı</span><span class="st-val" id="stt-gm"></span></div>
-  <div class="st-desc" id="stt-desc"></div>
+<!-- SIDEBAR -->
+<div id="sidebar">
+<div id="tabbar">
+  <button class="tb on"  onclick="GQ.tab(event,'stats')">STAT</button>
+  <button class="tb"     onclick="GQ.tab(event,'inv')">GEMİ</button>
+  <button class="tb"     onclick="GQ.tab(event,'quest')">GÖREV</button>
+  <button class="tb"     onclick="GQ.tab(event,'box')">KUTU</button>
+  <button class="tb"     onclick="GQ.tab(event,'ability')">YETENEKLEr</button>
+  <button class="tb"     onclick="GQ.tab(event,'passive')">PASİF</button>
+  <button class="tb"     onclick="GQ.tab(event,'boss')">BOSS</button>
 </div>
-<div id="item-tooltip">
-  <div class="it-name" id="itt-name"></div>
-  <div class="it-sub" id="itt-sub"></div>
-  <div id="itt-stats"></div>
-  <div class="it-affix" id="itt-affix"></div>
+<div class="tpanel on" id="panel-stats">
+  <div class="sl">Hayat & Kaynaklar</div>
+  <div class="sr"><span class="la">HP</span><div class="sbg"><div class="sf hp" id="bar-hp" style="width:100%"></div></div><span class="sv2" id="v-hp">100/100</span></div>
+  <div class="sr"><span class="la">GQT ENERJİ</span><div class="sbg"><div class="sf gt" id="bar-gt" style="width:0%"></div></div><span class="sv2" id="v-gt">0/100</span></div>
+  <div class="sr"><span class="la">XP</span><div class="sbg"><div class="sf xp" id="bar-xp" style="width:0%"></div></div><span class="sv2" id="v-xp">0/100</span></div>
+  <div class="sr"><span class="la" style="color:var(--pu)">ÖZ</span><div class="sbg"><div class="sf es" id="bar-es" style="width:0%"></div></div><span class="sv2" id="v-es">0/100</span></div>
+  <div class="sl">İstatistikler</div>
+  <div class="sg">
+    <div>💪 STR:<b id="s-str" style="color:var(--cy)"> 10</b></div>
+    <div>🏃 AGI:<b id="s-agi" style="color:var(--cy)"> 10</b></div>
+    <div>🧠 INT:<b id="s-int" style="color:var(--cy)"> 10</b></div>
+    <div>🍀 LCK:<b id="s-lck" style="color:var(--cy)"> 5</b></div>
+    <div>⚔️ ATK:<b id="s-atk" style="color:var(--mg)"> 15</b></div>
+    <div>🛡️ DEF:<b id="s-def" style="color:var(--mg)"> 5</b></div>
+    <div>💨 SPD:<b id="s-spd" style="color:var(--mg)"> 1.0</b>/s</div>
+    <div>🎯 CRIT:<b id="s-crit" style="color:var(--mg)"> 5</b>%</div>
+  </div>
+  <div class="sl">Gemi Yükseltme</div>
+  <div id="ship-upg-zone"></div>
+  <div class="sl">Yetenek Ağacı</div>
+  <div id="skill-tree-zone"></div>
 </div>
-
+<div class="tpanel" id="panel-inv">
+  <div class="sl">Gemi Ekipmanları</div>
+  <div id="ship-prev">
+    <canvas id="sc" width="288" height="130"></canvas>
+    <div class="eqs" id="eq-weapon"  style="left:202px;top:50px" onclick="GQ.unequip('weapon')"  onmouseenter="GQ.eqTip(event,'weapon')"  onmouseleave="GQ.itTipH()" title="Silah">🔫</div>
+    <div class="eqs" id="eq-hull"    style="left:125px;top:46px" onclick="GQ.unequip('hull')"    onmouseenter="GQ.eqTip(event,'hull')"    onmouseleave="GQ.itTipH()" title="Gövde">🛡️</div>
+    <div class="eqs" id="eq-engine"  style="left:36px;top:50px"  onclick="GQ.unequip('engine')"  onmouseenter="GQ.eqTip(event,'engine')"  onmouseleave="GQ.itTipH()" title="Motor">⚙️</div>
+    <div class="eqs" id="eq-shield"  style="left:125px;top:8px"  onclick="GQ.unequip('shield')"  onmouseenter="GQ.eqTip(event,'shield')"  onmouseleave="GQ.itTipH()" title="Kalkan">🔵</div>
+    <div class="eqs" id="eq-reactor" style="left:125px;top:100px"onclick="GQ.unequip('reactor')" onmouseenter="GQ.eqTip(event,'reactor')" onmouseleave="GQ.itTipH()" title="Reaktör">⚡</div>
+    <div class="eqs" id="eq-sensor"  style="left:167px;top:8px"  onclick="GQ.unequip('sensor')"  onmouseenter="GQ.eqTip(event,'sensor')"  onmouseleave="GQ.itTipH()" title="Sensör">📡</div>
+    <div class="eqs" id="eq-armor"   style="left:78px;top:8px"   onclick="GQ.unequip('armor')"   onmouseenter="GQ.eqTip(event,'armor')"   onmouseleave="GQ.itTipH()" title="Zırh">🔩</div>
+  </div>
+  <div class="sl">Çanta (20 Slot)</div>
+  <div id="inv-grid"></div>
+</div>
+<div class="tpanel" id="panel-quest">
+  <div class="sl">Günlük Görevler</div>
+  <div id="daily-info" style="font-size:8px;color:var(--dm);margin-bottom:4px;"></div>
+  <div id="quest-list"></div>
+</div>
+<div class="tpanel" id="panel-box">
+  <div class="sl">Quantum Kutular</div>
+  <div id="box-list"></div>
+</div>
+<div class="tpanel" id="panel-ability">
+  <div class="sl">Yetenek Sayfası</div>
+  <div style="font-size:8px;color:var(--dm);margin-bottom:4px;">Seviye & Nadirliğe göre açılır. Gold ile öğren.</div>
+  <div id="ability-list"></div>
+</div>
+<div class="tpanel" id="panel-passive">
+  <div class="sl">Pasif Güç Ağacı</div>
+  <div style="font-size:8px;color:var(--dm);margin-bottom:4px;">💎 Pasif Kristal gerekir.</div>
+  <div id="ptree"></div>
+</div>
+<div class="tpanel" id="panel-boss">
+  <div class="sl">Özel Boss Karşılaşmaları</div>
+  <div style="font-size:8px;color:var(--dm);margin-bottom:4px;">Her boss bir kez yenilebilir. Büyük ödüller!</div>
+  <div id="boss-list"></div>
+</div>
+</div>
+</div>
+</div>
+<div id="sk-tip">
+  <div class="stn" id="stn"></div>
+  <div class="strow"><span class="stl">Bekleme</span><span id="st-cd"></span></div>
+  <div class="strow"><span class="stl">Hasar x</span><span id="st-dm"></span></div>
+  <div class="strow"><span class="stl">Glitch x</span><span id="st-gm"></span></div>
+  <div class="std" id="st-ds"></div>
+</div>
+<div id="it-tip">
+  <div style="font-size:11px" id="it-nm"></div>
+  <div style="font-size:8px;color:var(--dm);margin:2px 0" id="it-sb"></div>
+  <div id="it-st" style="font-size:9px"></div>
+  <div id="it-af" style="font-size:8px;color:var(--gr);margin-top:2px"></div>
+</div>
 <script>
-const GQ = (() => {
-// ═══════════════════════════════════════════════
-//  CONFIG
-// ═══════════════════════════════════════════════
-const RARITIES = ['bronze','silver','gold','platinum','diamond','radianium','glitchanium'];
-const RARITY_LABELS = {bronze:'BRONZ',silver:'SİLVER',gold:'ALTIN',platinum:'PLATİNYUM',diamond:'DİAMOND',radianium:'RADİANİUM',glitchanium:'GLİTCHANİUM'};
-const RARITY_COLORS = {bronze:'#cd7f32',silver:'#c0c0c0',gold:'#ffd700',platinum:'#e5e4e2',diamond:'#a8f0ff',radianium:'#ff88ff',glitchanium:'#cc44ff'};
-const RARITY_WEIGHTS = [40,28,18,8,4,1.5,0.5];
-const RARITY_SELL    = {bronze:5,silver:15,gold:40,platinum:100,diamond:280,radianium:700,glitchanium:2000};
-const RARITY_POWER   = {bronze:1,silver:2,gold:3,platinum:4,diamond:5,radianium:6,glitchanium:7};
+const GQ=(()=>{
+'use strict';
+// UTILS
+const fmt=n=>{if(n>=1e12)return(n/1e12).toFixed(1)+'T';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return Math.floor(n)+''};
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmtDur=s=>{if(s<60)return Math.ceil(s)+'s';if(s<3600)return Math.ceil(s/60)+'dk';if(s<86400)return(s/3600).toFixed(1)+'sa';return(s/86400).toFixed(1)+'gün'};
 
-const ITEM_SLOTS = {
-  weapon:  {label:'Lazer Silahı', icon:'🔫', statKey:'atk',  bonus:[8,12,18,26,36,50,70]},
-  hull:    {label:'Gemi Gövdesi', icon:'🛡️', statKey:'hp',   bonus:[20,40,70,110,160,230,330]},
-  engine:  {label:'Motor',        icon:'⚙️', statKey:'spd',  bonus:[0.1,0.2,0.35,0.5,0.7,1.0,1.5]},
-  shield:  {label:'Kalkan',       icon:'🔵', statKey:'def',  bonus:[4,8,14,22,32,45,65]},
-  reactor: {label:'Reaktör',      icon:'⚡', statKey:'gqt',  bonus:[10,20,35,55,80,115,160]},
-  sensor:  {label:'Sensör',       icon:'📡', statKey:'crit', bonus:[2,4,7,11,16,23,32]},
-  armor:   {label:'Zırh',         icon:'🔩', statKey:'def',  bonus:[3,6,10,16,23,33,47]},
-};
-
-// Visual skin per rarity (applied on ship canvas)
-const RARITY_SHIP_COLORS = {
-  bronze:     {hull:'#3d2010',accent:'#cd7f32',glow:'#cd7f3266'},
-  silver:     {hull:'#182030',accent:'#c0c0c0',glow:'#c0c0c066'},
-  gold:       {hull:'#1a1a00',accent:'#ffd700',glow:'#ffd70066'},
-  platinum:   {hull:'#101820',accent:'#e5e4e2',glow:'#e5e4e266'},
-  diamond:    {hull:'#001a1e',accent:'#a8f0ff',glow:'#a8f0ff88'},
-  radianium:  {hull:'#1a0020',accent:'#ff88ff',glow:'#ff88ff88'},
-  glitchanium:{hull:'#0a0015',accent:'#cc44ff',glow:'#cc44ffaa'},
-};
-
-const SKILLS = [
-  {name:'PULSE',  icon:'⚡',cd:3,  dmgMult:1.8,glitchMult:3.2,range:600,desc:'Yakın menzildeki hedefe hızlı enerji atışı. Düşük bekleme süreli temel saldırı.'},
-  {name:'VORTEX', icon:'🌀',cd:7,  dmgMult:2.4,glitchMult:4.2,range:600,desc:'Tüm ekrandaki düşmanlara çok hedefli girdap hasarı uygular.'},
-  {name:'NOVA',   icon:'💥',cd:13, dmgMult:3.5,glitchMult:6.0,range:600,desc:'Devasa patlama dalgası. Tüm düşmanlara yüksek alan hasarı.'},
-  {name:'ULTI',   icon:'🔮',cd:28, dmgMult:6.0,glitchMult:10.0,range:600,desc:'GLİTCH ULTI: Gerçekliği parçalar. Tüm düşmanlara yıkıcı hasar. Ekran efekti.'},
-];
-
-const AFFIXES = ['+5% Kritik Hasar','Canlandırma +10 HP','Saldırı Hızı +8%','+12 Güç','Şans +3','+15% GQT Kazanımı','Düşman Yavaşlatma %10','+20 Zekâ','Crit Şansı +7%','Savunma +5'];
-
-const ENEMY_TYPES = [
-  {name:'Anomali', hp:30,  xp:5,  gqt:2,  dmg:3,  color:'#ff3355'},
-  {name:'Glitchör',hp:60,  xp:10, gqt:4,  dmg:5,  color:'#ff00aa'},
-  {name:'Voidar',  hp:120, xp:20, gqt:8,  dmg:9,  color:'#aa44ff'},
-  {name:'Nexus',   hp:300, xp:50, gqt:20, dmg:18, color:'#ffd700'},
-];
-
-const BOX_TYPES = [
-  {name:'Common Kutu',    icon:'📦',color:'#aaa',   boost:0},
-  {name:'Rare Kutu',      icon:'💎',color:'#4488ff',boost:2},
-  {name:'Premium Sandık', icon:'🏆',color:'#ffd700',boost:4},
-];
-
-const STATE_KEY = 'gq_save_v2';
-
-// ═══════════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════════
-let gs;
-
-function defaultState(){
-  return {
-    player:{
-      level:1,xp:0,xpNext:100,hp:100,maxHp:100,gqt:0,maxGqt:100,
-      stats:{str:10,agi:10,int:10,lck:5},kills:0,
-      glitchSkills:[],skillCooldowns:[0,0,0,0],
-      equipped:{weapon:null,hull:null,engine:null,shield:null,reactor:null,sensor:null,armor:null},
-    },
-    inventory:new Array(20).fill(null),
-    boxes:{0:3,1:1,2:0},
-    quests:[
-      {id:0,title:'Anomali Avcısı',desc:'50 düşman yok et',goal:50,progress:0,reward:'gqt',rewardAmt:50,done:false},
-      {id:1,title:'Kutular Açılsın',desc:'3 kutu aç',goal:3,progress:0,reward:'box',rewardAmt:1,done:false},
-      {id:2,title:'Seviye Atla',desc:'Seviye 5 ol',goal:5,progress:0,reward:'gqt',rewardAmt:100,done:false},
-    ],
-    wave:1,lastOnline:Date.now(),
-  };
+// RARITIES
+const RARS=['bronze','silver','gold','platinum','diamond','radianium','glitchanium'];
+const RLBL={bronze:'BRONZ',silver:'SİLVER',gold:'ALTIN',platinum:'PLATİNYUM',diamond:'DİAMOND',radianium:'RADİANİUM',glitchanium:'GLİTCHANİUM'};
+const RCOL={bronze:'#cd7f32',silver:'#c0c0c0',gold:'#ffd700',platinum:'#e5e4e2',diamond:'#a8f0ff',radianium:'#ff88ff',glitchanium:'#cc44ff'};
+const RSELL={bronze:5,silver:18,gold:55,platinum:160,diamond:450,radianium:1200,glitchanium:4000};
+const RBASE=[8,22,55,140,380,1000,3000];
+function lootW(lvl){
+  if(lvl<5)  return[90,10,0,0,0,0,0];
+  if(lvl<10) return[60,35,5,0,0,0,0];
+  if(lvl<20) return[35,45,18,2,0,0,0];
+  if(lvl<35) return[15,35,38,10,2,0,0];
+  if(lvl<55) return[5,18,42,24,9,2,0];
+  if(lvl<80) return[1,6,28,36,22,6,1];
+  return[0,1,10,22,35,24,8];
 }
-function saveState(){try{localStorage.setItem(STATE_KEY,btoa(JSON.stringify(gs)));}catch(e){}}
-function loadState(){
-  try{const r=localStorage.getItem(STATE_KEY);if(r){gs=JSON.parse(atob(r));if(!gs.player.equipped)gs.player.equipped={weapon:null,hull:null,engine:null,shield:null,reactor:null,sensor:null,armor:null};return;}}catch(e){}
-  gs=defaultState();
-}
-
-// ═══════════════════════════════════════════════
-//  ITEM FACTORY
-// ═══════════════════════════════════════════════
-function rollRarity(boost=0){
-  const w=[...RARITY_WEIGHTS];
-  for(let i=2;i<w.length;i++)w[i]+=boost;
+function rollRar(lvl,boost=0){
+  const w=lootW(lvl).map((v,i)=>Math.max(0,v+(i>=2?boost:-boost/3)));
   const t=w.reduce((a,b)=>a+b,0);let r=Math.random()*t;
-  for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return RARITIES[i];}
+  for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return RARS[i];}
   return 'bronze';
 }
-function makeItem(slotKey,rarityBoost=0){
-  const rarity=rollRarity(rarityBoost);
-  const ri=RARITIES.indexOf(rarity);
-  const slot=ITEM_SLOTS[slotKey];
-  const affixCount=ri>=5?3:ri>=3?2:ri>=2?1:0;
-  const affixes=[];const pool=[...AFFIXES];
-  for(let i=0;i<affixCount;i++){const ai=Math.floor(Math.random()*pool.length);affixes.push(pool.splice(ai,1)[0]);}
-  const baseVal=slot.bonus[ri];
-  const statVal=Math.round(baseVal*(0.9+Math.random()*0.2));
-  return {slotKey,rarity,ri,name:`${RARITY_LABELS[rarity]} ${slot.label}`,icon:slot.icon,statKey:slot.statKey,statVal,affixes,sellVal:RARITY_SELL[rarity]};
+
+// SLOTS
+const SLOTS={
+  weapon: {label:'Lazer Silahı', icon:'🔫', sk:'atk',   part:'cannon'},
+  hull:   {label:'Gemi Gövdesi', icon:'🛡️', sk:'hp',    part:'hull'},
+  engine: {label:'Motor',        icon:'⚙️', sk:'spd',   part:'engine'},
+  shield: {label:'Kalkan',       icon:'🔵', sk:'def',   part:'shield'},
+  reactor:{label:'Reaktör',      icon:'⚡', sk:'gqt_m', part:'reactor'},
+  sensor: {label:'Sensör',       icon:'📡', sk:'crit',  part:'sensor'},
+  armor:  {label:'Zırh',         icon:'🔩', sk:'def2',  part:'armor'},
+};
+function itemSV(ri,shipLvl,stars){
+  return Math.round(RBASE[ri]*Math.pow(shipLvl,1.4)*Math.pow(1.18,stars));
 }
 
-// ═══════════════════════════════════════════════
-//  COMBAT STATS
-// ═══════════════════════════════════════════════
-function combatStats(){
-  const p=gs.player;
-  let atkBonus=0,defBonus=0,spdBonus=0,critBonus=0,maxHpBonus=0,maxGqtBonus=0;
-  Object.values(p.equipped).forEach(item=>{
-    if(!item)return;
-    if(item.statKey==='atk')atkBonus+=item.statVal;
-    if(item.statKey==='def')defBonus+=item.statVal;
-    if(item.statKey==='spd')spdBonus+=item.statVal;
-    if(item.statKey==='crit')critBonus+=item.statVal;
-    if(item.statKey==='hp')maxHpBonus+=item.statVal;
-    if(item.statKey==='gqt')maxGqtBonus+=item.statVal;
+// ── PIXEL-ART SHIP DRAW ──────────────────────────────────────────
+// Colors: each part tinted by equipped rarity
+const PART_BASE={
+  body:'#1e2a4a', bodyAcc:'#00f5ff', bodyDark:'#0d1630',
+  cockpit:'#00ccff', cockpitGlow:'#aaeeff',
+  wingTop:'#162040', wingBot:'#142038',
+  engine1:'#5a3020', engine2:'#3a2010', engineGlow:'#ff4422',
+  cannon:'#1a3060', cannonAcc:'#00f5ff',
+  grid:'#00f5ff',
+  light1:'#00ff88', light2:'#ff3355',
+};
+const RAR_TINT={
+  bronze:   {body:'#3a1a08',bA:'#cd7f32',ck:'#ffbb44',ckG:'#ffeeaa',eg:'#cc5500',grd:'#cd7f32'},
+  silver:   {body:'#1a2535',bA:'#c0c0c0',ck:'#ddeeff',ckG:'#ffffff', eg:'#aaaaff',grd:'#c0c0c0'},
+  gold:     {body:'#1a1500',bA:'#ffd700',ck:'#ffffaa',ckG:'#ffffee', eg:'#ffaa00',grd:'#ffd700'},
+  platinum: {body:'#101820',bA:'#e5e4e2',ck:'#ffffff',ckG:'#ffffff', eg:'#ddddff',grd:'#e5e4e2'},
+  diamond:  {body:'#001520',bA:'#a8f0ff',ck:'#ccffff',ckG:'#efffff', eg:'#66aaff',grd:'#a8f0ff'},
+  radianium:{body:'#1a0018',bA:'#ff88ff',ck:'#ffccff',ckG:'#ffeeff', eg:'#ff00ff',grd:'#ff88ff'},
+  glitchanium:{body:'#0a0012',bA:'#cc44ff',ck:'#ff88ff',ckG:'#ffccff',eg:'#9900ff',grd:'#cc44ff'},
+};
+function getSlotRar(slotKey,equipped){
+  const it=equipped[slotKey];
+  return it?it.rar:null;
+}
+function tintForPart(part,equipped){
+  // which slot drives which part
+  const map={hull:'hull',cannon:'weapon',engine:'engine',shield:'shield',sensor:'sensor',armor:'armor',reactor:'reactor'};
+  const slotKey=Object.keys(map).find(k=>map[k]===part)||null;
+  if(!slotKey)return null;
+  const it=equipped[slotKey];
+  return it?RAR_TINT[it.rar]:null;
+}
+
+function drawPixelShip(ctx,cx,cy,equipped,pulse,scale=1){
+  ctx.save();
+  ctx.translate(cx,cy);
+  ctx.scale(scale,scale);
+  const P=PART_BASE;
+
+  // Helper: get color with optional tint override
+  const T=(part,fallback)=>{const t=tintForPart(part,equipped);return t?t[Object.keys(t)[0]]:fallback;};
+  const TA=(part,key,fallback)=>{const t=tintForPart(part,equipped);return(t&&t[key])?t[key]:fallback;};
+
+  const bodyCol   = TA('hull','body',P.body);
+  const bodyAcc   = TA('hull','bA',P.bodyAcc);
+  const gridCol   = TA('hull','grd',P.grid);
+  const ckCol     = TA('sensor','ck',P.cockpit);
+  const ckGlow    = TA('sensor','ckG',P.cockpitGlow);
+  const engGlow   = TA('engine','eg',P.engineGlow);
+  const canCol    = TA('cannon','bA',P.cannonAcc);
+  const armorCol  = TA('armor','body',P.wingTop);
+
+  // ── ENGINE EXHAUSTS (left side, 2 nozzles) ──────────────────
+  const exLen=28+Math.sin(pulse)*8;
+  [-12,10].forEach((ey,i)=>{
+    const ex=ctx.createLinearGradient(-exLen,0,0,0);
+    ex.addColorStop(0,i===0?'#ff442200':'#ff220000');
+    ex.addColorStop(0.3,engGlow+'88');
+    ex.addColorStop(1,engGlow);
+    ctx.beginPath();
+    ctx.moveTo(-20,ey-5);ctx.lineTo(-20-exLen,ey);ctx.lineTo(-20,ey+5);ctx.closePath();
+    ctx.fillStyle=ex;ctx.fill();
   });
-  return {
-    atk: 10+p.stats.str*1.5+atkBonus,
-    def: 3+p.stats.str*0.3+defBonus,
-    spd: 0.5+p.stats.agi*0.05+spdBonus,
-    crit:5+p.stats.lck*0.5+critBonus,
-    maxHpBonus,maxGqtBonus,
+
+  // ── ENGINE NACELLES (2 cylindrical pods left) ─────────────
+  const eng2=TA('engine','body',P.engine2);
+  const eng1=TA('engine','body',P.engine1);
+  // TOP NACELLE
+  ctx.fillStyle=eng1;ctx.beginPath();
+  ctx.roundRect(-22,-16,14,10,3);ctx.fill();
+  ctx.fillStyle='#2a1808';ctx.fillRect(-20,-14,10,6);
+  // nozzle rings
+  for(let r=0;r<3;r++){
+    ctx.strokeStyle='#1a0c04';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(-8-r*3,-11,4,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.fillStyle=engGlow+'cc';ctx.beginPath();ctx.arc(-9,-11,3,0,Math.PI*2);ctx.fill();
+  // BOTTOM NACELLE
+  ctx.fillStyle=eng1;ctx.beginPath();ctx.roundRect(-22,6,14,10,3);ctx.fill();
+  ctx.fillStyle='#2a1808';ctx.fillRect(-20,8,10,6);
+  for(let r=0;r<3;r++){
+    ctx.strokeStyle='#1a0c04';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(-8-r*3,11,4,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.fillStyle=engGlow+'cc';ctx.beginPath();ctx.arc(-9,11,3,0,Math.PI*2);ctx.fill();
+
+  // Reactor CORE between nacelles
+  const reactCol=TA('reactor','bA','#00f5ff');
+  ctx.fillStyle='#050d1a';ctx.beginPath();ctx.roundRect(-12,-4,8,8,4);ctx.fill();
+  ctx.beginPath();ctx.arc(-8,0,3.5,0,Math.PI*2);
+  ctx.fillStyle=reactCol;ctx.shadowColor=reactCol;ctx.shadowBlur=6+Math.sin(pulse)*3;ctx.fill();ctx.shadowBlur=0;
+
+  // ── MAIN BODY FUSELAGE ───────────────────────────────────────
+  const bGrad=ctx.createLinearGradient(-18,-18,22,18);
+  bGrad.addColorStop(0,bodyCol);bGrad.addColorStop(0.4,TA('hull','bA',P.bodyAcc)+'18');bGrad.addColorStop(1,bodyCol);
+  ctx.beginPath();
+  // nose pointed right
+  ctx.moveTo(28,0);
+  ctx.bezierCurveTo(24,-6, 8,-14,-4,-13);
+  ctx.lineTo(-16,-12);ctx.lineTo(-16,12);ctx.lineTo(-4,13);
+  ctx.bezierCurveTo(8,14,24,6,28,0);
+  ctx.closePath();
+  ctx.fillStyle=bGrad;ctx.fill();
+  ctx.strokeStyle=bodyAcc+'55';ctx.lineWidth=1;ctx.stroke();
+
+  // ── GRID LINES ON HULL ───────────────────────────────────────
+  ctx.strokeStyle=gridCol+'44';ctx.lineWidth=0.5;
+  // horizontal
+  [-5,0,5].forEach(gy=>{
+    ctx.beginPath();ctx.moveTo(-14,gy);ctx.lineTo(24,gy);ctx.stroke();
+  });
+  // vertical
+  [-8,0,8,16].forEach(gx=>{
+    ctx.beginPath();ctx.moveTo(gx,-12+Math.abs(gx)*0.3);ctx.lineTo(gx,12-Math.abs(gx)*0.3);ctx.stroke();
+  });
+  // outer hull glow line
+  ctx.strokeStyle=bodyAcc+'88';ctx.lineWidth=0.8;
+  ctx.beginPath();ctx.moveTo(28,0);ctx.bezierCurveTo(24,-6,8,-14,-4,-13);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(28,0);ctx.bezierCurveTo(24,6,8,14,-4,13);ctx.stroke();
+
+  // ── ARMOR PLATING (panel on side) ───────────────────────────
+  ctx.fillStyle=armorCol;ctx.strokeStyle=TA('armor','bA',bodyAcc)+'55';ctx.lineWidth=0.6;
+  ctx.beginPath();ctx.roundRect(4,-6,10,4,1);ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.roundRect(4,2,10,4,1);ctx.fill();ctx.stroke();
+
+  // ── TOP FIN / WING ──────────────────────────────────────────
+  const wGrad=ctx.createLinearGradient(0,-14,0,-28);
+  wGrad.addColorStop(0,armorCol);wGrad.addColorStop(1,armorCol+'88');
+  ctx.beginPath();
+  ctx.moveTo(6,-12);ctx.lineTo(4,-26);ctx.lineTo(-2,-24);ctx.lineTo(-10,-12);
+  ctx.closePath();ctx.fillStyle=wGrad;ctx.fill();
+  ctx.strokeStyle=TA('armor','bA',bodyAcc)+'55';ctx.lineWidth=0.6;ctx.stroke();
+  // fin grid
+  ctx.strokeStyle=gridCol+'33';ctx.lineWidth=0.4;
+  [[4,-14,-1,-13],[2,-18,-2,-17],[0,-22,-2,-21]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();});
+
+  // ── BOTTOM FIN / WING ───────────────────────────────────────
+  ctx.beginPath();ctx.moveTo(6,12);ctx.lineTo(4,26);ctx.lineTo(-2,24);ctx.lineTo(-10,12);ctx.closePath();
+  ctx.fillStyle=wGrad;ctx.fill();ctx.strokeStyle=TA('armor','bA',bodyAcc)+'55';ctx.lineWidth=0.6;ctx.stroke();
+  ctx.strokeStyle=gridCol+'33';ctx.lineWidth=0.4;
+  [[4,14,-1,13],[2,18,-2,17],[0,22,-2,21]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();});
+
+  // ── DOME COCKPIT (center of ship) ───────────────────────────
+  // base frame (struts)
+  ctx.strokeStyle=gridCol+'66';ctx.lineWidth=0.8;
+  for(let a=0;a<6;a++){const ang=(a/6)*Math.PI*2;ctx.beginPath();ctx.moveTo(6,0);ctx.lineTo(6+Math.cos(ang)*8,Math.sin(ang)*6);ctx.stroke();}
+  // dome glow
+  const dGrad=ctx.createRadialGradient(6,-1,1,6,-1,8);
+  dGrad.addColorStop(0,ckGlow);dGrad.addColorStop(0.5,ckCol+'cc');dGrad.addColorStop(1,ckCol+'44');
+  ctx.beginPath();ctx.ellipse(6,-0.5,8.5,6,0,0,Math.PI*2);
+  ctx.fillStyle=dGrad;ctx.shadowColor=ckCol;ctx.shadowBlur=8+Math.sin(pulse)*4;ctx.fill();ctx.shadowBlur=0;
+  // dome rim
+  ctx.strokeStyle=ckCol+'aa';ctx.lineWidth=0.8;ctx.beginPath();ctx.ellipse(6,-0.5,8.5,6,0,0,Math.PI*2);ctx.stroke();
+  // dome shine
+  ctx.beginPath();ctx.ellipse(4,-2,4,2,-.4,0,Math.PI*2);
+  ctx.fillStyle='rgba(220,250,255,0.5)';ctx.fill();
+
+  // ── UPPER TURRET / CANNON ───────────────────────────────────
+  ctx.fillStyle='#0a1828';ctx.strokeStyle=gridCol+'44';ctx.lineWidth=0.6;
+  ctx.beginPath();ctx.roundRect(8,-15,12,4,2);ctx.fill();ctx.stroke();
+  // barrel
+  ctx.fillStyle=canCol+'88';ctx.beginPath();ctx.rect(14,-14,10,2);ctx.fill();
+  // second smaller barrel below
+  ctx.fillStyle=canCol+'66';ctx.beginPath();ctx.rect(10,-9,8,1.5);ctx.fill();
+  // cannon tip glow
+  ctx.beginPath();ctx.arc(24,-13,2,0,Math.PI*2);
+  ctx.fillStyle=canCol;ctx.shadowColor=canCol;ctx.shadowBlur=5+Math.sin(pulse)*2;ctx.fill();ctx.shadowBlur=0;
+  // lower gun pod
+  ctx.fillStyle='#0a1828';ctx.beginPath();ctx.roundRect(8,11,10,3,1.5);ctx.fill();
+  ctx.fillStyle=canCol+'66';ctx.beginPath();ctx.rect(12,12,8,1.5);ctx.fill();
+
+  // ── SHIELD visual (ring if equipped) ─────────────────────────
+  const shIt=equipped.shield;
+  if(shIt){
+    const shCol=RCOL[shIt.rar];
+    ctx.beginPath();ctx.ellipse(4,0,36,26,0,0,Math.PI*2);
+    ctx.strokeStyle=shCol+'44';ctx.lineWidth=1.5+Math.sin(pulse);ctx.stroke();
+    ctx.beginPath();ctx.ellipse(4,0,36,26,0,0,Math.PI*2);
+    ctx.strokeStyle=shCol+'22';ctx.lineWidth=3+Math.sin(pulse)*1.5;ctx.stroke();
+  }
+
+  // ── RUNNING LIGHTS ──────────────────────────────────────────
+  [[22,-2,P.light1],[22,2,P.light2],[-18,-10,'#aa44ff'],[-18,10,'#aa44ff']].forEach(([lx,ly,lc])=>{
+    ctx.beginPath();ctx.arc(lx,ly,1.5,0,Math.PI*2);
+    ctx.fillStyle=lc;ctx.shadowColor=lc;ctx.shadowBlur=4+Math.sin(pulse)*2;ctx.fill();ctx.shadowBlur=0;
+  });
+
+  ctx.restore();
+}
+
+// SKILLS
+const SKILLS=[
+  {name:'PULSE', icon:'⚡',cd:3, dm:1.8,gm:3.2,desc:'Hızlı enerji atışı, kısa bekleme.'},
+  {name:'VORTEX',icon:'🌀',cd:7, dm:2.4,gm:4.2,desc:'Tüm düşmanlara girdap hasarı.'},
+  {name:'NOVA',  icon:'💥',cd:13,dm:3.5,gm:6.0,desc:'Devasa patlama — tüm alan.'},
+  {name:'ULTI',  icon:'🔮',cd:28,dm:6.0,gm:10.0,desc:'Gerçekliği parçalar — ULTI.'},
+];
+
+// ABILITIES
+const ABILITIES=[
+  {id:'turret',    name:'Oto-Top',          rarReq:'bronze',  lvlReq:1,  cost:200,   effect:'auto_dmg',   val:0.10,icon:'🔰',desc:'Auto saldırı +%10',          eff:'ATK +%10'},
+  {id:'overdrive', name:'Aşırı İtim',       rarReq:'silver',  lvlReq:5,  cost:600,   effect:'spd_boost',  val:0.15,icon:'💨',desc:'Saldırı hızı +%15',          eff:'SPD +%15'},
+  {id:'crit_sight',name:'Kritik Gözetleme', rarReq:'silver',  lvlReq:8,  cost:900,   effect:'crit_boost', val:5,   icon:'🎯',desc:'Kritik şansı +5',            eff:'CRIT +5'},
+  {id:'quantum_l', name:'Kuantum Merceği',  rarReq:'gold',    lvlReq:12, cost:2000,  effect:'atk_pct',    val:0.20,icon:'🔭',desc:'Tüm hasar +%20',             eff:'ALL DMG +%20'},
+  {id:'shieldnova',name:'Kalkan Novas',     rarReq:'gold',    lvlReq:15, cost:3000,  effect:'def_boost',  val:25,  icon:'🌐',desc:'Savunma +25',                eff:'DEF +25'},
+  {id:'void_tap',  name:'Void Kanalı',      rarReq:'platinum',lvlReq:20, cost:8000,  effect:'ess_gain',   val:2,   icon:'🌀',desc:'Öz kazanım x2',              eff:'ÖZ x2'},
+  {id:'melt_laser',name:'Erime Lazeri',     rarReq:'platinum',lvlReq:25, cost:12000, effect:'atk_flat',   val:500, icon:'🔥',desc:'Sabit ATK +500',             eff:'ATK +500'},
+  {id:'phase_dash',name:'Faz Koşusu',       rarReq:'diamond', lvlReq:35, cost:50000, effect:'spd_flat',   val:0.5, icon:'⚡',desc:'Hız +0.5/s',                 eff:'SPD +0.5'},
+  {id:'dark_m',    name:'Karanlık Madde',   rarReq:'diamond', lvlReq:40, cost:80000, effect:'all_pct',    val:0.35,icon:'🌑',desc:'Tüm istatistikler +%35',     eff:'ALL +%35'},
+  {id:'rad_core',  name:'Radyanium Çekirdeği',rarReq:'radianium',lvlReq:55,cost:500000,effect:'double_atk',val:1,icon:'☢️',desc:'Çift vuruş',                  eff:'DOUBLE HIT'},
+  {id:'glitch_g',  name:'Glitch Tanrısı',   rarReq:'glitchanium',lvlReq:80,cost:5e6,effect:'godmode',    val:1,   icon:'👾',desc:'Hasar milyonlarla çarpılır', eff:'GOD MODE'},
+];
+function highestRi(equipped){const ri=Object.values(equipped).filter(Boolean).map(i=>RARS.indexOf(i.rar));return ri.length?Math.max(...ri):-1;}
+
+// PASSIVE
+const PASSIVE=[
+  {id:'atk',name:'Saldırı',icon:'⚔️',nodes:[
+    {nm:'Temel Ateş',   sk:'atk', base:5,  per:3,   cc:[1,3,8,20,50,120,300]},
+    {nm:'Kritik Fırtına',sk:'crit',base:2, per:1.5, cc:[2,5,12,30,75,180,450]},
+  ]},
+  {id:'def',name:'Savunma',icon:'🛡️',nodes:[
+    {nm:'Zırh Takviye', sk:'def', base:4,  per:2.5, cc:[1,3,8,20,50,120,300]},
+    {nm:'Can Yenile',   sk:'hp',  base:20, per:15,  cc:[2,5,12,30,75,180,450]},
+  ]},
+  {id:'spd',name:'Hız',icon:'💨',nodes:[
+    {nm:'Reaktif Motor',sk:'spd', base:0.05,per:0.03,cc:[1,3,8,20,50,120,300]},
+    {nm:'Şans Avcısı',  sk:'lck', base:1,  per:0.8, cc:[2,5,12,30,75,180,450]},
+  ]},
+];
+
+// SPECIAL BOSSES (Challenge)
+const SP_BOSSES=[
+  {id:0,name:'PRIME ANOMALİ',   req:1,  hp:5000,    dmg:50,    rw:{gold:500,  gqt:0,  boxes:5,  rar:'silver'}},
+  {id:1,name:'VOID EMPEROR',    req:5,  hp:80000,   dmg:800,   rw:{gold:3000, gqt:10, boxes:10, rar:'gold'}},
+  {id:2,name:'NEXUS OVERLORD',  req:10, hp:2000000, dmg:15000, rw:{gold:20000,gqt:50, boxes:20, rar:'platinum'}},
+  {id:3,name:'GLITCH TITAN',    req:20, hp:5e7,     dmg:200000,rw:{gold:1e5,  gqt:200,boxes:50, rar:'diamond'}},
+  {id:4,name:'RADİANT YIKICI',  req:35, hp:2e9,     dmg:5e6,   rw:{gold:5e5, gqt:1000,boxes:100,rar:'radianium'}},
+  {id:5,name:'GLİTCHANİUM TANRI',req:55,hp:1e12,   dmg:5e8,   rw:{gold:5e6, gqt:5000,boxes:300,rar:'glitchanium'}},
+];
+
+// WAVE BOSS STATS (every 10 sub-waves)
+function waveBossStats(wave,shipLvl){
+  const sc=Math.pow(1.18,wave-1)*Math.pow(1.28,shipLvl-1)*6;
+  return{
+    name:`WAVE ${wave} BOSS`,col:'#ffd700',isBoss:true,
+    hp:Math.ceil(500*sc),maxHp:Math.ceil(500*sc),
+    dmg:Math.ceil(20*Math.pow(1.12,wave-1)*Math.pow(1.2,shipLvl-1)),
+    xp:Math.ceil(200*sc),gold:Math.ceil(100*Math.pow(1.08,wave-1)),
+    ess:Math.ceil(15*Math.pow(1.05,wave-1)),
   };
 }
 
-// ═══════════════════════════════════════════════
-//  COMBAT ENGINE
-// ═══════════════════════════════════════════════
-let enemies=[],particles=[],projectiles=[],playerProjectiles=[];
-let bgStars=[],bgX=0,lastFrameTime=0,autoAttackTimer=0,playerY=0;
-let shipPulse=0,glitchTimer=0;
-let waveSpawnNeeded=true,uiTickTimer=0,saveTimer=0;
+// MARKET
+const MKT=[
+  {id:'load100',name:'100 GQT Yükle',icon:'💠',desc:'100 GQT token hesabınıza eklenir.',realMoney:true,realAmt:100},
+  {id:'load500',name:'500 GQT Yükle',icon:'💠',desc:'500 GQT token hesabınıza eklenir.',realMoney:true,realAmt:500},
+  {id:'qb_gqt', name:'Quantum Box x10',icon:'📦',desc:'GQT ile. Günde 999 limit.',gqtP:50,goldP:0,gqtLim:999,goldLim:0,eff:'boxes',amt:10},
+  {id:'qb_gold',name:'Quantum Box x1', icon:'📦',desc:'Gold ile. Günde 100 limit.',gqtP:0,goldP:200,gqtLim:0,goldLim:100,eff:'boxes',amt:1},
+  {id:'pc_gqt', name:'Pasif Kristal x100',icon:'💎',desc:'GQT ile.',gqtP:100,goldP:0,gqtLim:9999,goldLim:0,eff:'pcryst',amt:100},
+  {id:'pc_gold',name:'Pasif Kristal x1', icon:'💎',desc:'Gold ile. Günde 10 limit.',gqtP:0,goldP:500,gqtLim:0,goldLim:10,eff:'pcryst',amt:1},
+  {id:'sp_gqt', name:'Hızlandırıcı x10',icon:'⚡',desc:'Her biri -30dk. GQT ile.',gqtP:80,goldP:0,gqtLim:9999,goldLim:0,eff:'speedup',amt:10},
+  {id:'sp_gold',name:'Hızlandırıcı x1', icon:'⚡',desc:'Gold ile. Günde 2 limit.',gqtP:0,goldP:1000,gqtLim:0,goldLim:2,eff:'speedup',amt:1},
+];
 
-function initBg(){
-  bgStars=Array.from({length:90},()=>({
-    x:Math.random()*CFG_W(),y:Math.random()*CFG_H()*0.85,
-    spd:0.3+Math.random()*1.4,r:0.4+Math.random()*1.6,a:0.3+Math.random()*0.7,
-  }));
-}
-function CFG_W(){return canvas?canvas.width:800;}
-function CFG_H(){return canvas?canvas.height:500;}
-const PLAYER_X=130;
+// UPGRADE TIMES
+const UPTIMES=[30,60,240,480,1800,3600,14400,28800,86400,172800,345600,604800,1209600,1814400];
+function upTime(sl){return UPTIMES[Math.min(sl-1,UPTIMES.length-1)];}
+function essCost(sl){return Math.ceil(50*Math.pow(1.8,sl-1));}
 
-function spawnEnemy(){
-  const wave=gs.wave;
-  const ti=Math.min(Math.floor((wave-1)/3),ENEMY_TYPES.length-1);
-  const type=ENEMY_TYPES[Math.floor(Math.random()*(ti+1))];
-  const hs=1+(wave-1)*0.15;
-  const stopX=CFG_W()*0.70;
-  const spawnY=CFG_H()*0.10+Math.random()*CFG_H()*0.78;
-  enemies.push({
-    type:type.name,color:type.color,
-    x:CFG_W()+50+Math.random()*100,y:spawnY,stopX,
-    hp:Math.ceil(type.hp*hs),maxHp:Math.ceil(type.hp*hs),
-    xp:type.xp,gqt:type.gqt,spd:55+Math.random()*35,dmg:Math.ceil(type.dmg+(wave-1)*0.4),
-    hitFlash:0,dead:false,shootTimer:0.8+Math.random()*1.5,
-  });
-}
-function spawnWave(){
-  const count=3+gs.wave;enemies=[];projectiles=[];
-  for(let i=0;i<count;i++)setTimeout(()=>spawnEnemy(),i*(750-Math.min(gs.wave*18,500)));
-  addLog(`🌊 Dalga ${gs.wave} başladı! ${count} düşman geliyor.`,'#ff00aa');
-}
+// ENEMY
+const ETYPES=[
+  {name:'Anomali', col:'#ff3355',xm:1, gm:1,  em:0.2},
+  {name:'Glitchör',col:'#ff00aa',xm:2, gm:2,  em:0.5},
+  {name:'Voidar',  col:'#aa44ff',xm:4, gm:4,  em:1},
+  {name:'Nexus',   col:'#ffd700',xm:10,gm:10, em:3},
+];
+const AFFIXES=['+5% Crit','+HP/öldürme','+ATK %8','Güç+','Şans+','+GQT %15','Yavaşlatma','Savunma+'];
 
-function autoAttack(dt){
-  const cs=combatStats();autoAttackTimer-=dt;
-  if(autoAttackTimer>0)return;
-  autoAttackTimer=1/cs.spd;
-  const alive=enemies.filter(e=>!e.dead);
-  if(!alive.length)return;
-  const target=alive.sort((a,b)=>a.x-b.x)[0];
-  const isCrit=Math.random()*100<cs.crit;
-  let dmg=cs.atk*(isCrit?2:1)*( 0.9+Math.random()*0.2);
-  dmg=Math.ceil(dmg);
-  // Fire a player projectile toward target
-  const dx=target.x-PLAYER_X,dy=target.y-playerY;
-  const dist=Math.sqrt(dx*dx+dy*dy)||1;
-  playerProjectiles.push({x:PLAYER_X+26,y:playerY,vx:(dx/dist)*400,vy:(dy/dist)*400,dmg,isCrit,targetId:enemies.indexOf(target),life:1.2});
+function mkEnemy(wave,shipLvl,isBoss=false){
+  const ti=Math.min(Math.floor((wave-1)/3),ETYPES.length-1);
+  const et=ETYPES[isBoss?3:Math.floor(Math.random()*(ti+1))];
+  const sc=Math.pow(1.18,wave-1)*Math.pow(1.28,shipLvl-1)*(isBoss?6:1);
+  return{
+    name:et.name,col:et.col,isBoss,
+    hp:Math.ceil((isBoss?500:20)*sc),maxHp:Math.ceil((isBoss?500:20)*sc),
+    dmg:Math.ceil((isBoss?18:3)*Math.pow(1.1,wave-1)*Math.pow(1.18,shipLvl-1)),
+    xp:Math.ceil(5*et.xm*sc),gold:Math.ceil(2*et.gm*Math.pow(1.05,wave-1)),
+    ess:Math.ceil(et.em*Math.pow(1.03,wave-1)),
+    x:0,y:0,stopX:0,spd:50+rnd(0,35),shootT:rnd(.8,2),hitFlash:0,dead:false,
+  };
 }
 
-function autoSkills(dt){
-  SKILLS.forEach((sk,i)=>{
-    const cd=gs.player.skillCooldowns[i];
-    if(cd<=0 && enemies.filter(e=>!e.dead).length>0){
-      // auto-fire skill
-      fireSkill(i);
-    }
-  });
+// STATE
+const SKEY='gqv4';
+let gs;
+function defState(){
+  return{
+    charLvl:1,charXp:0,charXpNext:100,
+    shipLvl:1,essence:0,essenceMax:100,
+    upgrading:false,upgradeEnd:null,
+    hp:100,maxHp:100,gqtE:0,maxGqtE:100,
+    stats:{str:10,agi:10,int:10,lck:5},
+    kills:0,gqt:50,gold:0,pCrystals:0,speedups:0,
+    wave:1,subWave:1, // wave X-Y format
+    boxes:10,
+    equipped:{weapon:null,hull:null,engine:null,shield:null,reactor:null,sensor:null,armor:null},
+    bag:new Array(20).fill(null),
+    glitchSkills:[],skillCDs:[0,0,0,0],
+    passive:{atk:[0,0],def:[0,0],spd:[0,0]},
+    abilities:[],abilityBonuses:{},
+    lastDaily:null,marketDaily:{},
+    bossBeaten:[],
+    autoSettings:{autoOpen:false,autoEquip:false,autoSell:false,autoSellBag:false},
+    lastOnline:Date.now(),
+  };
 }
-
-function fireSkill(idx){
-  const sk=SKILLS[idx];
-  const p=gs.player;
-  if(p.skillCooldowns[idx]>0)return;
-  p.skillCooldowns[idx]=sk.cd;
-  const isGlitch=p.glitchSkills.includes(idx);
-  const mult=isGlitch?sk.glitchMult:sk.dmgMult;
-  const cs=combatStats();
-  const alive=enemies.filter(e=>!e.dead);
-  alive.forEach(e=>{
-    const dmg=Math.ceil(cs.atk*mult*(0.85+Math.random()*0.3));
-    dealDamage(e,dmg,true);
-  });
-  addLog(`🔥 ${sk.name}${isGlitch?' [GLITCH]':''} → x${mult} hasar (${alive.length} hedef)`,isGlitch?'#ff00aa':'#00f5ff');
-  if(idx===3||isGlitch)triggerGlitchEffect();
-  // Skill visual burst
-  spawnSkillBurst(idx,mult);
+function save(){try{localStorage.setItem(SKEY,btoa(JSON.stringify(gs)));}catch(e){}}
+function load(){
+  try{const r=localStorage.getItem(SKEY);if(r){gs=JSON.parse(atob(r));mg();return;}}catch(e){}
+  gs=defState();
 }
-
-function useSkill(idx){
-  fireSkill(idx); // manual trigger also allowed
+function mg(){
+  const d=defState();
+  ['equipped','bag','passive','marketDaily','abilities','abilityBonuses','autoSettings','bossBeaten'].forEach(k=>{if(!gs[k])gs[k]=d[k];});
+  if(!gs.bossBeaten)gs.bossBeaten=[];
+  if(!gs.autoSettings)gs.autoSettings=d.autoSettings;
+  if(gs.boxes===undefined)gs.boxes=10;
+  if(!gs.glitchSkills)gs.glitchSkills=[];
+  if(!gs.skillCDs)gs.skillCDs=[0,0,0,0];
+  if(gs.subWave===undefined)gs.subWave=1;
 }
-
-function spawnSkillBurst(idx,mult){
-  const colors=['#00f5ff','#aa44ff','#ff8800','#ff00aa'];
-  const c=colors[idx]||'#fff';
-  for(let i=0;i<10;i++){
-    const angle=Math.random()*Math.PI*2;
-    const spd=60+Math.random()*120;
-    particles.push({x:PLAYER_X+30,y:playerY,vx:Math.cos(angle)*spd,vy:Math.sin(angle)*spd,text:'✦',color:c,life:0.7,maxLife:0.7,size:8+mult});
+function checkDaily(){
+  const today=new Date().toDateString();
+  if(gs.lastDaily!==today){
+    gs.lastDaily=today;gs.marketDaily={};
+    gs.boxes+=100;
+    addLog('🎁 Günlük giriş: +100 Quantum Box!','#ffd700');
   }
 }
+function calcIdle(){
+  const now=Date.now(),away=Math.min((now-gs.lastOnline)/1000,3600);
+  if(away<30)return null;
+  const g=Math.floor(away*.2),e=Math.floor(away*.05);
+  gs.gold+=g;gs.essence=Math.min(gs.essenceMax,gs.essence+e);
+  gs.lastOnline=now;return{gold:g,ess:e,secs:Math.floor(away)};
+}
 
-function dealDamage(enemy,dmg,isCrit=false){
-  enemy.hp-=dmg;enemy.hitFlash=0.25;
-  spawnDmgParticle(enemy.x,enemy.y,dmg,isCrit);
-  if(enemy.hp<=0&&!enemy.dead)killEnemy(enemy);
+// COMBAT STATS
+function cStats(){
+  const ab=gs.abilityBonuses||{};
+  let atk=10+gs.stats.str*1.5,def=3+gs.stats.str*.3,spd=.5+gs.stats.agi*.05,crit=5+gs.stats.lck*.5,maxHp=gs.maxHp,maxGqt=gs.maxGqtE;
+  PASSIVE.forEach(br=>{
+    br.nodes.forEach((nd,ni)=>{
+      const lvl=(gs.passive[br.id]||[])[ni]||0;if(!lvl)return;
+      const v=nd.base+nd.per*(lvl-1);
+      if(nd.sk==='atk')atk+=v;if(nd.sk==='def')def+=v;if(nd.sk==='spd')spd+=v;
+      if(nd.sk==='crit')crit+=v;if(nd.sk==='hp')maxHp+=v;
+    });
+  });
+  Object.values(gs.equipped).forEach(it=>{
+    if(!it)return;
+    if(it.sk==='atk')atk+=it.sv;if(it.sk==='def'||it.sk==='def2')def+=it.sv;
+    if(it.sk==='spd')spd+=it.sv;if(it.sk==='crit')crit+=it.sv;
+    if(it.sk==='hp')maxHp+=it.sv;if(it.sk==='gqt_m')maxGqt+=it.sv;
+  });
+  if(ab.auto_dmg)atk*=(1+ab.auto_dmg);
+  if(ab.spd_boost)spd*=(1+ab.spd_boost);
+  if(ab.crit_boost)crit+=ab.crit_boost;
+  if(ab.atk_pct)atk*=(1+ab.atk_pct);
+  if(ab.def_boost)def+=ab.def_boost;
+  if(ab.atk_flat)atk+=ab.atk_flat;
+  if(ab.spd_flat)spd+=ab.spd_flat;
+  if(ab.all_pct){const m=1+ab.all_pct;atk*=m;def*=m;spd*=m;crit*=m;}
+  if(ab.godmode)atk*=1e6;
+  return{atk,def,spd,crit,maxHp,maxGqt};
+}
+
+// ITEM FACTORY
+function mkItem(boost=0){
+  const rar=rollRar(gs.charLvl,boost);const ri=RARS.indexOf(rar);
+  const stars=Math.floor(rnd(1,6));
+  const slotKey=Object.keys(SLOTS)[Math.floor(rnd(0,Object.keys(SLOTS).length))];
+  const sv=itemSV(ri,gs.shipLvl,stars);
+  const ac=ri>=5?3:ri>=3?2:ri>=2?1:0;
+  const afs=[];const pool=[...AFFIXES];
+  for(let i=0;i<ac;i++){const ai=Math.floor(rnd(0,pool.length));afs.push(pool.splice(ai,1)[0]);}
+  return{slotKey,rar,ri,stars,sk:SLOTS[slotKey].sk,name:`${RLBL[rar]} ${SLOTS[slotKey].label}`,icon:SLOTS[slotKey].icon,sv,afs,sellVal:Math.ceil(RSELL[rar]*Math.pow(gs.shipLvl,.8))};
+}
+
+// ENEMIES & COMBAT
+let enemies=[],particles=[],projs=[],pProjs=[];
+let bgStars=[],bgX=0,lastT=0,aaTimer=0,pyPos=0;
+let shipPulse=0,glitchT=0;
+let waveActive=false,paused=false,lootQueue=[];
+let pendingLoot=null,autoSellTimer=null;
+let uiTick=0,saveTick=0;
+let gc=null,gctx=null,sc=null,sctx=null;
+const PX=120;
+const CW=()=>gc?gc.width:800;
+const CH=()=>gc?gc.height:500;
+
+function initBg(){bgStars=Array.from({length:90},()=>({x:rnd(0,CW()),y:rnd(0,CH()*.88),spd:rnd(.3,1.5),r:rnd(.4,1.8),a:rnd(.3,.9)}));}
+function setAuto(key,val){gs.autoSettings[key]=val;save();}
+
+function startWithBox(){
+  if(gs.boxes<=0){addLog('📦 Box yok! Marketten al.','#ff3355');return;}
+  gs.boxes--;
+  waveActive=true;paused=false;lootQueue=[];
+  document.getElementById('idle-sc').style.display='none';
+  spawnWave();save();
+}
+
+function spawnWave(){
+  enemies=[];projs=[];
+  const isBossWave=(gs.subWave===10);
+  const cnt=isBossWave?1:3+Math.min(gs.wave,12);
+  for(let i=0;i<cnt;i++){
+    const e=isBossWave?{...waveBossStats(gs.wave,gs.shipLvl),stopX:CW()*.68}:mkEnemy(gs.wave,gs.shipLvl,false);
+    if(!isBossWave)e.maxHp=e.hp;
+    e.x=CW()+50+i*75+rnd(0,50);
+    e.y=CH()*.10+rnd(0,CH()*.76);
+    if(!e.stopX)e.stopX=CW()*.70;
+    if(!e.shootT)e.shootT=rnd(.8,2);
+    if(!e.hitFlash)e.hitFlash=0;
+    if(!e.dead)e.dead=false;
+    enemies.push(e);
+  }
+  document.getElementById('wb-wave').textContent=gs.wave;
+  document.getElementById('wb-sub').textContent=gs.subWave;
+  document.getElementById('wb-kills').textContent=`${cnt} düşman`;
+  addLog(`🌊 ${gs.wave}-${gs.subWave}${isBossWave?' ⭐ BOSS DALGASI!':''} — ${cnt} düşman`,'#ff00aa');
+}
+
+function autoAtk(dt){
+  if(paused)return;
+  aaTimer-=dt;if(aaTimer>0)return;
+  const cs=cStats();aaTimer=1/cs.spd;
+  const alive=enemies.filter(e=>!e.dead);if(!alive.length)return;
+  const tgt=alive.sort((a,b)=>a.x-b.x)[0];
+  const isCrit=rnd(0,100)<cs.crit;
+  let dmg=Math.ceil(cs.atk*(isCrit?2:1)*rnd(.88,1.12));
+  if(gs.abilityBonuses?.double_atk)dmg*=2;
+  const dx=tgt.x-PX,dy=tgt.y-pyPos,dist=Math.sqrt(dx*dx+dy*dy)||1;
+  pProjs.push({x:PX+28,y:pyPos,vx:(dx/dist)*440,vy:(dy/dist)*440,dmg,isCrit,life:1.2});
+}
+function autoSkills(dt){
+  if(paused)return;
+  SKILLS.forEach((_,i)=>{if(gs.skillCDs[i]<=0&&enemies.filter(e=>!e.dead).length)fireSkill(i);});
+}
+function fireSkill(i){
+  const sk=SKILLS[i];if(gs.skillCDs[i]>0)return;
+  gs.skillCDs[i]=sk.cd;
+  const isG=gs.glitchSkills.includes(i);const mult=isG?sk.gm:sk.dm;
+  const cs=cStats();
+  enemies.filter(e=>!e.dead).forEach(e=>{
+    let dmg=Math.ceil(cs.atk*mult*rnd(.85,1.3));
+    if(gs.abilityBonuses?.double_atk)dmg*=2;
+    hitEnemy(e,dmg,true);
+  });
+  addLog(`🔥 ${sk.name}${isG?' [G]':''} ×${mult}`,isG?'#ff00aa':'#00f5ff');
+  if(i===3||isG)glitchT=.45;
+  spawnBurst(i,mult);
+}
+function useSkill(i){fireSkill(i);}
+
+function hitEnemy(e,dmg,isCrit=false){
+  e.hp-=dmg;e.hitFlash=.25;
+  spawnDmgP(e.x,e.y,dmg,isCrit);
+  if(e.hp<=0&&!e.dead)killEnemy(e);
 }
 function killEnemy(e){
   e.dead=true;
-  gs.player.xp+=e.xp;
-  gs.player.gqt=Math.min(gs.player.maxGqt,gs.player.gqt+e.gqt);
-  gs.player.kills++;
-  addLog(`💀 ${e.type} yok edildi! +${e.xp}XP +${e.gqt}GQT`,e.color);
-  updateQuestProgress(0,1);checkXpLevelUp();
-  spawnDeathParticles(e.x,e.y,e.color);
-  // Drop chance
-  if(Math.random()<0.12+gs.player.stats.lck*0.004){
-    const slotKeys=Object.keys(ITEM_SLOTS);
-    const slotKey=slotKeys[Math.floor(Math.random()*slotKeys.length)];
-    const item=makeItem(slotKey,0);
-    pendingLoot=item;
-    showLootPopup(item);
+  gs.charXp+=e.xp;gs.gold+=e.gold;
+  gs.essence=Math.min(gs.essenceMax,gs.essence+(e.ess||0));
+  gs.kills++;
+  spawnDeathP(e.x,e.y,e.col);
+  addLog(`💀 ${e.name} +${fmt(e.xp)}XP +${fmt(e.gold)}💰`,e.col);
+  checkCharXp();
+  if(enemies.every(e2=>e2.dead))checkWaveEnd();
+}
+function checkWaveEnd(){
+  // drop loot with probability
+  const dropChance=.22+gs.stats.lck*.006;
+  const numDrops=Math.floor(enemies.length*(gs.subWave===10?0.8:dropChance));
+  const actualDrops=Math.max(0,Math.min(numDrops,enemies.length));
+  for(let i=0;i<actualDrops;i++){
+    lootQueue.push(mkItem(gs.subWave===10?2:0));
+  }
+  processLoot();
+}
+function processLoot(){
+  if(lootQueue.length>0){
+    pendingLoot=lootQueue.shift();
+    // AUTO logic
+    if(handleAutoLoot(pendingLoot)){
+      // was handled automatically — continue
+      pendingLoot=null;
+      setTimeout(()=>processLoot(),80);
+      return;
+    }
+    showLootPop(pendingLoot);
+    paused=true;
+    // auto-sell timer if configured
+    if(gs.autoSettings.autoSell){
+      startAutoSellTimer();
+    }
+    return;
+  }
+  advanceSubWave();
+}
+function handleAutoLoot(item){
+  // Auto-equip better
+  if(gs.autoSettings.autoEquip){
+    const eq=gs.equipped[item.slotKey];
+    if(!eq||item.sv>eq.sv){
+      // equip new, sell old
+      if(eq){gs.gold+=eq.sellVal;addLog(`🤖 Auto-sold: ${eq.name} +${fmt(eq.sellVal)}💰`,RCOL[eq.rar]);}
+      gs.equipped[item.slotKey]=item;
+      addLog(`🤖 Auto-equipped: ${item.name}`,RCOL[item.rar]);
+      renderInv();renderShipPrev();
+      return true;
+    }
+  }
+  // Auto-sell worse
+  if(gs.autoSettings.autoSell){
+    const eq=gs.equipped[item.slotKey];
+    if(eq&&item.sv<=eq.sv){
+      gs.gold+=item.sellVal;
+      addLog(`🤖 Auto-sold (zayıf): ${item.name} +${fmt(item.sellVal)}💰`,RCOL[item.rar]);
+      return true;
+    }
+  }
+  return false;
+}
+function startAutoSellTimer(){
+  let elapsed=0;const dur=5;
+  const bar=document.getElementById('auto-sell-bar');
+  bar.style.display='block';bar.style.width='100%';bar.style.transition=`width ${dur}s linear`;
+  setTimeout(()=>bar.style.width='0%',50);
+  autoSellTimer=setTimeout(()=>{
+    if(pendingLoot){lootSell();}
+  },dur*1000);
+}
+function clearAutoTimer(){
+  if(autoSellTimer){clearTimeout(autoSellTimer);autoSellTimer=null;}
+  const bar=document.getElementById('auto-sell-bar');
+  bar.style.display='none';bar.style.transition='';bar.style.width='100%';
+}
+function advanceSubWave(){
+  gs.subWave++;
+  if(gs.subWave>10){gs.subWave=1;gs.wave++;}
+  document.getElementById('wb-wave').textContent=gs.wave;
+  document.getElementById('wb-sub').textContent=gs.subWave;
+  addLog(`✅ ${gs.wave}-${gs.subWave-1>0?gs.subWave-1:10} temizlendi!`,'#00ff88');
+  // auto-sell bag items weaker than equipped
+  if(gs.autoSettings.autoSellBag)doAutoSellBag();
+  // continue?
+  if(gs.autoSettings.autoOpen&&gs.boxes>0){
+    gs.boxes--;
+    setTimeout(()=>spawnWave(),1200);save();
+  } else if(gs.boxes>0&&waveActive){
+    // consume one box for next wave automatically if wave was started
+    gs.boxes--;
+    setTimeout(()=>spawnWave(),1200);save();
+  } else {
+    waveActive=false;enemies=[];projs=[];pProjs=[];
+    document.getElementById('idle-sc').style.display='flex';
+    document.getElementById('idle-box-cnt').textContent=gs.boxes;
+    addLog('📦 Box bitti. Yeni box açarak devam et.','#ffd700');
+    save();
   }
 }
-function checkXpLevelUp(){
-  while(gs.player.xp>=gs.player.xpNext){
-    gs.player.xp-=gs.player.xpNext;gs.player.level++;
-    gs.player.xpNext=Math.ceil(100*Math.pow(1.3,gs.player.level-1));
-    gs.player.maxHp+=10;gs.player.hp=gs.player.maxHp;gs.player.maxGqt+=5;
-    gs.player.stats.str+=1;gs.player.stats.agi+=1;gs.player.stats.int+=1;
-    if(gs.player.level%5===0)gs.player.stats.lck+=1;
-    addLog(`✨ SEVİYE ATLADI! Lvl ${gs.player.level}`,'#ffd700');
-    updateQuestProgress(2,gs.player.level,true);
+function doAutoSellBag(){
+  gs.bag.forEach((it,i)=>{
+    if(!it)return;
+    const eq=gs.equipped[it.slotKey];
+    if(eq&&it.sv<eq.sv){
+      gs.gold+=it.sellVal;gs.bag[i]=null;
+      addLog(`🤖 Bag auto-sold: ${it.name}`,RCOL[it.rar]);
+    }
+  });
+  renderInv();
+}
+function checkCharXp(){
+  while(gs.charXp>=gs.charXpNext){
+    gs.charXp-=gs.charXpNext;gs.charLvl++;
+    gs.charXpNext=Math.ceil(120*Math.pow(1.3,gs.charLvl-1));
+    gs.stats.str++;gs.stats.agi++;gs.stats.int++;
+    if(gs.charLvl%5===0)gs.stats.lck++;
+    gs.maxHp+=15;gs.hp=gs.maxHp;
+    addLog(`✨ KARAKTER Lvl ${gs.charLvl}!`,'#ffd700');
   }
 }
-
+function tryShipUpgrade(){
+  if(gs.upgrading){openSlvl();return;}
+  const cost=essCost(gs.shipLvl);
+  if(gs.essence<cost){addLog(`⚠️ Öz yetersiz: ${fmt(cost)} gerekli`,'#ff3355');return;}
+  gs.essence-=cost;gs.upgrading=true;
+  gs.upgradeEnd=Date.now()+upTime(gs.shipLvl)*1000;
+  addLog(`⚙️ Gemi geliştirme başladı! Süre: ${fmtDur(upTime(gs.shipLvl))}`,'#00f5ff');
+  renderShipUpgZone();save();
+}
+function checkUpgrade(){
+  if(!gs.upgrading)return;
+  if(Date.now()>=gs.upgradeEnd){
+    gs.upgrading=false;gs.upgradeEnd=null;gs.shipLvl++;
+    gs.essenceMax=Math.ceil(100*Math.pow(1.6,gs.shipLvl-1));
+    gs.maxGqtE+=10;
+    addLog(`🚀 GEMİ SEVİYE ${gs.shipLvl}!`,'#ffd700');
+    renderShipUpgZone();renderShipPrev();save();
+  }
+}
+function useSpeed(){
+  if(!gs.speedups){addLog('⚠️ Hızlandırıcı yok!','#ff3355');return;}
+  if(!gs.upgrading){addLog('Yükseltme aktif değil.','#ff3355');return;}
+  gs.speedups--;gs.upgradeEnd=Math.max(Date.now(),gs.upgradeEnd-30*60*1000);
+  addLog('⚡ Hızlandırıcı: -30dk!','#ffd700');
+  document.getElementById('sl-sp').textContent=gs.speedups;save();
+}
 function respawn(){
-  gs.player.hp=gs.player.maxHp;gs.wave=Math.max(1,gs.wave-1);
-  enemies=[];projectiles=[];playerProjectiles=[];
-  addLog('💔 Yenildin! Respawn... Dalga geri alındı.','#ff3355');
-  setTimeout(()=>spawnWave(),1500);
-}
-function triggerGlitchEffect(){glitchTimer=0.45;}
-
-// ═══════════════════════════════════════════════
-//  PARTICLES
-// ═══════════════════════════════════════════════
-function spawnDmgParticle(x,y,dmg,isCrit,isPlayer=false){
-  particles.push({x,y:y-20,vx:(Math.random()-.5)*50,vy:-65-Math.random()*45,
-    text:(isCrit?'CRIT! ':'')+Math.ceil(dmg),color:isPlayer?'#ff3355':isCrit?'#ffd700':'#00f5ff',
-    life:1.5,maxLife:1.5,size:isCrit?14:11});
-}
-function spawnDeathParticles(x,y,color){
-  for(let i=0;i<8;i++){const a=(i/8)*Math.PI*2;
-    particles.push({x,y,vx:Math.cos(a)*90,vy:Math.sin(a)*90,text:'✦',color,life:0.8,maxLife:0.8,size:12});}
+  gs.hp=gs.maxHp;if(gs.subWave>1)gs.subWave--;else if(gs.wave>1){gs.wave--;gs.subWave=10;}
+  enemies=[];projs=[];pProjs=[];lootQueue=[];paused=false;
+  clearAutoTimer();
+  addLog('💔 Yenildin! Respawn.','#ff3355');
+  if(waveActive&&gs.boxes>0){gs.boxes--;setTimeout(()=>spawnWave(),1200);}
+  else{waveActive=false;document.getElementById('idle-sc').style.display='flex';}
 }
 
-// ═══════════════════════════════════════════════
-//  LOOT POPUP
-// ═══════════════════════════════════════════════
-let pendingLoot=null;
+// PARTICLES
+function spawnBurst(i,m){const c=['#00f5ff','#aa44ff','#ff8800','#ff00aa'][i];for(let j=0;j<8;j++){const a=rnd(0,Math.PI*2),s=rnd(60,120);particles.push({x:PX+26,y:pyPos,vx:Math.cos(a)*s,vy:Math.sin(a)*s,txt:'✦',col:c,life:.6,ml:.6,sz:7+m});}}
+function spawnDmgP(x,y,d,ic,ip=false){particles.push({x,y:y-16,vx:rnd(-25,25),vy:rnd(-65,-38),txt:(ic?'CRIT! ':'')+fmt(d),col:ip?'#ff3355':ic?'#ffd700':'#00f5ff',life:1.5,ml:1.5,sz:ic?13:10});}
+function spawnDeathP(x,y,col){for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2;particles.push({x,y,vx:Math.cos(a)*80,vy:Math.sin(a)*80,txt:'✦',col,life:.7,ml:.7,sz:11});}}
 
-function showLootPopup(item){
-  const pop=document.getElementById('loot-popup');
-  const color=RARITY_COLORS[item.rarity];
-  document.getElementById('lp-icon').textContent=ITEM_SLOTS[item.slotKey].icon;
-  document.getElementById('lp-rarity').textContent=RARITY_LABELS[item.rarity];
-  document.getElementById('lp-rarity').style.color=color;
-  document.getElementById('lp-name').textContent=item.name;
-  document.getElementById('lp-name').style.color=color;
-  document.getElementById('lp-type').textContent=ITEM_SLOTS[item.slotKey].label;
-  const statLabel={atk:'Saldırı',def:'Savunma',spd:'Hız',crit:'Kritik %',hp:'Max HP',gqt:'Max GQT'}[item.statKey]||item.statKey;
-  document.getElementById('lp-stats').textContent=`+${item.statVal} ${statLabel}`;
-  document.getElementById('lp-affix').textContent=item.affixes.join('  ·  ');
-  document.getElementById('lp-affix').style.display=item.affixes.length?'block':'none';
-  // Compare with equipped
-  const equipped=gs.player.equipped[item.slotKey];
-  const cmpEl=document.getElementById('lp-compare');
-  if(equipped){
-    const diff=item.statVal-equipped.statVal;
-    const diffSign=diff>0?'+':diff<0?'-':'';
-    const abs=Math.abs(diff);
-    cmpEl.style.display='block';
-    if(diff>0){cmpEl.className='lp-compare upgrade';cmpEl.textContent=`▲ Mevcut: ${equipped.name} (${diffSign}${abs} ${statLabel} daha iyi)`;}
-    else if(diff<0){cmpEl.className='lp-compare downgrade';cmpEl.textContent=`▼ Mevcut: ${equipped.name} (${Math.abs(diff)} ${statLabel} daha zayıf)`;}
-    else{cmpEl.className='lp-compare same';cmpEl.textContent=`= Aynı güçte: ${equipped.name}`;}
-  } else { cmpEl.style.display='none'; }
-  // Sell value
-  document.querySelector('#loot-popup .btn-sell').textContent=`💰 SAT (${item.sellVal} GQT)`;
-  pop.style.display='block';
-  pop.classList.remove('lp-anim');
-  void pop.offsetWidth;
-  pop.classList.add('lp-anim');
+// LOOT POPUP
+function showLootPop(item){
+  clearAutoTimer();
+  const col=RCOL[item.rar];
+  const sl={atk:'ATK',def:'DEF',def2:'DEF',spd:'Hız',crit:'Crit%',hp:'MaxHP',gqt_m:'MaxGQT'}[item.sk]||item.sk;
+  document.getElementById('lp-ic').textContent=SLOTS[item.slotKey].icon;
+  document.getElementById('lp-rar').textContent=RLBL[item.rar];document.getElementById('lp-rar').style.color=col;
+  document.getElementById('lp-stars').textContent='★'.repeat(item.stars)+'☆'.repeat(5-item.stars);
+  document.getElementById('lp-nm').textContent=item.name;document.getElementById('lp-nm').style.color=col;
+  document.getElementById('lp-sub').textContent=SLOTS[item.slotKey].label;
+  document.getElementById('lp-st').textContent=`+${fmt(item.sv)} ${sl}`;
+  document.getElementById('lp-af').textContent=item.afs.join(' · ');
+  document.getElementById('lp-af').style.display=item.afs.length?'block':'none';
+  const eq=gs.equipped[item.slotKey];
+  const cmp=document.getElementById('lp-cmp');
+  if(eq){
+    const d=item.sv-eq.sv;cmp.style.display='block';
+    cmp.className='lp-cmp '+(d>0?'up':d<0?'dn':'eq');
+    cmp.textContent=`${d>0?'▲ DAHA İYİ':'▼ DAHA ZAYIF'}: Mevcut ${eq.name} (${d>0?'+':''}${fmt(d)} ${sl})`;
+  }else cmp.style.display='none';
+  document.getElementById('lp-sell-btn').textContent=`💰 SAT (${fmt(item.sellVal)}💰)`;
+  const note=document.getElementById('lp-auto-note');
+  note.textContent=gs.autoSettings.autoSell?'⏱️ 5sn sonra otomatik satılacak...':'';
+  const pop=document.getElementById('loot-pop');const ov=document.getElementById('loot-ov');
+  pop.style.display='block';ov.style.display='block';
+  pop.className='open';
+  if(gs.autoSettings.autoSell)startAutoSellTimer();
 }
-function closeLootPopup(){document.getElementById('loot-popup').style.display='none';pendingLoot=null;}
-function lootEquip(){
+function closeLootPop(){
+  clearAutoTimer();
+  document.getElementById('loot-pop').style.display='none';
+  document.getElementById('loot-ov').style.display='none';
+  pendingLoot=null;paused=false;
+  processLoot();
+}
+function lootEq(){
   if(!pendingLoot)return;
-  const old=gs.player.equipped[pendingLoot.slotKey];
-  if(old){// move old to bag
-    const slot=gs.inventory.findIndex(s=>s===null);
-    if(slot!==-1)gs.inventory[slot]=old;
-  }
-  gs.player.equipped[pendingLoot.slotKey]=pendingLoot;
-  addLog(`✅ ${pendingLoot.name} kuşanıldı!`,RARITY_COLORS[pendingLoot.rarity]);
-  closeLootPopup();renderInventoryPanel();renderShipPreview();saveState();
+  const old=gs.equipped[pendingLoot.slotKey];
+  if(old){const s=gs.bag.findIndex(x=>x===null);if(s!==-1)gs.bag[s]=old;else gs.gold+=old.sellVal;}
+  gs.equipped[pendingLoot.slotKey]=pendingLoot;
+  addLog(`✅ ${pendingLoot.name} kuşanıldı!`,RCOL[pendingLoot.rar]);
+  closeLootPop();renderInv();renderShipPrev();save();
 }
 function lootSell(){
   if(!pendingLoot)return;
-  gs.player.gqt=Math.min(gs.player.maxGqt,gs.player.gqt+pendingLoot.sellVal);
-  addLog(`💰 ${pendingLoot.name} satıldı: +${pendingLoot.sellVal} GQT`,RARITY_COLORS[pendingLoot.rarity]);
-  closeLootPopup();saveState();
+  gs.gold+=pendingLoot.sellVal;
+  addLog(`💰 Satıldı: +${fmt(pendingLoot.sellVal)}💰`,RCOL[pendingLoot.rar]);
+  closeLootPop();save();
 }
 function lootBag(){
   if(!pendingLoot)return;
-  const slot=gs.inventory.findIndex(s=>s===null);
-  if(slot===-1){addLog('⚠️ Çanta dolu! Önce bir şey sat veya kuşan.','#ff3355');return;}
-  gs.inventory[slot]=pendingLoot;
-  addLog(`🎒 ${pendingLoot.name} çantaya eklendi.`,'#c8d8ff');
-  closeLootPopup();renderInventoryPanel();saveState();
+  const s=gs.bag.findIndex(x=>x===null);
+  if(s===-1){addLog('⚠️ Çanta dolu!','#ff3355');return;}
+  gs.bag[s]=pendingLoot;addLog(`🎒 Çantaya eklendi.`,'#c0d0ff');
+  closeLootPop();renderInv();save();
 }
-function unequipSlot(slotKey){
-  const item=gs.player.equipped[slotKey];
-  if(!item)return;
-  const slot=gs.inventory.findIndex(s=>s===null);
-  if(slot===-1){addLog('⚠️ Çanta dolu!','#ff3355');return;}
-  gs.inventory[slot]=item;
-  gs.player.equipped[slotKey]=null;
-  addLog(`🔓 ${item.name} çıkarıldı.`,'#c8d8ff');
-  renderInventoryPanel();renderShipPreview();saveState();
+function unequip(sk){
+  const it=gs.equipped[sk];if(!it)return;
+  const s=gs.bag.findIndex(x=>x===null);if(s===-1){addLog('⚠️ Çanta dolu!','#ff3355');return;}
+  gs.bag[s]=it;gs.equipped[sk]=null;
+  addLog(`🔓 ${it.name} çıkarıldı.`,'#c0d0ff');
+  renderInv();renderShipPrev();save();
 }
-function equipFromBag(invIdx){
-  const item=gs.inventory[invIdx];if(!item)return;
-  pendingLoot=item;
-  gs.inventory[invIdx]=null;
-  showLootPopup(item);
-  renderInventoryPanel();
+function equipFromBag(i){
+  const it=gs.bag[i];if(!it)return;
+  pendingLoot=it;gs.bag[i]=null;
+  showLootPop(it);renderInv();paused=true;
 }
 
-// ═══════════════════════════════════════════════
-//  BOX / QUEST
-// ═══════════════════════════════════════════════
-function openBox(boxIdx){
-  if(!gs.boxes[boxIdx]||gs.boxes[boxIdx]<=0)return;
-  gs.boxes[boxIdx]--;
-  const slotKeys=Object.keys(ITEM_SLOTS);
-  const sk=slotKeys[Math.floor(Math.random()*slotKeys.length)];
-  const item=makeItem(sk,BOX_TYPES[boxIdx].boost);
-  pendingLoot=item;showLootPopup(item);
-  updateQuestProgress(1,1);renderBoxes();saveState();
+// SPECIAL BOSS FIGHT (Click-based)
+let activeBoss=null,bossPlHp=0,bossFightCanvas=null,bfCtx=null,bossAnim=0;
+function renderBossPanel(){
+  const c=document.getElementById('boss-list');if(!c)return;c.innerHTML='';
+  SP_BOSSES.forEach(b=>{
+    const beaten=gs.bossBeaten.includes(b.id);const locked=gs.charLvl<b.req;
+    const d=document.createElement('div');d.className='bcard'+(beaten?' done':'');
+    const rw=`+${fmt(b.rw.gold)}💰 +${b.rw.gqt}💠 +${b.rw.boxes}📦 [${RLBL[b.rw.rar]}]`;
+    d.innerHTML=`<div class="bct">${beaten?'✅ ':locked?'🔒 ':'👹 '}${b.name}</div>
+    <div style="font-size:8px;color:var(--dm)">HP:${fmt(b.hp)} · DMG:${fmt(b.dmg)} · Req Lvl${b.req}</div>
+    <div style="font-size:8px;color:var(--gd)">Ödül: ${rw}</div>
+    ${beaten?'<div style="font-size:8px;color:var(--gr)">YENİLDİ</div>':
+      locked?`<div style="font-size:8px;color:var(--dm)">Karakter Lvl ${b.req} gerekli</div>`:
+      `<button class="bcbtn" onclick="GQ.startSpBoss(${b.id})">⚔️ BOSS'A SALDIRI!</button>`}`;
+    c.appendChild(d);
+  });
 }
-function updateQuestProgress(qid,amount,setTo=false){
-  const q=gs.quests[qid];if(!q||q.done)return;
-  q.progress=setTo?amount:Math.min(q.goal,q.progress+amount);
-  if(q.progress>=q.goal)completeQuest(qid);
-  renderQuests();
+function startSpBoss(id){
+  const b=SP_BOSSES.find(x=>x.id===id);if(!b||gs.bossBeaten.includes(id))return;
+  if(gs.charLvl<b.req){addLog(`Karakter Lvl ${b.req} gerekli!`,'#ff3355');return;}
+  activeBoss={...b,curHp:b.hp};bossPlHp=cStats().maxHp;
+  // pause normal game
+  paused=true;waveActive=false;
+  // show boss enter cinematic
+  showBossEnter(b);
 }
-function completeQuest(qid){
-  const q=gs.quests[qid];if(q.done)return;q.done=true;
-  if(q.reward==='gqt'){gs.player.gqt=Math.min(gs.player.maxGqt,gs.player.gqt+q.rewardAmt);addLog(`🏆 GÖREV: "${q.title}" +${q.rewardAmt} GQT`,'#ffd700');}
-  else{gs.boxes[1]=(gs.boxes[1]||0)+q.rewardAmt;addLog(`🏆 GÖREV: "${q.title}" +${q.rewardAmt} Rare Kutu`,'#ffd700');}
+function showBossEnter(b){
+  const el=document.getElementById('boss-enter');el.style.display='flex';
+  document.getElementById('be-name').textContent='👹 '+b.name;
+  document.getElementById('be-sub').textContent=`HP: ${fmt(b.hp)} · DMG: ${fmt(b.dmg)}`;
+  const cd=document.getElementById('boss-countdown');
+  let n=3;cd.textContent=n;
+  const iv=setInterval(()=>{
+    n--;
+    if(n<=0){
+      clearInterval(iv);cd.textContent='BAŞLA!';
+      setTimeout(()=>{
+        el.style.display='none';
+        showBossFight();
+      },700);
+    } else {
+      cd.textContent=n;
+    }
+  },1000);
+}
+function showBossFight(){
+  const bf=document.getElementById('boss-fight');bf.style.display='flex';
+  bossFightCanvas=document.getElementById('boss-fight-canvas');
+  bossFightCanvas.width=bossFightCanvas.offsetWidth||600;
+  bossFightCanvas.height=bossFightCanvas.offsetHeight||400;
+  bfCtx=bossFightCanvas.getContext('2d');
+  document.getElementById('bf-name').textContent='👹 '+activeBoss.name;
+  document.getElementById('bf-log').innerHTML='';
+  const cs=cStats();
+  document.getElementById('bf-patk').textContent=fmt(cs.atk);
+  document.getElementById('bf-php').textContent=fmt(bossPlHp);
+  updBossOv();
+  animateBossBg();
+}
+function animateBossBg(){
+  if(!bfCtx||!activeBoss)return;
+  bossAnim+=0.04;
+  const w=bossFightCanvas.width,h=bossFightCanvas.height;
+  // Dark red nebula bg
+  const g=bfCtx.createRadialGradient(w/2,h/2,0,w/2,h/2,w*.7);
+  g.addColorStop(0,'#1a000a');g.addColorStop(.5,'#0a0005');g.addColorStop(1,'#040006');
+  bfCtx.fillStyle=g;bfCtx.fillRect(0,0,w,h);
+  // Stars
+  for(let i=0;i<60;i++){
+    const sx=(i*97+bossAnim*10)%w,sy=(i*67)%h,sr=Math.random()<.3?1.5:.7;
+    bfCtx.beginPath();bfCtx.arc(sx,sy,sr,0,Math.PI*2);
+    bfCtx.fillStyle=`rgba(255,150,200,${.3+Math.sin(bossAnim+i)*.2})`;bfCtx.fill();
+  }
+  // Boss silhouette — large menacing skull shape
+  const bx=w*.65,by=h*.4,bs=1.2+Math.sin(bossAnim*.5)*.05;
+  const hpPct=activeBoss.curHp/activeBoss.hp;
+  const bc=`rgba(255,${Math.floor(80*hpPct)},${Math.floor(50*hpPct)},0.9)`;
+  bfCtx.save();bfCtx.translate(bx,by);bfCtx.scale(bs,bs);
+  // main body
+  bfCtx.beginPath();bfCtx.ellipse(0,0,55,50,0,0,Math.PI*2);
+  bfCtx.fillStyle='#1a0008';bfCtx.fill();
+  bfCtx.strokeStyle=bc;bfCtx.lineWidth=2;bfCtx.stroke();
+  // eye sockets
+  [-20,20].forEach(ex=>{
+    bfCtx.beginPath();bfCtx.ellipse(ex,-12,12,10,0,0,Math.PI*2);
+    bfCtx.fillStyle='#000';bfCtx.fill();bfCtx.strokeStyle=bc+'aa';bfCtx.lineWidth=1;bfCtx.stroke();
+    // glowing pupils
+    bfCtx.beginPath();bfCtx.arc(ex,-12,5+Math.sin(bossAnim)*2,0,Math.PI*2);
+    bfCtx.fillStyle=bc;bfCtx.shadowColor=bc;bfCtx.shadowBlur=10;bfCtx.fill();bfCtx.shadowBlur=0;
+  });
+  // teeth
+  for(let t=-3;t<=3;t++){
+    bfCtx.beginPath();bfCtx.moveTo(t*10,20);bfCtx.lineTo(t*10-5,38);bfCtx.lineTo(t*10+5,38);bfCtx.closePath();
+    bfCtx.fillStyle='#ddd';bfCtx.fill();
+  }
+  // aura rings
+  [70,85,100].forEach((r,ri)=>{
+    bfCtx.beginPath();bfCtx.arc(0,0,r+Math.sin(bossAnim+ri)*.5*5,0,Math.PI*2);
+    bfCtx.strokeStyle=bc.replace('0.9',String(0.15-ri*.04));bfCtx.lineWidth=1.5;bfCtx.stroke();
+  });
+  bfCtx.restore();
+  // Player ship (small, left side)
+  bfCtx.save();bfCtx.translate(w*.2,by);
+  drawPixelShip(bfCtx,0,0,gs.equipped,bossAnim,.7);
+  bfCtx.restore();
+  // HP damage flash
+  if(hpPct<.3){bfCtx.fillStyle=`rgba(255,0,50,${.05+Math.sin(bossAnim*8)*.04})`;bfCtx.fillRect(0,0,w,h);}
+  if(document.getElementById('boss-fight').style.display!=='none'&&activeBoss)requestAnimationFrame(animateBossBg);
+}
+function updBossOv(){
+  if(!activeBoss)return;
+  const p=activeBoss.curHp/activeBoss.hp*100;
+  document.getElementById('bf-hpf').style.width=Math.max(0,p)+'%';
+  document.getElementById('bf-hptxt').textContent=`${fmt(activeBoss.curHp)} / ${fmt(activeBoss.hp)}`;
+  document.getElementById('bf-php').textContent=fmt(bossPlHp);
+}
+function bAtk(){
+  if(!activeBoss)return;
+  const cs=cStats();const ic=rnd(0,100)<cs.crit;
+  let pd=Math.ceil(cs.atk*(ic?2:1)*rnd(.85,1.3));if(gs.abilityBonuses?.double_atk)pd*=2;
+  activeBoss.curHp-=pd;
+  const log=document.getElementById('bf-log');
+  log.innerHTML+=`<div style="color:#00f5ff">▶ Sen: <b>${fmt(pd)}</b>${ic?' [CRIT!]':''}</div>`;
+  // boss counter-attack
+  const bd=Math.ceil(activeBoss.dmg*rnd(.8,1.3));bossPlHp-=bd;
+  log.innerHTML+=`<div style="color:#ff3355">◀ ${activeBoss.name}: <b>${fmt(bd)}</b></div>`;
+  log.scrollTop=9999;
+  updBossOv();
+  if(activeBoss.curHp<=0){bossDone();return;}
+  if(bossPlHp<=0){bossDefeat();return;}
+}
+function bSkill(){
+  if(!activeBoss)return;
+  const cs=cStats();
+  let pd=Math.ceil(cs.atk*4*rnd(.9,1.2));
+  activeBoss.curHp-=pd;
+  const log=document.getElementById('bf-log');
+  log.innerHTML+=`<div style="color:#aa44ff">🔮 YETENEK: <b>${fmt(pd)}</b> hasar!</div>`;
+  log.scrollTop=9999;updBossOv();
+  if(activeBoss.curHp<=0){bossDone();return;}
+}
+function bRet(){
+  document.getElementById('boss-fight').style.display='none';
+  activeBoss=null;paused=false;
+  addLog('🚪 Boss karşılaşmasından geri çekildin.','#ffd700');
+}
+function bossDone(){
+  const b=activeBoss;
+  gs.bossBeaten.push(b.id);gs.gold+=b.rw.gold;gs.gqt+=b.rw.gqt;gs.boxes+=b.rw.boxes;
+  document.getElementById('boss-fight').style.display='none';
+  activeBoss=null;
+  const rbox=document.getElementById('boss-result');
+  const bbox=document.getElementById('br-box');
+  bbox.className='br-box win';
+  document.getElementById('br-title').textContent='🏆 ZAFER!';
+  document.getElementById('br-txt').textContent=`${b.name} yenildi!\n+${fmt(b.rw.gold)}💰 +${b.rw.gqt}💠 +${b.rw.boxes}📦\nNadirlik: ${RLBL[b.rw.rar]}`;
+  rbox.style.display='flex';
+  const loot=mkItem(RARS.indexOf(b.rw.rar)*2);
+  pendingLoot=loot;
+  renderBossPanel();save();
+}
+function bossDefeat(){
+  document.getElementById('boss-fight').style.display='none';
+  activeBoss=null;paused=false;
+  const rbox=document.getElementById('boss-result');
+  const bbox=document.getElementById('br-box');
+  bbox.className='br-box fail';
+  document.getElementById('br-title').textContent='💀 BOSS KARŞILAŞMASI BAŞARISIZ';
+  document.getElementById('br-txt').textContent='Boss seni yendi!\nTekrar denemek için Boss sayfasına geri dön.';
+  rbox.style.display='flex';
+}
+function closeBossResult(){
+  document.getElementById('boss-result').style.display='none';
+  if(pendingLoot){showLootPop(pendingLoot);paused=true;}
+  else{paused=false;}
 }
 
-// ═══════════════════════════════════════════════
-//  LOG
-// ═══════════════════════════════════════════════
-function addLog(msg,color='#c8d8ff'){
-  const log=document.getElementById('combat-log');
-  const line=document.createElement('div');line.className='log-line';line.style.color=color;line.textContent=msg;
+// MARKET
+function openMkt(){renderMkt();document.getElementById('mkt-modal').style.display='flex';}
+function closeMkt(){document.getElementById('mkt-modal').style.display='none';}
+function renderMkt(){
+  document.getElementById('m-gqt').textContent=gs.gqt;
+  document.getElementById('m-gold').textContent=fmt(gs.gold);
+  const c=document.getElementById('mkt-content');c.innerHTML='';
+  const s1=document.createElement('div');s1.className='mcat';s1.innerHTML='<div class="mcat-t">💠 GQT TOKEN YÜKLEME (Simülasyon)</div>';
+  MKT.filter(m=>m.realMoney).forEach(m=>{
+    const d=document.createElement('div');d.className='mit';
+    d.innerHTML=`<div class="mic">${m.icon}</div><div><div class="min">${m.name}</div><div class="mid">${m.desc}</div>
+    <div class="mibtns"><button class="mb cy" onclick="GQ.mktBuy('${m.id}')">💠 YÜKLE</button></div></div>`;
+    s1.appendChild(d);
+  });c.appendChild(s1);
+  [{t:'📦 QUANTUM BOX',ids:['qb_gqt','qb_gold']},{t:'💎 PASİF KRİSTAL',ids:['pc_gqt','pc_gold']},{t:'⚡ HIZLANDIRICI',ids:['sp_gqt','sp_gold']}].forEach(cat=>{
+    const sec=document.createElement('div');sec.className='mcat';sec.innerHTML=`<div class="mcat-t">${cat.t}</div>`;
+    MKT.filter(m=>cat.ids.includes(m.id)).forEach(m=>{
+      const used=gs.marketDaily[m.id]||0;const lim=m.gqtLim||m.goldLim;const rem=Math.max(0,lim-used);
+      const d=document.createElement('div');d.className='mit';
+      let btns='';
+      if(m.gqtP>0)btns+=`<button class="mb cy" onclick="GQ.mktBuy('${m.id}','gqt')" ${rem<=0||gs.gqt<m.gqtP?'disabled':''}>💠${m.gqtP} GQT</button>`;
+      if(m.goldP>0)btns+=`<button class="mb gd" onclick="GQ.mktBuy('${m.id}','gold')" ${rem<=0||gs.gold<m.goldP?'disabled':''}>💰${fmt(m.goldP)}</button>`;
+      d.innerHTML=`<div class="mic">${m.icon}</div><div><div class="min">${m.name}</div><div class="mid">${m.desc}</div>
+      <div class="mibtns">${btns}</div><div class="mlim">Kalan: ${rem}</div></div>`;
+      sec.appendChild(d);
+    });c.appendChild(sec);
+  });
+}
+function mktBuy(id,cur='gqt'){
+  const m=MKT.find(x=>x.id===id);if(!m)return;
+  if(m.realMoney){gs.gqt+=m.realAmt;addLog(`💠 +${m.realAmt} GQT yüklendi!`,'#00f5ff');renderMkt();save();return;}
+  const used=gs.marketDaily[id]||0;const lim=cur==='gqt'?m.gqtLim:m.goldLim;
+  if(lim>0&&used>=lim){addLog('⚠️ Günlük limit!','#ff3355');return;}
+  if(cur==='gqt'&&gs.gqt<m.gqtP){addLog('⚠️ Yetersiz GQT!','#ff3355');return;}
+  if(cur==='gold'&&gs.gold<m.goldP){addLog('⚠️ Yetersiz Gold!','#ff3355');return;}
+  if(cur==='gqt')gs.gqt-=m.gqtP;else gs.gold-=m.goldP;
+  gs.marketDaily[id]=(gs.marketDaily[id]||0)+1;
+  if(m.eff==='boxes'){gs.boxes+=m.amt;addLog(`📦 +${m.amt} Quantum Box alındı!`,'#00f5ff');}
+  if(m.eff==='pcryst'){gs.pCrystals+=m.amt;addLog(`💎 +${m.amt} Pasif Kristal!`,'#aa44ff');}
+  if(m.eff==='speedup'){gs.speedups+=m.amt;addLog(`⚡ +${m.amt} Hızlandırıcı!`,'#ffd700');}
+  renderMkt();save();
+}
+
+// ABILITIES
+function renderAbilityList(){
+  const c=document.getElementById('ability-list');if(!c)return;c.innerHTML='';
+  const highRi=highestRi(gs.equipped);
+  ABILITIES.forEach(ab=>{
+    const owned=gs.abilities.includes(ab.id);
+    const rarReq=RARS.indexOf(ab.rarReq);
+    const locked=gs.charLvl<ab.lvlReq||highRi<rarReq;
+    const col=RCOL[ab.rarReq];
+    const d=document.createElement('div');d.className='ab-card';
+    d.style.borderColor=owned?'var(--gr)':locked?'var(--brd)':col;
+    d.innerHTML=`<div class="ab-title" style="color:${owned?'var(--gr)':col}">${ab.icon} ${ab.name} <span style="font-size:8px;color:var(--dm)">[${RLBL[ab.rarReq]}+,Lvl${ab.lvlReq}+]</span></div>
+    <div class="ab-desc">${ab.desc}</div><div class="ab-eff">${ab.eff}</div>
+    ${owned?'<span style="color:var(--gr);font-size:8px">✅ ÖĞRENILDI</span>':
+      locked?`<span style="font-size:8px;color:var(--dm)">🔒 Req: Lvl${ab.lvlReq}, ${RLBL[ab.rarReq]}+ ekipman</span>`:
+      `<button class="ab-btn" onclick="GQ.buyAbility('${ab.id}')" ${gs.gold<ab.cost?'disabled':''}>💰 ${fmt(ab.cost)} Gold</button>`}`;
+    c.appendChild(d);
+  });
+}
+function buyAbility(id){
+  const ab=ABILITIES.find(a=>a.id===id);if(!ab||gs.abilities.includes(id))return;
+  if(gs.gold<ab.cost){addLog('⚠️ Yetersiz Gold!','#ff3355');return;}
+  gs.gold-=ab.cost;gs.abilities.push(id);
+  const bns=gs.abilityBonuses;
+  if(ab.effect==='auto_dmg')bns.auto_dmg=(bns.auto_dmg||0)+ab.val;
+  if(ab.effect==='spd_boost')bns.spd_boost=(bns.spd_boost||0)+ab.val;
+  if(ab.effect==='crit_boost')bns.crit_boost=(bns.crit_boost||0)+ab.val;
+  if(ab.effect==='atk_pct')bns.atk_pct=(bns.atk_pct||0)+ab.val;
+  if(ab.effect==='def_boost')bns.def_boost=(bns.def_boost||0)+ab.val;
+  if(ab.effect==='atk_flat')bns.atk_flat=(bns.atk_flat||0)+ab.val;
+  if(ab.effect==='spd_flat')bns.spd_flat=(bns.spd_flat||0)+ab.val;
+  if(ab.effect==='all_pct')bns.all_pct=(bns.all_pct||0)+ab.val;
+  if(ab.effect==='double_atk')bns.double_atk=1;
+  if(ab.effect==='godmode')bns.godmode=1;
+  addLog(`⭐ ${ab.name} öğrenildi!`,RCOL[ab.rarReq]);
+  renderAbilityList();save();
+}
+
+// PASSIVE
+function renderPassiveTree(){
+  const c=document.getElementById('ptree');if(!c)return;c.innerHTML='';
+  PASSIVE.forEach(br=>{
+    const d=document.createElement('div');d.className='pbr';
+    d.innerHTML=`<div class="pbrt">${br.icon} ${br.name}</div>`;
+    br.nodes.forEach((nd,ni)=>{
+      const lvl=(gs.passive[br.id]||[])[ni]||0;const maxL=nd.cc.length;
+      const nc=lvl<maxL?nd.cc[lvl]:null;
+      const curV=(lvl>0?(nd.base+nd.per*(lvl-1)).toFixed(nd.per<1?2:0):0);
+      const nd2=document.createElement('div');nd2.className='pbn';
+      nd2.innerHTML=`<span style="font-size:12px">${nd.sk==='crit'?'🎯':nd.sk==='spd'?'💨':'⭐'}</span>
+      <div style="flex:1"><div>${nd.nm} <span style="color:var(--dm)">[${lvl}/${maxL}]</span></div>
+      <div style="color:var(--cy);font-size:8px">${lvl>0?'+'+curV:'Kilitli'}</div>
+      ${nc!==null?`<div style="color:var(--dm);font-size:8px">${nc} 💎</div>`:'<div style="color:var(--gr);font-size:8px">MAX</div>'}
+      </div>${nc!==null&&gs.pCrystals>=nc?`<button class="pbb" onclick="GQ.upPassive('${br.id}',${ni})">YÜK</button>`:`<button class="pbb" disabled>${gs.pCrystals}/${nc||'MAX'}</button>`}`;
+      d.appendChild(nd2);
+    });
+    c.appendChild(d);
+  });
+}
+function upPassive(brid,ni){
+  const br=PASSIVE.find(b=>b.id===brid);if(!br)return;
+  const nd=br.nodes[ni];if(!gs.passive[brid])gs.passive[brid]=[0,0];
+  const lvl=gs.passive[brid][ni]||0;if(lvl>=nd.cc.length)return;
+  const cost=nd.cc[lvl];if(gs.pCrystals<cost){addLog('⚠️ Kristal yetersiz!','#ff3355');return;}
+  gs.pCrystals-=cost;gs.passive[brid][ni]=lvl+1;
+  addLog(`✨ ${nd.nm} Lvl ${lvl+1}!`,'#aa44ff');
+  renderPassiveTree();save();
+}
+
+// SHIP UPGRADE ZONE
+function openSlvl(){
+  if(!gs.upgrading)return;
+  const left=Math.max(0,(gs.upgradeEnd-Date.now())/1000);
+  document.getElementById('sl-desc').textContent=`Gemi Lvl ${gs.shipLvl} → ${gs.shipLvl+1}`;
+  document.getElementById('sl-timer').textContent=fmtDur(left);
+  document.getElementById('sl-sp').textContent=gs.speedups;
+  document.getElementById('slvl-modal').style.display='flex';
+}
+function closeSlvl(){document.getElementById('slvl-modal').style.display='none';}
+function renderShipUpgZone(){
+  const z=document.getElementById('ship-upg-zone');if(!z)return;
+  const cost=essCost(gs.shipLvl);const ts=fmtDur(upTime(gs.shipLvl));
+  if(gs.upgrading){
+    const left=Math.max(0,(gs.upgradeEnd-Date.now())/1000);
+    z.innerHTML=`<div style="font-size:9px;color:var(--cy);margin-bottom:4px;">⚙️ Yükseltiliyor... ${fmtDur(left)} kaldı</div>
+    <button onclick="GQ.openSlvl()" style="background:var(--mg);border:none;color:#fff;font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;cursor:pointer;border-radius:4px;">⏳ Detay / Hızlandır</button>`;
+  }else{
+    z.innerHTML=`<div style="font-size:8px;color:var(--dm)">Lvl ${gs.shipLvl}→${gs.shipLvl+1}: ${fmt(cost)} Öz · ${ts}</div>
+    <button onclick="GQ.tryShipUpgrade()" style="background:var(--cy);border:none;color:#020810;font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;cursor:pointer;border-radius:4px;margin-top:4px;">🚀 GELİŞTİR</button>`;
+  }
+}
+function renderSkillTree(){
+  const z=document.getElementById('skill-tree-zone');if(!z)return;z.innerHTML='';
+  SKILLS.forEach((sk,i)=>{
+    const isG=gs.glitchSkills.includes(i);const can=gs.charLvl>=10&&!isG;
+    const d=document.createElement('div');
+    d.style.cssText=`display:flex;align-items:center;gap:4px;font-size:9px;padding:3px;background:#04080f;border:1px solid ${isG?'var(--mg)':'var(--brd)'};border-radius:3px;margin-bottom:2px;`;
+    d.innerHTML=`<span style="font-size:13px">${sk.icon}</span><span style="flex:1;color:${isG?'var(--mg)':'var(--tx)'}">${sk.name}${isG?' [G]':''}</span>
+    ${can?`<button onclick="GQ.upgSkill(${i})" style="background:var(--mg);border:none;color:#fff;font-family:'Share Tech Mono',monospace;font-size:7px;padding:2px 5px;cursor:pointer;border-radius:3px;">GLITCH</button>`:''}`;
+    z.appendChild(d);
+  });
+}
+function upgSkill(i){
+  if(gs.charLvl<10){addLog('Karakter Lvl 10 gerekli!','#ff3355');return;}
+  if(gs.glitchSkills.includes(i))return;
+  gs.glitchSkills.push(i);
+  document.getElementById('sk'+i).classList.add('G');
+  addLog(`🌀 ${SKILLS[i].name} GLITCH!`,'#ff00aa');
+  renderSkillTree();
+}
+
+// INVENTORY
+function renderInv(){
+  Object.keys(SLOTS).forEach(sk=>{
+    const el=document.getElementById('eq-'+sk);if(!el)return;
+    const it=gs.equipped[sk];el.innerHTML=SLOTS[sk].icon;
+    if(it){
+      const d=document.createElement('div');d.className='erd r-'+it.rar;el.appendChild(d);
+      const s=document.createElement('div');s.className='estars';s.textContent='★'.repeat(Math.min(it.stars,5));el.appendChild(s);
+      el.style.borderColor=RCOL[it.rar];
+    }else el.style.borderColor='';
+  });
+  const grid=document.getElementById('inv-grid');grid.innerHTML='';
+  for(let i=0;i<20;i++){
+    const it=gs.bag[i];
+    const sl=document.createElement('div');sl.className='isl'+(it?'':' empty');sl.textContent=it?SLOTS[it.slotKey].icon:'·';
+    if(it){
+      const d=document.createElement('div');d.className='rdot r-'+it.rar;sl.appendChild(d);
+      const s=document.createElement('div');s.className='istars';s.textContent='★'.repeat(Math.min(it.stars,5));sl.appendChild(s);
+      sl.addEventListener('click',()=>equipFromBag(i));
+      sl.addEventListener('mouseenter',ev=>showItTip(ev,it));sl.addEventListener('mouseleave',itTipH);
+    }
+    grid.appendChild(sl);
+  }
+}
+
+// SHIP PREVIEW (sidebar canvas)
+function renderShipPrev(){
+  if(!sctx)return;
+  sctx.clearRect(0,0,288,130);
+  sctx.fillStyle='#02050e';sctx.fillRect(0,0,288,130);
+  // grid bg
+  sctx.strokeStyle='#080f20';sctx.lineWidth=.5;
+  for(let x=0;x<288;x+=16){sctx.beginPath();sctx.moveTo(x,0);sctx.lineTo(x,130);sctx.stroke();}
+  for(let y=0;y<130;y+=16){sctx.beginPath();sctx.moveTo(0,y);sctx.lineTo(288,y);sctx.stroke();}
+  drawPixelShip(sctx,144,68,gs.equipped,shipPulse,1.15);
+  // update eq slot borders from current equipped
+  Object.keys(SLOTS).forEach(sk=>{
+    const el=document.getElementById('eq-'+sk);if(!el)return;
+    const it=gs.equipped[sk];el.innerHTML=SLOTS[sk].icon;
+    if(it){
+      const d=document.createElement('div');d.className='erd r-'+it.rar;el.appendChild(d);
+      const s=document.createElement('div');s.className='estars';s.textContent='★'.repeat(Math.min(it.stars,5));el.appendChild(s);
+      el.style.borderColor=RCOL[it.rar];
+    }else el.style.borderColor='';
+  });
+}
+
+// QUESTS
+function renderQuests(){
+  const list=document.getElementById('quest-list');if(!list)return;list.innerHTML='';
+  const QUESTS=[
+    {title:'Günlük Giriş',desc:'Bugün giriş yap',goal:1,progress:1,reward:'box',rewardAmt:100,done:true},
+    {title:'50 Box Aç',desc:'50 Quantum Box aç (bug: sayaç gösterge)',goal:50,progress:Math.min(50,gs.kills>0?50:0),reward:'box',rewardAmt:10,done:gs.kills>=50},
+    {title:'100 Düşman Öldür',desc:'100 düşman yok et',goal:100,progress:Math.min(100,gs.kills),reward:'gold',rewardAmt:500,done:gs.kills>=100},
+    {title:'Wave 5-1\'e ulaş',desc:'5. Wave\'e ulaş',goal:5,progress:Math.min(5,gs.wave),reward:'gqt',rewardAmt:20,done:gs.wave>=5},
+  ];
+  QUESTS.forEach(q=>{
+    const pct=Math.min(100,(q.progress/q.goal)*100);
+    const d=document.createElement('div');d.className='qi';
+    d.style.opacity=q.done?.5:1;d.style.borderColor=q.done?'var(--gr)':'var(--brd)';
+    d.innerHTML=`<div class="qt">${q.done?'✅ ':''}${q.title}</div>
+    <div class="qp">${q.desc} (${q.progress}/${q.goal})</div>
+    <div class="qbg"><div class="qf" style="width:${pct}%"></div></div>
+    <div class="qr">🎁 ${q.reward==='box'?q.rewardAmt+' Box':q.reward==='gold'?fmt(q.rewardAmt)+' Gold':q.rewardAmt+' GQT'}</div>`;
+    list.appendChild(d);
+  });
+  const di=document.getElementById('daily-info');if(di)di.textContent=`📦 Mevcut: ${gs.boxes} Box`;
+}
+function renderBoxPanel(){
+  const bl=document.getElementById('box-list');if(!bl)return;bl.innerHTML='';
+  const d=document.createElement('div');d.className='bxi';
+  d.innerHTML=`<div style="font-size:26px">📦</div>
+  <div style="flex:1"><div style="font-size:10px">Quantum Box</div><div style="font-size:8px;color:var(--dm)">${gs.boxes} adet · Her box = 1 dalga</div></div>
+  <button class="bxb" ${gs.boxes<=0?'disabled':''} onclick="GQ.startWithBox()">BAŞLAT</button>`;
+  bl.appendChild(d);
+}
+
+// TOOLTIPS
+function showItTip(ev,item){
+  const c=RCOL[item.rar];const sl={atk:'ATK',def:'DEF',def2:'DEF',spd:'Hız',crit:'Crit%',hp:'MaxHP',gqt_m:'MaxGQT'}[item.sk]||item.sk;
+  document.getElementById('it-nm').textContent=item.icon+' '+item.name;document.getElementById('it-nm').style.color=c;
+  document.getElementById('it-sb').textContent=RLBL[item.rar]+' ·'+'★'.repeat(item.stars)+' · '+SLOTS[item.slotKey].label;
+  document.getElementById('it-st').innerHTML=`<div>+${fmt(item.sv)} ${sl}</div><div style="color:var(--gd)">Sat: ${fmt(item.sellVal)}💰</div>`;
+  document.getElementById('it-af').textContent=item.afs.join(' · ');
+  const tt=document.getElementById('it-tip');tt.style.display='block';
+  const r=ev.target.getBoundingClientRect();tt.style.left=Math.max(0,r.left-200)+'px';tt.style.top=r.top+'px';
+}
+function itTipH(){document.getElementById('it-tip').style.display='none';}
+function eqTip(ev,sk){
+  const it=gs.equipped[sk];
+  if(it)showItTip(ev,it);
+  else{
+    document.getElementById('it-nm').textContent=SLOTS[sk].icon+' '+SLOTS[sk].label;
+    document.getElementById('it-nm').style.color='var(--dm)';
+    document.getElementById('it-sb').textContent='Boş slot';
+    document.getElementById('it-st').innerHTML='';document.getElementById('it-af').textContent='';
+    const tt=document.getElementById('it-tip');tt.style.display='block';
+    const r=ev.target.getBoundingClientRect();tt.style.left=Math.max(0,r.left-200)+'px';tt.style.top=r.top+'px';
+  }
+}
+function skTip(ev,i){
+  const sk=SKILLS[i];const isG=gs.glitchSkills.includes(i);const cs=cStats();
+  document.getElementById('stn').textContent=sk.icon+' '+sk.name+(isG?' [GLITCH]':'');
+  document.getElementById('stn').style.color=isG?'var(--mg)':'var(--cy)';
+  document.getElementById('st-cd').textContent=sk.cd+'s';
+  document.getElementById('st-dm').textContent=`${sk.dm} (≈${fmt(cs.atk*sk.dm)})`;
+  document.getElementById('st-gm').textContent=isG?sk.gm+' AKTİF':sk.gm+' (Lvl10+)';
+  document.getElementById('st-ds').textContent=sk.desc;
+  const tt=document.getElementById('sk-tip');tt.style.display='block';
+  tt.style.left=Math.max(0,ev.clientX-200)+'px';tt.style.top=Math.max(0,ev.clientY-160)+'px';
+}
+function skTipH(){document.getElementById('sk-tip').style.display='none';}
+
+// TAB
+function tab(ev,name){
+  document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('panel-'+name).classList.add('on');ev.target.classList.add('on');
+  if(name==='inv'){renderInv();renderShipPrev();}
+  if(name==='quest')renderQuests();
+  if(name==='box')renderBoxPanel();
+  if(name==='ability')renderAbilityList();
+  if(name==='passive')renderPassiveTree();
+  if(name==='boss')renderBossPanel();
+}
+
+// LOG
+function addLog(msg,col='#c0d0ff'){
+  const log=document.getElementById('clog');
+  const line=document.createElement('div');line.className='cl';line.style.color=col;line.textContent=msg;
   log.appendChild(line);setTimeout(()=>line.remove(),6000);
   while(log.children.length>8)log.removeChild(log.firstChild);
 }
 
-// ═══════════════════════════════════════════════
-//  RENDER: SIDEBAR PANELS
-// ═══════════════════════════════════════════════
-function renderInventoryPanel(){
-  // Equipment slots
-  const slots=Object.keys(ITEM_SLOTS);
-  slots.forEach(sk=>{
-    const el=document.getElementById('eq-'+sk);if(!el)return;
-    const item=gs.player.equipped[sk];
-    el.innerHTML=ITEM_SLOTS[sk].icon;
-    el.className='eq-slot'+(item?' has-item':'');
-    if(item){
-      const dot=document.createElement('div');
-      dot.className='eq-rarity r-'+item.rarity;
-      el.appendChild(dot);
-      el.style.borderColor=RARITY_COLORS[item.rarity];
-    } else {
-      el.style.borderColor='';
-    }
-  });
-  // Bag
-  const grid=document.getElementById('inv-grid');grid.innerHTML='';
-  for(let i=0;i<20;i++){
-    const item=gs.inventory[i];
-    const slot=document.createElement('div');
-    slot.className='inv-slot'+(item?'':' empty');
-    slot.textContent=item?ITEM_SLOTS[item.slotKey].icon:'·';
-    if(item){
-      const dot=document.createElement('div');dot.className='rarity-dot r-'+item.rarity;slot.appendChild(dot);
-      slot.addEventListener('click',()=>equipFromBag(i));
-      slot.addEventListener('mouseenter',ev=>showItemTip(ev,item));
-      slot.addEventListener('mouseleave',hideItemTip);
-    }
-    grid.appendChild(slot);
-  }
-}
-
-function renderShipPreview(){
-  const sc=document.getElementById('shipCanvas');
-  if(!sc)return;
-  const sctx=sc.getContext('2d');
-  sctx.clearRect(0,0,280,130);
-  // Draw ship in preview canvas using best equipped item color scheme
-  const equippedRarities=Object.values(gs.player.equipped).filter(Boolean).map(i=>RARITIES.indexOf(i.rarity));
-  const maxRi=equippedRarities.length?Math.max(...equippedRarities):0;
-  const scheme=RARITY_SHIP_COLORS[RARITIES[maxRi]]||RARITY_SHIP_COLORS.bronze;
-  drawShipAt(sctx,140,65,scheme,0);
-  // Labels for each slot
-  const slotPositions={weapon:[190,50],hull:[115,46],engine:[38,50],shield:[115,10],reactor:[115,96],sensor:[160,10],armor:[72,10]};
-  Object.entries(slotPositions).forEach(([sk,[sx,sy]])=>{
-    const item=gs.player.equipped[sk];
-    if(item){
-      sctx.font='7px Share Tech Mono,monospace';
-      sctx.fillStyle=RARITY_COLORS[item.rarity];
-      sctx.textAlign='center';
-      sctx.textBaseline='bottom';
-      // small rarity indicator line
-      sctx.fillStyle=RARITY_COLORS[item.rarity]+'aa';
-      sctx.fillRect(sx,sy+24,24,2);
-    }
-  });
-}
-
-function drawShipAt(sctx,x,y,scheme,pulse){
-  sctx.save();sctx.translate(x,y);
-  // Engine exhaust
-  const exLen=22+Math.sin(pulse)*6;
-  const exG=sctx.createLinearGradient(-exLen,0,0,0);
-  exG.addColorStop(0,scheme.accent+'00');exG.addColorStop(1,scheme.accent+'cc');
-  sctx.beginPath();sctx.moveTo(-16,-4);sctx.lineTo(-16-exLen,0);sctx.lineTo(-16,4);sctx.closePath();
-  sctx.fillStyle=exG;sctx.fill();
-  [-10,10].forEach(wy=>{
-    const g2=sctx.createLinearGradient(-exLen*.5,0,0,0);
-    g2.addColorStop(0,'#8800ff00');g2.addColorStop(1,scheme.accent+'99');
-    sctx.beginPath();sctx.moveTo(-13,wy-2);sctx.lineTo(-13-exLen*.5,wy);sctx.lineTo(-13,wy+2);sctx.closePath();
-    sctx.fillStyle=g2;sctx.fill();
-  });
-  // Hull
-  const hg=sctx.createLinearGradient(-16,-10,16,10);
-  hg.addColorStop(0,scheme.hull);hg.addColorStop(.5,scheme.accent+'44');hg.addColorStop(1,scheme.hull);
-  sctx.beginPath();
-  sctx.moveTo(20,0);sctx.bezierCurveTo(16,-5,3,-9,-9,-8);sctx.lineTo(-16,-5);sctx.lineTo(-16,5);sctx.lineTo(-9,8);sctx.bezierCurveTo(3,9,16,5,20,0);sctx.closePath();
-  sctx.fillStyle=hg;sctx.fill();
-  sctx.strokeStyle=scheme.accent+'99';sctx.lineWidth=0.8;sctx.stroke();
-  // Wings
-  [[3,-8,0,-20,-5,-18,-10,-8],[3,8,0,20,-5,18,-10,8]].forEach(pts=>{
-    sctx.beginPath();sctx.moveTo(pts[0],pts[1]);sctx.lineTo(pts[2],pts[3]);sctx.lineTo(pts[4],pts[5]);sctx.lineTo(pts[6],pts[7]);sctx.closePath();
-    sctx.fillStyle=scheme.hull;sctx.fill();sctx.strokeStyle=scheme.accent+'66';sctx.lineWidth=0.6;sctx.stroke();
-  });
-  // Cockpit
-  const cg=sctx.createRadialGradient(7,-2,1,7,-2,6);
-  cg.addColorStop(0,'#aaf0ff');cg.addColorStop(.5,scheme.accent+'88');cg.addColorStop(1,'#005588cc');
-  sctx.beginPath();sctx.ellipse(7,-2,6,4.5,-0.2,0,Math.PI*2);sctx.fillStyle=cg;sctx.fill();
-  sctx.strokeStyle=scheme.accent+'bb';sctx.lineWidth=0.5;sctx.stroke();
-  // Cannon
-  sctx.fillStyle=scheme.hull;sctx.strokeStyle=scheme.accent+'aa';sctx.lineWidth=0.7;
-  sctx.beginPath();sctx.rect(16,-1.5,7,3);sctx.fill();sctx.stroke();
-  sctx.beginPath();sctx.arc(23,0,2,0,Math.PI*2);
-  sctx.fillStyle=scheme.accent;sctx.shadowColor=scheme.accent;sctx.shadowBlur=6;sctx.fill();sctx.shadowBlur=0;
-  // Running lights
-  [[12,-6,'#00ff88'],[12,6,'#ff3355'],[-13,0,scheme.accent]].forEach(([lx,ly,lc])=>{
-    sctx.beginPath();sctx.arc(lx,ly,1.5,0,Math.PI*2);
-    sctx.fillStyle=lc;sctx.shadowColor=lc;sctx.shadowBlur=3+Math.sin(pulse)*2;sctx.fill();sctx.shadowBlur=0;
-  });
-  sctx.restore();
-}
-
-function renderQuests(){
-  const list=document.getElementById('quest-list');list.innerHTML='';
-  gs.quests.forEach(q=>{
-    const pct=Math.min(100,(q.progress/q.goal)*100);
-    const div=document.createElement('div');div.className='quest-item';
-    div.style.opacity=q.done?'.5':'1';div.style.borderColor=q.done?'var(--green)':'var(--border)';
-    div.innerHTML=`<div class="q-title">${q.done?'✅ ':''}${q.title}</div>
-      <div class="q-prog">${q.desc} (${q.progress}/${q.goal})</div>
-      <div class="q-bar-bg"><div class="q-bar-fill" style="width:${pct}%"></div></div>
-      <div class="q-reward">🎁 ${q.reward==='gqt'?q.rewardAmt+' GQT':q.rewardAmt+' Rare Kutu'}</div>`;
-    list.appendChild(div);
-  });
-}
-function renderBoxes(){
-  const panel=document.getElementById('box-panel');panel.innerHTML='';
-  BOX_TYPES.forEach((bt,i)=>{
-    const count=gs.boxes[i]||0;
-    const div=document.createElement('div');div.className='box-item';
-    div.innerHTML=`<div style="font-size:24px">${bt.icon}</div>
-      <div style="flex:1"><div style="font-size:11px;color:${bt.color}">${bt.name}</div><div style="font-size:9px;color:var(--dim)">${count} adet</div></div>
-      <button class="box-open-btn" ${count<1?'disabled':''} onclick="GQ.openBox(${i})">AÇ</button>`;
-    panel.appendChild(div);
-  });
-}
-function renderSkillUpgrades(){
-  const zone=document.getElementById('skill-upgrade-zone');zone.innerHTML='';
-  SKILLS.forEach((sk,idx)=>{
-    const isG=gs.player.glitchSkills.includes(idx);
-    const can=gs.player.level>=10&&!isG;
-    const div=document.createElement('div');
-    div.style.cssText=`display:flex;align-items:center;gap:5px;font-size:9px;padding:4px;background:#0b1025;border:1px solid ${isG?'var(--magenta)':'var(--border)'};border-radius:4px;`;
-    div.innerHTML=`<span style="font-size:15px">${sk.icon}</span>
-      <span style="flex:1;color:${isG?'var(--magenta)':'var(--text)'}">${sk.name}${isG?' [GLITCH]':''}</span>
-      ${can?`<button onclick="GQ.upgradeSkill(${idx})" style="background:var(--magenta);border:none;color:#fff;font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 6px;cursor:pointer;border-radius:3px;">GLITCH</button>`:''}`;
-    zone.appendChild(div);
-  });
-}
-function upgradeSkill(idx){
-  if(gs.player.level<10){addLog('⚠️ Lvl 10 gerekli!','#ff3355');return;}
-  if(gs.player.glitchSkills.includes(idx))return;
-  gs.player.glitchSkills.push(idx);
-  document.getElementById('sk'+idx).classList.add('glitch-mode');
-  addLog(`🌀 ${SKILLS[idx].name} GLITCH moduna yükseltildi!`,'#ff00aa');
-  renderSkillUpgrades();
-}
-
-// ═══════════════════════════════════════════════
-//  TOOLTIPS
-// ═══════════════════════════════════════════════
-function showSkillTip(ev,idx){
-  const sk=SKILLS[idx];const isG=gs.player.glitchSkills.includes(idx);
-  const cs=combatStats();
-  document.getElementById('stt-name').textContent=sk.icon+' '+sk.name+(isG?' [GLITCH]':'');
-  document.getElementById('stt-name').style.color=isG?'var(--magenta)':'var(--cyan)';
-  document.getElementById('stt-cd').textContent=sk.cd+'s';
-  document.getElementById('stt-dmg').textContent='x'+sk.dmgMult+' (≈'+Math.round(cs.atk*sk.dmgMult)+' hasar)';
-  document.getElementById('stt-range').textContent='Tüm Düşmanlar';
-  document.getElementById('stt-gm').textContent=isG?('x'+sk.glitchMult+' AKTİF'):'x'+sk.glitchMult+' (Lvl10+)';
-  document.getElementById('stt-desc').textContent=sk.desc;
-  const tt=document.getElementById('skill-tooltip');tt.style.display='block';
-  tt.style.left=(ev.clientX-220)+'px';tt.style.top=(ev.clientY-140)+'px';
-}
-function hideSkillTip(){document.getElementById('skill-tooltip').style.display='none';}
-
-function showItemTip(ev,item){
-  const tt=document.getElementById('item-tooltip');
-  const c=RARITY_COLORS[item.rarity];
-  document.getElementById('itt-name').textContent=ITEM_SLOTS[item.slotKey].icon+' '+item.name;
-  document.getElementById('itt-name').style.color=c;
-  document.getElementById('itt-sub').textContent=RARITY_LABELS[item.rarity]+' · '+ITEM_SLOTS[item.slotKey].label;
-  const statLabel={atk:'Saldırı',def:'Savunma',spd:'Hız',crit:'Kritik %',hp:'Max HP',gqt:'Max GQT'}[item.statKey]||item.statKey;
-  document.getElementById('itt-stats').innerHTML=`<div class="it-stat">+${item.statVal} ${statLabel}</div><div class="it-stat" style="color:var(--gold)">Sat: ${item.sellVal} GQT</div>`;
-  document.getElementById('itt-affix').textContent=item.affixes.join('\n');
-  tt.style.display='block';
-  const rect=ev.target.getBoundingClientRect();
-  tt.style.left=(rect.left-200)+'px';tt.style.top=rect.top+'px';
-}
-function hideItemTip(){document.getElementById('item-tooltip').style.display='none';}
-function showEqTip(ev,slotKey){
-  const item=gs.player.equipped[slotKey];
-  if(!item){
-    const tt=document.getElementById('item-tooltip');
-    document.getElementById('itt-name').textContent=ITEM_SLOTS[slotKey].icon+' '+ITEM_SLOTS[slotKey].label;
-    document.getElementById('itt-name').style.color='var(--dim)';
-    document.getElementById('itt-sub').textContent='Boş slot';
-    document.getElementById('itt-stats').innerHTML='';document.getElementById('itt-affix').textContent='';
-    tt.style.display='block';
-    const rect=ev.target.getBoundingClientRect();tt.style.left=(rect.left-200)+'px';tt.style.top=rect.top+'px';
-    return;
-  }
-  showItemTip(ev,item);
-}
-function hideItemTip(){document.getElementById('item-tooltip').style.display='none';}
-
-// ═══════════════════════════════════════════════
-//  TAB SWITCH
-// ═══════════════════════════════════════════════
-function switchTab(ev,name){
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
-  ev.target.classList.add('active');
-  if(name==='inv')renderInventoryPanel();
-}
-
-// ═══════════════════════════════════════════════
-//  UI UPDATE
-// ═══════════════════════════════════════════════
-function updateUI(){
-  const p=gs.player;const cs=combatStats();
-  document.getElementById('h-lvl').textContent=p.level;
-  document.getElementById('h-gqt').textContent=Math.floor(p.gqt);
-  document.getElementById('h-kills').textContent=p.kills;
-  document.getElementById('h-wave').textContent=gs.wave;
-  document.getElementById('wb-num').textContent=gs.wave;
-  const hpPct=(p.hp/p.maxHp)*100,gqtPct=(p.gqt/p.maxGqt)*100,xpPct=(p.xp/p.xpNext)*100;
-  document.getElementById('bar-hp').style.width=hpPct+'%';
-  document.getElementById('bar-gqt').style.width=gqtPct+'%';
-  document.getElementById('bar-xp').style.width=xpPct+'%';
-  document.getElementById('val-hp').textContent=Math.ceil(p.hp)+'/'+p.maxHp;
-  document.getElementById('val-gqt').textContent=Math.floor(p.gqt)+'/'+p.maxGqt;
-  document.getElementById('val-xp').textContent=p.xp+'/'+p.xpNext;
-  document.getElementById('s-str').textContent=p.stats.str;
-  document.getElementById('s-agi').textContent=p.stats.agi;
-  document.getElementById('s-int').textContent=p.stats.int;
-  document.getElementById('s-lck').textContent=p.stats.lck;
-  document.getElementById('s-atk').textContent=Math.ceil(cs.atk);
-  document.getElementById('s-def').textContent=Math.ceil(cs.def);
-  document.getElementById('s-spd').textContent=cs.spd.toFixed(1);
-  document.getElementById('s-crit').textContent=Math.ceil(cs.crit);
-  // Skill CD bars (no cost overlay — just cooldown bar + timer number)
+// UI UPDATE
+function renderUI(){
+  const cs=cStats();
+  document.getElementById('h-lvl').textContent=gs.charLvl;
+  document.getElementById('h-slvl').textContent=gs.shipLvl+(gs.upgrading?'⚙️':'');
+  document.getElementById('h-ess').textContent=fmt(gs.essence);
+  document.getElementById('h-gold').textContent=fmt(gs.gold);
+  document.getElementById('h-gqt').textContent=gs.gqt;
+  document.getElementById('h-boxes').textContent=gs.boxes;
+  document.getElementById('h-kills').textContent=gs.kills;
+  document.getElementById('h-wave').textContent=`${gs.wave}-${gs.subWave}`;
+  document.getElementById('wb-wave').textContent=gs.wave;
+  document.getElementById('wb-sub').textContent=gs.subWave;
+  document.getElementById('idle-box-cnt').textContent=gs.boxes;
+  const hpPct=gs.hp/cs.maxHp*100,gtPct=gs.gqtE/cs.maxGqt*100,xpPct=gs.charXp/gs.charXpNext*100,esPct=gs.essence/gs.essenceMax*100;
+  document.getElementById('bar-hp').style.width=clamp(hpPct,0,100)+'%';
+  document.getElementById('bar-gt').style.width=clamp(gtPct,0,100)+'%';
+  document.getElementById('bar-xp').style.width=clamp(xpPct,0,100)+'%';
+  document.getElementById('bar-es').style.width=clamp(esPct,0,100)+'%';
+  document.getElementById('v-hp').textContent=fmt(Math.ceil(gs.hp))+'/'+fmt(cs.maxHp);
+  document.getElementById('v-gt').textContent=fmt(Math.floor(gs.gqtE))+'/'+fmt(cs.maxGqt);
+  document.getElementById('v-xp').textContent=fmt(gs.charXp)+'/'+fmt(gs.charXpNext);
+  document.getElementById('v-es').textContent=fmt(gs.essence)+'/'+fmt(gs.essenceMax);
+  document.getElementById('s-str').textContent=' '+gs.stats.str;document.getElementById('s-agi').textContent=' '+gs.stats.agi;
+  document.getElementById('s-int').textContent=' '+gs.stats.int;document.getElementById('s-lck').textContent=' '+gs.stats.lck;
+  document.getElementById('s-atk').textContent=' '+fmt(cs.atk);document.getElementById('s-def').textContent=' '+fmt(cs.def);
+  document.getElementById('s-spd').textContent=' '+cs.spd.toFixed(2);document.getElementById('s-crit').textContent=' '+Math.ceil(cs.crit);
   SKILLS.forEach((sk,i)=>{
-    const cd=p.skillCooldowns[i];
-    const ov=document.getElementById('sk'+i+'-ov');
-    const bar=document.getElementById('sk'+i+'-bar');
-    const tx=document.getElementById('sk'+i+'-t');
-    if(cd>0){
-      ov.style.display='flex';tx.textContent=cd.toFixed(1);
-      bar.style.width=((cd/sk.cd)*100)+'%';
-    } else {
-      ov.style.display='none';bar.style.width='0%';
-    }
+    const cd=gs.skillCDs[i];
+    document.getElementById('sk'+i+'-ov').style.display=cd>0?'flex':'none';
+    if(cd>0)document.getElementById('sk'+i+'-t').textContent=cd.toFixed(1);
+    document.getElementById('sk'+i+'-bar').style.width=(cd>0?cd/sk.cd*100:0)+'%';
   });
+  if(gs.upgrading){
+    const left=Math.max(0,(gs.upgradeEnd-Date.now())/1000);
+    document.getElementById('upg-bar').style.display='block';
+    document.getElementById('ub-txt').textContent=`Gemi ${gs.shipLvl}→${gs.shipLvl+1} | ${fmtDur(left)}`;
+  }else document.getElementById('upg-bar').style.display='none';
+  // start-btn state
+  const sb=document.getElementById('start-btn');
+  if(sb)sb.disabled=gs.boxes<=0;
 }
 
-// ═══════════════════════════════════════════════
-//  CANVAS DRAW
-// ═══════════════════════════════════════════════
-let canvas,ctx;
-function initCanvas(){
-  canvas=document.getElementById('gameCanvas');
-  const zone=document.getElementById('canvas-zone');
-  canvas.width=zone.clientWidth;canvas.height=zone.clientHeight;
-  playerY=canvas.height*0.50;ctx=canvas.getContext('2d');
-}
-
+// CANVAS / MAIN DRAW
 function drawBg(dt){
-  const g=ctx.createLinearGradient(0,0,0,canvas.height);
-  g.addColorStop(0,'#010408');g.addColorStop(.6,'#050a18');g.addColorStop(1,'#08101e');
-  ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
-  bgStars.forEach(s=>{
-    s.x-=s.spd*dt*60;if(s.x<-2)s.x=canvas.width+2;
-    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(180,200,255,${s.a})`;ctx.fill();
+  const g=gctx.createLinearGradient(0,0,0,CH());g.addColorStop(0,'#010306');g.addColorStop(.6,'#030810');g.addColorStop(1,'#060f1a');
+  gctx.fillStyle=g;gctx.fillRect(0,0,CW(),CH());
+  bgStars.forEach(s=>{s.x-=s.spd*dt*60;if(s.x<-2)s.x=CW()+2;
+    gctx.beginPath();gctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    gctx.fillStyle=`rgba(170,190,255,${s.a})`;gctx.fill();
   });
-  // Subtle scanline
-  ctx.fillStyle='rgba(0,20,40,0.08)';
-  for(let y=0;y<canvas.height;y+=4)ctx.fillRect(0,y,canvas.width,2);
-  bgX-=dt*35;
+  // subtle scanlines
+  gctx.fillStyle='rgba(0,12,28,.055)';for(let y=0;y<CH();y+=4)gctx.fillRect(0,y,CW(),2);
 }
 
 function drawPlayer(){
-  shipPulse+=0.055;
-  const p=gs.wave;
-  // Pick scheme based on best equipped rarity
-  const equippedRarities=Object.values(gs.player.equipped).filter(Boolean).map(i=>RARITIES.indexOf(i.rarity));
-  const maxRi=equippedRarities.length?Math.max(...equippedRarities):0;
-  const scheme=RARITY_SHIP_COLORS[RARITIES[maxRi]]||RARITY_SHIP_COLORS.bronze;
+  shipPulse+=.05;
+  const x=PX,y=pyPos;
+  // Outer glow based on best rarity
+  const bestRi=Math.max(...Object.values(gs.equipped).filter(Boolean).map(i=>i.ri),-1);
+  const glowCol=bestRi>=0?RCOL[RARS[bestRi]]:'#00f5ff';
+  const gr=gctx.createRadialGradient(x,y,4,x,y,48);
+  gr.addColorStop(0,glowCol+'22');gr.addColorStop(1,'transparent');
+  gctx.beginPath();gctx.ellipse(x,y,48,32,0,0,Math.PI*2);gctx.fillStyle=gr;gctx.fill();
 
-  const x=PLAYER_X,y=playerY;
-  // Outer glow
-  ctx.save();
-  const gr=ctx.createRadialGradient(x,y,5,x,y,40);
-  gr.addColorStop(0,scheme.glow);gr.addColorStop(1,'transparent');
-  ctx.beginPath();ctx.ellipse(x,y,40,30,0,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
-  ctx.restore();
-
-  ctx.save();ctx.translate(x,y);
-  drawShipAt(ctx,0,0,scheme,shipPulse);
-  ctx.restore();
+  gctx.save();gctx.translate(x,y);
+  drawPixelShip(gctx,0,0,gs.equipped,shipPulse,1);
+  gctx.restore();
 
   // HP bar
-  const bw=52,bh=4,hpPct=gs.player.hp/gs.player.maxHp;
-  ctx.fillStyle='#0a1428';ctx.fillRect(x-bw/2,y-48,bw,bh);
-  ctx.fillStyle=hpPct>.5?'#00ff88':hpPct>.25?'#ffd700':'#ff3355';
-  ctx.fillRect(x-bw/2,y-48,bw*hpPct,bh);
-  ctx.strokeStyle='#1a3a5e';ctx.lineWidth=0.5;ctx.strokeRect(x-bw/2,y-48,bw,bh);
-  const gqtPct=gs.player.gqt/gs.player.maxGqt;
-  ctx.fillStyle='#0a1428';ctx.fillRect(x-bw/2,y-42,bw,3);
-  ctx.fillStyle='#00f5ff';ctx.fillRect(x-bw/2,y-42,bw*gqtPct,3);
-  ctx.font='8px Share Tech Mono,monospace';ctx.fillStyle='#00f5ffaa';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('GQ-VANGUARD',x,y-54);
+  const bw=58,bh=4,hpP=gs.hp/cStats().maxHp;
+  gctx.fillStyle='#08121e';gctx.fillRect(x-bw/2,y-56,bw,bh);
+  gctx.fillStyle=hpP>.5?'#00ff88':hpP>.25?'#ffd700':'#ff3355';
+  gctx.fillRect(x-bw/2,y-56,bw*hpP,bh);
+  gctx.strokeStyle='#182050';gctx.lineWidth=.5;gctx.strokeRect(x-bw/2,y-56,bw,bh);
+  // GQT bar
+  const gqP=gs.gqtE/gs.maxGqtE;
+  gctx.fillStyle='#08121e';gctx.fillRect(x-bw/2,y-50,bw,3);
+  gctx.fillStyle='#00f5ff';gctx.fillRect(x-bw/2,y-50,bw*gqP,3);
+  // Label
+  gctx.font='7px Share Tech Mono,monospace';gctx.fillStyle='#00f5ff88';gctx.textAlign='center';gctx.textBaseline='middle';
+  gctx.fillText('GQ-VANGUARD',x,y-62);
 }
 
 function drawEnemies(dt){
-  const cs=combatStats();
+  const cs=cStats();
   enemies.forEach(e=>{
     if(e.dead)return;
     if(e.x>e.stopX){e.x-=e.spd*dt;if(e.x<e.stopX)e.x=e.stopX;}
-    else{
-      e.shootTimer-=dt;
-      if(e.shootTimer<=0){
-        e.shootTimer=1.0+Math.random()*0.8;
-        const dx=PLAYER_X-e.x,dy=playerY-e.y;
-        const dist=Math.sqrt(dx*dx+dy*dy)||1;
-        projectiles.push({x:e.x-14,y:e.y,vx:(dx/dist)*260,vy:(dy/dist)*260,dmg:e.dmg,color:e.color,life:1.6});
+    else if(!paused){
+      e.shootT-=dt;
+      if(e.shootT<=0){
+        e.shootT=rnd(.9,1.7);
+        const dx=PX-e.x,dy=pyPos-e.y,dist=Math.sqrt(dx*dx+dy*dy)||1;
+        projs.push({x:e.x-14,y:e.y,vx:(dx/dist)*255,vy:(dy/dist)*255,dmg:e.dmg,col:e.col,life:1.6});
       }
     }
     if(e.hitFlash>0)e.hitFlash-=dt;
-
-    // Draw enemy ship
-    ctx.save();ctx.translate(e.x,e.y);ctx.scale(-1,1);
-    if(e.hitFlash>0)ctx.filter='brightness(4) saturate(0)';
-    const c=e.color;
-    const exL=12+Math.sin(shipPulse*1.2)*4;
+    const ctx=gctx,c=e.col;const sc2=e.isBoss?1.8:1;
+    ctx.save();ctx.translate(e.x,e.y);ctx.scale(-sc2,sc2);
+    if(e.hitFlash>0)ctx.filter='brightness(5) saturate(0)';
+    // engine exhaust
+    const exL=12+Math.sin(shipPulse*1.3)*4;
     const exG=ctx.createLinearGradient(-exL,0,0,0);exG.addColorStop(0,c+'00');exG.addColorStop(1,c+'bb');
-    ctx.beginPath();ctx.moveTo(-9,-3);ctx.lineTo(-9-exL,0);ctx.lineTo(-9,3);ctx.closePath();ctx.fillStyle=exG;ctx.fill();
-    const hg=ctx.createLinearGradient(-10,-6,12,6);hg.addColorStop(0,'#1a0510');hg.addColorStop(.5,'#2d0820');hg.addColorStop(1,'#0d0218');
-    ctx.beginPath();ctx.moveTo(12,0);ctx.bezierCurveTo(8,-4,2,-6,-7,-5);ctx.lineTo(-10,-3);ctx.lineTo(-10,3);ctx.lineTo(-7,5);ctx.bezierCurveTo(2,6,8,4,12,0);ctx.closePath();
-    ctx.fillStyle=hg;ctx.fill();ctx.strokeStyle=c+'88';ctx.lineWidth=0.7;ctx.stroke();
-    [[3,-5,0,-13,-5,-11,-7,-5],[3,5,0,13,-5,11,-7,5]].forEach(pts=>{
-      ctx.beginPath();ctx.moveTo(pts[0],pts[1]);ctx.lineTo(pts[2],pts[3]);ctx.lineTo(pts[4],pts[5]);ctx.lineTo(pts[6],pts[7]);ctx.closePath();
-      ctx.fillStyle='#1a0520';ctx.fill();ctx.strokeStyle=c+'55';ctx.lineWidth=0.5;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(-10,-3.5);ctx.lineTo(-10-exL,0);ctx.lineTo(-10,3.5);ctx.closePath();ctx.fillStyle=exG;ctx.fill();
+    // hull
+    const hg=ctx.createLinearGradient(-10,-6,13,6);hg.addColorStop(0,'#18041a');hg.addColorStop(.5,c+'18');hg.addColorStop(1,'#0c0214');
+    ctx.beginPath();ctx.moveTo(13,0);ctx.bezierCurveTo(9,-4,2,-7,-8,-5.5);ctx.lineTo(-11,-3);ctx.lineTo(-11,3);ctx.lineTo(-8,5.5);ctx.bezierCurveTo(2,7,9,4,13,0);ctx.closePath();
+    ctx.fillStyle=hg;ctx.fill();ctx.strokeStyle=c+'88';ctx.lineWidth=.8;ctx.stroke();
+    // fins
+    [[3,-5,0,-13,-5,-11,-7,-5],[3,5,0,13,-5,11,-7,5]].forEach(p=>{
+      ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(p[2],p[3]);ctx.lineTo(p[4],p[5]);ctx.lineTo(p[6],p[7]);ctx.closePath();
+      ctx.fillStyle='#1a0520';ctx.fill();ctx.strokeStyle=c+'44';ctx.lineWidth=.5;ctx.stroke();
     });
-    ctx.beginPath();ctx.ellipse(5,0,3.5,2,0,0,Math.PI*2);ctx.fillStyle=c+'bb';ctx.shadowColor=c;ctx.shadowBlur=4;ctx.fill();ctx.shadowBlur=0;
-    ctx.fillStyle='#300830';ctx.strokeStyle=c+'aa';ctx.lineWidth=0.6;ctx.beginPath();ctx.rect(10,-1,5,2);ctx.fill();ctx.stroke();
+    // cockpit
+    ctx.beginPath();ctx.ellipse(4,0,4,3,0,0,Math.PI*2);ctx.fillStyle=c+'cc';ctx.shadowColor=c;ctx.shadowBlur=5;ctx.fill();ctx.shadowBlur=0;
+    // cannon
+    ctx.fillStyle='#300830';ctx.strokeStyle=c+'aa';ctx.lineWidth=.6;ctx.beginPath();ctx.rect(10,-1.5,6,3);ctx.fill();ctx.stroke();
     ctx.restore();
-
     // HP bar
-    const bw=32,bh=3,hpP=e.hp/e.maxHp;
-    ctx.fillStyle='#1a0a0a';ctx.fillRect(e.x-bw/2,e.y-26,bw,bh);
-    ctx.fillStyle=e.color;ctx.fillRect(e.x-bw/2,e.y-26,bw*hpP,bh);
-    ctx.font='7px Share Tech Mono,monospace';ctx.fillStyle='#aa80c0';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillText(e.type,e.x,e.y+22);
+    const bw=36*sc2,bh=3,hpP=e.hp/e.maxHp;
+    ctx.fillStyle='#1a0a0a';ctx.fillRect(e.x-bw/2,e.y-30*sc2,bw,bh);
+    ctx.fillStyle=c;ctx.fillRect(e.x-bw/2,e.y-30*sc2,bw*hpP,bh);
+    ctx.font=`${e.isBoss?9:7}px Share Tech Mono,monospace`;ctx.fillStyle=e.isBoss?'#ffd700':'#aa80c0';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(e.name,e.x,e.y+(e.isBoss?30:22));
   });
 
-  // Enemy projectiles
-  projectiles.forEach(p=>{
+  // enemy projectiles
+  if(!paused)projs.forEach(p=>{
     p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
-    const dx=p.x-PLAYER_X,dy=p.y-playerY;
-    if(Math.sqrt(dx*dx+dy*dy)<22){
-      const dmg=Math.max(1,p.dmg-combatStats().def*0.25);
-      gs.player.hp=Math.max(0,gs.player.hp-dmg);
-      spawnDmgParticle(PLAYER_X,playerY,dmg,false,true);
-      p.life=-1;if(gs.player.hp<=0)respawn();
+    const dx=p.x-PX,dy=p.y-pyPos;
+    if(Math.sqrt(dx*dx+dy*dy)<24){
+      const dmg=Math.max(1,p.dmg-cStats().def*.2);
+      gs.hp=Math.max(0,gs.hp-dmg);spawnDmgP(PX,pyPos,dmg,false,true);p.life=-1;
+      if(gs.hp<=0)respawn();
     }
     if(p.life<0)return;
-    const al=Math.min(1,p.life*2);
-    ctx.save();ctx.globalAlpha=al;
-    ctx.strokeStyle=p.color;ctx.lineWidth=2;ctx.shadowColor=p.color;ctx.shadowBlur=5;
-    ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*.04,p.y-p.vy*.04);ctx.stroke();
-    ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,Math.PI*2);ctx.fillStyle='#fff';ctx.shadowBlur=7;ctx.fill();
-    ctx.shadowBlur=0;ctx.restore();
+    gctx.save();gctx.globalAlpha=Math.min(1,p.life*2);
+    gctx.strokeStyle=p.col;gctx.lineWidth=2;gctx.shadowColor=p.col;gctx.shadowBlur=5;
+    gctx.beginPath();gctx.moveTo(p.x,p.y);gctx.lineTo(p.x-p.vx*.04,p.y-p.vy*.04);gctx.stroke();
+    gctx.beginPath();gctx.arc(p.x,p.y,2.5,0,Math.PI*2);gctx.fillStyle='#fff';gctx.shadowBlur=7;gctx.fill();gctx.shadowBlur=0;gctx.restore();
   });
-  projectiles=projectiles.filter(p=>p.life>0&&p.x>-10&&p.x<canvas.width+10);
+  projs=projs.filter(p=>p.life>0&&p.x>-10&&p.x<CW()+10);
 
-  // Player projectiles
-  playerProjectiles.forEach(p=>{
+  // player projectiles
+  pProjs.forEach(p=>{
     p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
-    // Check hit on any enemy
-    enemies.forEach(e=>{
-      if(e.dead)return;
-      const dx=p.x-e.x,dy=p.y-e.y;
-      if(Math.sqrt(dx*dx+dy*dy)<20&&p.life>0){
-        dealDamage(e,p.dmg,p.isCrit);p.life=-1;
-      }
-    });
+    enemies.forEach(e=>{if(e.dead)return;const dx=p.x-e.x,dy=p.y-e.y;if(Math.sqrt(dx*dx+dy*dy)<26&&p.life>0){hitEnemy(e,p.dmg,p.isCrit);p.life=-1;}});
     if(p.life<0)return;
-    const al=Math.min(1,p.life*3);
-    ctx.save();ctx.globalAlpha=al;
-    ctx.strokeStyle='#00f5ff';ctx.lineWidth=2;ctx.shadowColor='#00f5ff';ctx.shadowBlur=6;
-    ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-p.vx*.05,p.y-p.vy*.05);ctx.stroke();
-    ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fillStyle='#fff';ctx.shadowBlur=8;ctx.fill();
-    ctx.shadowBlur=0;ctx.restore();
+    gctx.save();gctx.globalAlpha=Math.min(1,p.life*3);
+    gctx.strokeStyle='#00f5ff';gctx.lineWidth=2.5;gctx.shadowColor='#00f5ff';gctx.shadowBlur=7;
+    gctx.beginPath();gctx.moveTo(p.x,p.y);gctx.lineTo(p.x-p.vx*.05,p.y-p.vy*.05);gctx.stroke();
+    gctx.beginPath();gctx.arc(p.x,p.y,3.5,0,Math.PI*2);gctx.fillStyle='#ccfaff';gctx.shadowBlur=9;gctx.fill();gctx.shadowBlur=0;gctx.restore();
   });
-  playerProjectiles=playerProjectiles.filter(p=>p.life>0&&p.x<canvas.width+20);
-
-  // Wave complete check
-  if(enemies.length>0&&enemies.every(e=>e.dead)){
-    enemies=[];gs.wave++;
-    addLog(`🎉 Dalga temizlendi! Sonraki dalga hazırlanıyor...`,'#00ff88');
-    setTimeout(()=>spawnWave(),2000);
-  }
+  pProjs=pProjs.filter(p=>p.life>0&&p.x<CW()+20);
 }
-
 function drawParticles(dt){
-  particles.forEach(p=>{
-    p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=55*dt;p.life-=dt;
-    const al=Math.max(0,p.life/p.maxLife);
-    ctx.font=p.size+'px Share Tech Mono,monospace';ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillStyle=p.color+Math.floor(al*255).toString(16).padStart(2,'0');
-    ctx.fillText(p.text,p.x,p.y);
+  particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=55*dt;p.life-=dt;
+    const al=Math.max(0,p.life/p.ml);
+    gctx.font=p.sz+'px Share Tech Mono,monospace';gctx.textAlign='center';gctx.textBaseline='middle';
+    gctx.fillStyle=p.col+Math.floor(al*255).toString(16).padStart(2,'0');gctx.fillText(p.txt,p.x,p.y);
   });
   particles=particles.filter(p=>p.life>0);
 }
-
 function drawGlitch(){
-  if(glitchTimer<=0)return;
-  ctx.save();
-  for(let i=0;i<7;i++){const sy=Math.random()*canvas.height,sh=3+Math.random()*18,dx=(Math.random()-.5)*28;ctx.drawImage(canvas,0,sy,canvas.width,sh,dx,sy,canvas.width,sh);}
-  ctx.fillStyle=`rgba(255,0,170,${glitchTimer*.18})`;ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.restore();
+  if(glitchT<=0)return;glitchT-=.016;
+  gctx.save();
+  for(let i=0;i<6;i++){const sy=rnd(0,CH()),sh=rnd(3,18),dx=rnd(-26,26);gctx.drawImage(gc,0,sy,CW(),sh,dx,sy,CW(),sh);}
+  gctx.fillStyle=`rgba(255,0,170,${glitchT*.18})`;gctx.fillRect(0,0,CW(),CH());gctx.restore();
 }
 
-// ═══════════════════════════════════════════════
-//  IDLE REWARDS
-// ═══════════════════════════════════════════════
-function calcIdleRewards(){
-  const now=Date.now(),awayMs=now-gs.lastOnline,awaySec=Math.min(awayMs/1000,3600);
-  if(awaySec<30)return null;
-  const gqtE=Math.floor(awaySec*0.05),boxE=Math.floor(awaySec/120);
-  gs.player.gqt=Math.min(gs.player.maxGqt,gs.player.gqt+gqtE);
-  gs.boxes[0]=(gs.boxes[0]||0)+boxE;gs.lastOnline=now;
-  return{gqt:gqtE,boxes:boxE,secs:Math.floor(awaySec)};
+// MAIN LOOP
+function loop(ts){
+  const dt=Math.min((ts-lastT)/1000,.05);lastT=ts;
+  if(waveActive&&!paused){autoAtk(dt);autoSkills(dt);}
+  gs.skillCDs=gs.skillCDs.map((cd)=>Math.max(0,cd-dt));
+  checkUpgrade();
+  drawBg(dt);
+  if(waveActive||enemies.length>0)drawEnemies(dt);
+  drawPlayer();
+  drawParticles(dt);
+  if(glitchT>0)drawGlitch();
+  uiTick-=dt;if(uiTick<=0){uiTick=.08;renderUI();}
+  saveTick-=dt;if(saveTick<=0){saveTick=15;gs.lastOnline=Date.now();save();}
+  requestAnimationFrame(loop);
 }
 
-// ═══════════════════════════════════════════════
-//  MAIN LOOP
-// ═══════════════════════════════════════════════
-function gameLoop(ts){
-  const dt=Math.min((ts-lastFrameTime)/1000,.05);lastFrameTime=ts;
-  autoAttack(dt);
-  autoSkills(dt);
-  gs.player.skillCooldowns=gs.player.skillCooldowns.map((cd,i)=>Math.max(0,cd-dt));
-  if(glitchTimer>0)glitchTimer-=dt;
-  if(waveSpawnNeeded&&enemies.length===0){waveSpawnNeeded=false;spawnWave();}
-  drawBg(dt);drawPlayer();drawEnemies(dt);drawParticles(dt);drawGlitch();
-  uiTickTimer-=dt;if(uiTickTimer<=0){uiTickTimer=.06;updateUI();}
-  saveTimer-=dt;if(saveTimer<=0){saveTimer=15;gs.lastOnline=Date.now();saveState();}
-  requestAnimationFrame(gameLoop);
-}
-
-// ═══════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════
+// INIT
 function init(){
-  loadState();
-  const idle=calcIdleRewards();
-  if(idle&&(idle.gqt>0||idle.boxes>0)){
-    document.getElementById('idle-badge').style.display='block';
-    setTimeout(()=>document.getElementById('idle-badge').style.display='none',5000);
-    setTimeout(()=>addLog(`💤 Çevrimdışı ${idle.secs}s: +${idle.gqt} GQT +${idle.boxes} Common Kutu`,'#00ff88'),500);
-  }
-  initCanvas();initBg();
-  renderInventoryPanel();renderShipPreview();renderQuests();renderBoxes();renderSkillUpgrades();
-  gs.player.glitchSkills.forEach(idx=>document.getElementById('sk'+idx)?.classList.add('glitch-mode'));
-  window.addEventListener('resize',()=>{
-    const z=document.getElementById('canvas-zone');
-    canvas.width=z.clientWidth;canvas.height=z.clientHeight;
-    playerY=canvas.height*.50;initBg();
-  });
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){gs.lastOnline=Date.now();saveState();}});
-  lastFrameTime=performance.now();requestAnimationFrame(gameLoop);
+  load();checkDaily();
+  const idle=calcIdle();
+  if(idle&&(idle.gold>0||idle.ess>0))setTimeout(()=>addLog(`💤 Çevrimdışı ${fmtDur(idle.secs)}: +${fmt(idle.gold)}💰 +${fmt(idle.ess)}Öz`,'#00ff88'),600);
+  gc=document.getElementById('gc');
+  const zone=document.getElementById('czone');
+  gc.width=zone.clientWidth;gc.height=zone.clientHeight;
+  gctx=gc.getContext('2d');
+  sc=document.getElementById('sc');sctx=sc?sc.getContext('2d'):null;
+  pyPos=gc.height*.50;
+  initBg();
+  renderInv();renderShipPrev();renderQuests();renderBoxPanel();renderSkillTree();renderShipUpgZone();
+  gs.glitchSkills.forEach(i=>document.getElementById('sk'+i)?.classList.add('G'));
+  // restore auto checkboxes
+  const ao=gs.autoSettings||{};
+  ['autoOpen','autoEquip','autoSell','autoSellBag'].forEach(k=>{const el=document.getElementById('ao-'+k.replace('auto','').toLowerCase());if(el)el.checked=!!ao[k];});
+  document.getElementById('ao-auto') && (document.getElementById('ao-auto').checked=!!ao.autoOpen);
+  document.getElementById('ao-eq')   && (document.getElementById('ao-eq').checked=!!ao.autoEquip);
+  document.getElementById('ao-sell') && (document.getElementById('ao-sell').checked=!!ao.autoSell);
+  document.getElementById('ao-sellbag')&&(document.getElementById('ao-sellbag').checked=!!ao.autoSellBag);
+  document.getElementById('idle-box-cnt').textContent=gs.boxes;
+  window.addEventListener('resize',()=>{const z=document.getElementById('czone');gc.width=z.clientWidth;gc.height=z.clientHeight;pyPos=gc.height*.50;initBg();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){gs.lastOnline=Date.now();save();}});
+  lastT=performance.now();requestAnimationFrame(loop);
 }
 
-return{init,useSkill,openBox,upgradeSkill,switchTab,lootEquip,lootSell,lootBag,unequipSlot,showSkillTip,hideSkillTip,showEqTip,hideItemTip};
+return{
+  init,startWithBox,setAuto,useSkill,tab,
+  lootEq,lootSell,lootBag,unequip,eqTip,itTipH,skTip,skTipH,
+  openMkt,closeMkt,mktBuy,
+  upgSkill,upPassive,
+  tryShipUpgrade,openSlvl,closeSlvl,useSpeed,
+  startSpBoss,bAtk,bSkill,bRet,closeBossResult,
+  buyAbility,
+};
 })();
 window.addEventListener('load',()=>GQ.init());
 </script>
 </body>
-</html>
+</html>"""
+
+with open('/mnt/user-data/outputs/glitch-quantum.html','w',encoding='utf-8') as f:
+    f.write(content)
+print(f"Written: {len(content)} chars, {content.count(chr(10))} lines")
+PYEOF
+python3 /tmp/gq_build.py
