@@ -6,9 +6,9 @@
     <title>KÜBRA ❤️ ÜMİT - Aşk Platformu</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-
+ 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-
+ 
         body {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             min-height: 100vh;
@@ -18,7 +18,7 @@
             position: relative;
             overflow-x: hidden;
         }
-
+ 
         .bg-text {
             position: absolute;
             top: 50%;
@@ -32,7 +32,7 @@
             pointer-events: none;
             text-align: center;
         }
-
+ 
         .app-container {
             position: relative;
             z-index: 2;
@@ -47,7 +47,7 @@
             display: flex;
             flex-direction: column;
         }
-
+ 
         .back-btn {
             align-self: flex-start;
             background: rgba(255,255,255,0.5);
@@ -61,7 +61,7 @@
             transition: 0.3s;
         }
         .back-btn:hover { background: rgba(255,255,255,0.8); }
-
+ 
         /* ANA MENÜ */
         #menuScreen {
             display: flex;
@@ -99,15 +99,15 @@
         .option-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
         .option-card .icon { font-size: 80px; margin-bottom: 20px; }
         .option-card .title { font-size: 18px; font-weight: 800; color: #ff6b81; }
-
+ 
         /* KART EKRANI */
         #cardScreen { display: none; flex: 1; gap: 20px; }
-
+ 
         /* KAHVE EKRANI */
         #coffeeScreen { display: none; flex: 1; gap: 20px; flex-direction: row; }
-
+ 
         .play-area { flex: 2; display: flex; flex-direction: column; position: relative; }
-
+ 
         .slots { display: flex; justify-content: center; gap: 20px; margin-top: 50px; }
         .slot { width: 140px; height: 220px; border: 3px dashed rgba(255,255,255,0.6); border-radius: 15px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.1); transition: all 0.5s ease; }
         .deck-container { position: absolute; right: 20px; bottom: 20px; width: 140px; height: 220px; cursor: pointer; transition: transform 0.2s; }
@@ -120,11 +120,11 @@
         .drawn-card.negative-card { border-color: #e74c3c; }
         .drawn-card .icon { font-size: 50px; margin-bottom: 10px; }
         .drawn-card .title { font-size: 14px; font-weight: 600; color: #333; }
-
+ 
         @keyframes popIn { 0% { transform: scale(0) translateY(100px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
-
+ 
         .instruction { text-align: center; margin-top: 20px; color: #fff; font-size: 18px; font-weight: 600; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
-
+ 
         /* KAHVE FALI */
         .coffee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
         .photo-slot { position: relative; height: 150px; border: 3px dashed rgba(255,255,255,0.8); border-radius: 15px; background: rgba(255,255,255,0.3); display: flex; justify-content: center; align-items: center; text-align: center; padding: 10px; cursor: pointer; overflow: hidden; transition: 0.3s; }
@@ -134,7 +134,7 @@
         .photo-slot input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 3; }
         .submit-coffee-btn { display: none; margin: 30px auto 0; padding: 15px 40px; background: #ff6b81; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,107,129,0.4); transition: transform 0.2s; }
         .submit-coffee-btn:hover { transform: scale(1.05); }
-
+ 
         /* SOHBET (ortak) */
         .chat-container { flex: 1; background: #e5ddd5; border-radius: 20px; overflow: hidden; display: none; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: slideIn 0.5s ease forwards; max-width: 400px; }
         @keyframes slideIn { 0% { transform: translateX(50px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
@@ -147,15 +147,15 @@
         .chat-footer { background: #f0f0f0; padding: 15px; text-align: center; }
         .reset-btn { background: #128C7E; color: white; border: none; padding: 10px 25px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
         .reset-btn:hover { background: #075e54; }
-
+ 
         /* ALİ DİZİLİMİ EKRANI */
         #seansScreen { display: none; flex: 1; flex-direction: column; }
-
+ 
         /* Adım ekranları */
         .seans-step { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; padding: 20px; }
         .seans-step h2 { color: #333; font-size: 22px; margin-bottom: 30px; text-shadow: 1px 1px 3px rgba(255,255,255,0.6); }
         .seans-step p { color: #555; font-size: 15px; margin-bottom: 25px; }
-
+ 
         .seans-grid { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; max-width: 750px; }
         .seans-card {
             background: white;
@@ -175,7 +175,7 @@
         .seans-card .scard-icon { font-size: 26px; margin-bottom: 8px; display: block; }
         .seans-card .scard-title { font-size: 15px; font-weight: 800; }
         .seans-card .scard-desc { font-size: 12px; font-weight: 400; margin-top: 4px; opacity: 0.75; }
-
+ 
         .rol-grid { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; max-width: 700px; }
         .rol-card {
             background: white;
@@ -193,10 +193,10 @@
         }
         .rol-card:hover { background: #ff6b81; color: white; transform: translateY(-4px); }
         .rol-card .rol-icon { font-size: 36px; margin-bottom: 10px; display: block; }
-
+ 
         /* GRUP SOHBET */
         #grupScreen { display: none; flex: 1; flex-direction: column; }
-
+ 
         .grup-chat-wrap {
             display: flex;
             flex-direction: column;
@@ -207,7 +207,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             max-height: 75vh;
         }
-
+ 
         .grup-header {
             background: #075e54;
             color: white;
@@ -219,7 +219,7 @@
         .grup-avatar { width: 48px; height: 48px; background: #25D366; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0; }
         .grup-info h3 { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
         .grup-katilimci { font-size: 11px; color: #b2dfdb; }
-
+ 
         .grup-body {
             flex: 1;
             padding: 15px;
@@ -230,13 +230,13 @@
             gap: 10px;
             overflow-y: auto;
         }
-
+ 
         /* Mesaj baloncukları */
         .gmsg-row { display: flex; flex-direction: column; max-width: 85%; animation: fadeUp 0.4s ease; }
         .gmsg-row.right { align-self: flex-end; align-items: flex-end; }
         .gmsg-row.left { align-self: flex-start; align-items: flex-start; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+ 
         .gmsg-sender { font-size: 11px; font-weight: 700; margin-bottom: 3px; padding-left: 4px; }
         .sender-umit { color: #075e54; }
         .sender-kubra { color: #9c27b0; }
@@ -244,7 +244,7 @@
         .sender-baba { color: #1565c0; }
         .sender-atalar { color: #4a148c; }
         .sender-diger { color: #2e7d32; }
-
+ 
         .gmsg-bubble {
             padding: 10px 14px;
             border-radius: 0 14px 14px 14px;
@@ -260,13 +260,13 @@
         .bubble-baba { background: #bbdefb; }
         .bubble-atalar { background: #e8eaf6; }
         .bubble-white { background: #ffffff; }
-
+ 
         .gmsg-time { font-size: 10px; color: #999; margin-top: 3px; padding: 0 4px; }
-
+ 
         /* Yazıyor göstergesi */
         .typing-row { display: none; align-self: flex-start; }
         .typing-bubble { background: white; border-radius: 0 14px 14px 14px; padding: 10px 16px; font-size: 13px; color: #888; font-style: italic; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-
+ 
         /* Input alanı */
         .grup-footer {
             background: #f0f0f0;
@@ -302,7 +302,7 @@
         }
         .grup-send-btn:hover { background: #128C7E; }
         .grup-send-btn:disabled { background: #aaa; cursor: not-allowed; }
-
+ 
         .yeni-seans-btn {
             display: none;
             margin: 15px auto 5px;
@@ -318,7 +318,7 @@
             transition: transform 0.2s;
         }
         .yeni-seans-btn:hover { transform: scale(1.05); }
-
+ 
         @media (max-width: 768px) {
             #cardScreen, #coffeeScreen { flex-direction: column; }
             .chat-container { max-width: 100%; min-height: 300px; }
@@ -329,13 +329,13 @@
     </style>
 </head>
 <body>
-
+ 
 <div class="bg-text">KÜBRA ❤️‍🔥 ÜMİT</div>
-
+ 
 <div class="app-container">
-
+ 
     <button class="back-btn" id="backBtn" onclick="goHome()">🏠 Ana Menüye Dön</button>
-
+ 
     <!-- ANA MENÜ -->
     <div id="menuScreen">
         <h1>Bugün hangi falımıza bakacaksın HERŞEYİM ❤️?</h1>
@@ -354,7 +354,7 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- KART FALI EKRANI -->
     <div id="cardScreen">
         <div class="play-area">
@@ -386,7 +386,7 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- KAHVE FALI EKRANI -->
     <div id="coffeeScreen">
         <div class="play-area">
@@ -427,10 +427,10 @@
             </div>
         </div>
     </div>
-
+ 
     <!-- ALİ DİZİLİMİ ANA EKRANI -->
     <div id="seansScreen">
-
+ 
         <!-- ADIM 1: Konu Seçimi -->
         <div class="seans-step" id="step1" style="display:flex;">
             <h2>🌿 Hangi konuya bakmak istersin?</h2>
@@ -478,7 +478,7 @@
                 </div>
             </div>
         </div>
-
+ 
         <!-- ADIM 2: Rol Seçimi -->
         <div class="seans-step" id="step2">
             <h2>🌀 Bu seansa hangi rolden katılmak istersin?</h2>
@@ -486,7 +486,7 @@
             <p>Seçeceğin rol, seansın başlangıç noktası olacak...</p>
             <div class="rol-grid" id="rolGrid"></div>
         </div>
-
+ 
         <!-- ADIM 3: Grup Sohbet Ekranı -->
         <div id="grupScreen">
             <div class="grup-chat-wrap">
@@ -509,11 +509,11 @@
             </div>
             <button class="yeni-seans-btn" id="yeniSeansBtn" onclick="resetSeans()">🌿 Yeni Seansa Başla</button>
         </div>
-
+ 
     </div>
-
+ 
 </div>
-
+ 
 <script>
 // ====================================================
 // EKRAN KONTROL
@@ -526,7 +526,7 @@ function openScreen(screenId) {
     document.getElementById(screenId).style.display = 'flex';
     document.getElementById('backBtn').style.display = 'block';
 }
-
+ 
 function goHome() {
     document.getElementById('menuScreen').style.display = 'flex';
     document.getElementById('cardScreen').style.display = 'none';
@@ -537,7 +537,7 @@ function goHome() {
     resetCoffeeGame();
     resetSeans();
 }
-
+ 
 // ====================================================
 // ORTAK VERİ
 // ====================================================
@@ -550,7 +550,7 @@ const finalEndings = [
     "Bütün işaretlerin sonu şuraya çıkıyor: Ümit seni her gün daha çok seviyor.",
     "Her şey çok net bebeğim, kalbi sadece senin için atıyor ve Ümit kocan olacak."
 ];
-
+ 
 // ====================================================
 // 1. KART FALI
 // ====================================================
@@ -588,7 +588,7 @@ const cardNegativeResolutions = [
     "Yine de hiç korkma bebeğim, ne olursa olsun tüm bunları omuz omuza verip atlatacağız ve çok mutlu olacağız."
 ];
 let drawnCards = [], availableCards = [...deck], cardCanDraw = true;
-
+ 
 function drawCard() {
     if (drawnCards.length >= 3 || !cardCanDraw) return;
     const randomIndex = Math.floor(Math.random() * availableCards.length);
@@ -646,7 +646,7 @@ function resetCardGame() {
     document.getElementById('cardMessage').style.display = 'none';
     document.getElementById('cardMessage').innerText = '';
 }
-
+ 
 // ====================================================
 // 2. KAHVE FALI
 // ====================================================
@@ -771,7 +771,7 @@ function resetCoffeeGame() {
     document.getElementById('coffeeMessage').style.display = 'none';
     document.getElementById('coffeeMessage').innerHTML = '';
 }
-
+ 
 // ====================================================
 // 3. ALİ DİZİLİMİ SEANS MODÜLü
 // ====================================================
@@ -781,13 +781,13 @@ let seciliRol = '';
 let seansAsamasi = 0;
 let seansKonusmaGecmisi = [];
 let seansKatilimcilar = [];
-
+ 
 // Şu anki saat
 function simdiSaat() {
     const now = new Date();
     return now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
 }
-
+ 
 // Rol -> Renk/Stil eşleştirmesi
 function rolStil(rol) {
     const r = rol.toLowerCase();
@@ -798,7 +798,7 @@ function rolStil(rol) {
     if (r.includes('ata') || r.includes('büyük')) return { sender:'sender-atalar', bubble:'bubble-atalar' };
     return { sender:'sender-diger', bubble:'bubble-white' };
 }
-
+ 
 // Mesaj ekleme
 function mesajEkle(gonderen, metin, taraf) {
     const body = document.getElementById('grupBody');
@@ -815,13 +815,13 @@ function mesajEkle(gonderen, metin, taraf) {
     body.scrollTop = body.scrollHeight;
     seansKonusmaGecmisi.push({ rol: gonderen, metin: metin });
 }
-
+ 
 // Yazıyor... göster/gizle
 function yaziyorGoster(goster) {
     document.getElementById('typingRow').style.display = goster ? 'flex' : 'none';
     if (goster) document.getElementById('grupBody').scrollTop = document.getElementById('grupBody').scrollHeight;
 }
-
+ 
 // Gecikmeyle mesaj gönder
 function yaziYaz(gonderen, metin, gecikme, taraf) {
     return new Promise(resolve => {
@@ -832,11 +832,11 @@ function yaziYaz(gonderen, metin, gecikme, taraf) {
         }, gecikme);
     });
 }
-
+ 
 function bekle(ms) {
     return new Promise(r => setTimeout(r, ms));
 }
-
+ 
 // --- ADIM 1: Konu seçildi ---
 function seciKonu(konu, roller) {
     seansKonu = konu;
@@ -868,78 +868,341 @@ function seciKonu(konu, roller) {
         rolGrid.appendChild(btn);
     });
 }
-
+ 
+// ====================================================
+// ROL VERİ BANKASI — Her role göre 3 aşama için dolu metinler
+// ====================================================
+const rolVerisi = {
+    'Anne': {
+        giris: 'Buradayım kızım, seni hep yanımda hissettim. Bu alanda seninle olmak benim için de çok kıymetli... 💛',
+        ilkHis1: 'Göğsümde bir sıkışma var, sanki uzun süredir tuttuğum bir şey var orada...',
+        ilkHis2: 'Seni büyütürken bazı şeyleri eksik yaptığımı hissediyorum. Bunu taşıyorum hep içimde.',
+        ilkHis3: 'Bu alanda durmak ve hissetmek bana çok iyi geliyor. Seninle olmak güzel.',
+        olumlama: 'Sen benim en güzel eserimsin. Sana veremediğim şeylerin ağırlığını artık burada bırakıyorum. Seni seviyorum, her zaman sevdim. 💛',
+        sonHis1: 'Sanki uzun süredir taşıdığım o yük biraz hafifliyor... Teşekkür ederim bu alanı açtığın için.',
+        sonHis2: 'Kalbim genişledi. Daha önce bu kadar açık konuşamamıştık. Şimdi daha iyi hissediyorum.',
+        veda: 'Seni çok seviyorum. Bu seans bana da şifa oldu. Huzurla ayrılıyorum. 💛🙏'
+    },
+    'Baba': {
+        giris: 'Buradayım. Kolay değil bu... ama burada olmak istiyorum. 🙏',
+        ilkHis1: 'İçimde bir sertlik var, bir çelik gibi... ama aslında altında ne olduğunu bilmiyorum.',
+        ilkHis2: 'Yeterince iyi bir baba olup olmadığımı hep sorguladım. Bu alan bana o soruyu yeniden sordurtu.',
+        ilkHis3: 'Bir mesafe var hep aramızda, bunu fark ediyorum şimdi. Ama burada doldurmaya çalışıyorum.',
+        olumlama: 'Sana söyleyemediklerimi bu alan biliyor. Gurur duyuyorum senden, her zaman duydum. Bunu bilmeni istiyorum. 🙏',
+        sonHis1: 'İçimde bir yumuşama var. Sanki o sert dış kabuk biraz eridi bu alanda.',
+        sonHis2: 'Daha önce hissetmediğim bir hafiflik var. Bu seans bana da iyi geldi.',
+        veda: 'Yolun açık olsun. Huzurla ve şükranla ayrılıyorum. 🙏'
+    },
+    'Atalar': {
+        giris: 'Atalar olarak buradayız... Nesiller boyu taşınanları hissediyoruz bu alanda. 🌿',
+        ilkHis1: 'Çok eski enerjiler var burada. Bizden size geçen bazı yükler, bazı güzellikler...',
+        ilkHis2: 'Sizi izliyoruz, hep izledik. Umutlarımız sizinle yaşıyor.',
+        ilkHis3: 'Bu nesilde bir şeylerin çözüldüğünü hissediyoruz. Bu güzel, çok güzel.',
+        olumlama: 'Atalar olarak size söylüyoruz: Sizden önce taşınan acıları artık toprağa bırakıyoruz. Siz özgürsünüz. Sevinçle, sevgiyle yaşayın. 🌿✨',
+        sonHis1: 'Soyun bu kadar güçlü durması bizi mutlu ediyor. Çok daha hafif hissediyoruz.',
+        sonHis2: 'Bu farkındalık bizim için de bir şifa oldu. Teşekkürler.',
+        veda: 'Atalar olarak sizi seviyoruz. Yolunuz açık, ışığınız daim olsun. 🌿'
+    },
+    'Partner / Sevgili': {
+        giris: 'Buradayım, yanındayım. Seninle bu alanda olmak benim için de çok derin bir şey... 💕',
+        ilkHis1: 'Kalbimde hem sevinç hem de bir hassasiyet var. Seninle böyle derin bir yere girmek beni etkiliyor.',
+        ilkHis2: 'Seni burada izlemek, ne kadar güçlü biri olduğunu bir kez daha gösteriyor bana.',
+        ilkHis3: 'Bazen aramızdaki bazı örüntülerin de bu sistemden beslendiğini hissediyorum. Bunu birlikte görmek önemli.',
+        olumlama: 'Seni olduğun gibi seviyorum. Bu alana girmek için gösterdiğin cesaret seni daha da güzel yapıyor gözümde. Yanındayım, hep yanında olacağım. 💕',
+        sonHis1: 'Seninle bu deneyimi paylaşmak beni de dönüştürdü. Çok daha iyi hissediyorum.',
+        sonHis2: 'Kalbim dolu. Bu seans bize ikimize de iyi geldi sanki.',
+        veda: 'Seni seviyorum. Hep yanındayım. 💕'
+    },
+    'İç Çocuk': {
+        giris: 'Ben buradayım... bazen unutuluyorum ama buradayım. 🌸',
+        ilkHis1: 'Bazen çok yalnız hissediyorum... kimse benim sesimi duymuyor gibi geliyor.',
+        ilkHis2: 'Oyun oynamak istiyorum, güvende hissetmek istiyorum. Bazen bunu hatırlamak zor oluyor.',
+        ilkHis3: 'Şu an burada sevildiğimi hissediyorum. Bu güzel bir his.',
+        olumlama: 'Sen benim en saf halimsin. Artık seni görmezden gelmeyeceğim, seninle oynayacağım, seni dinleyeceğim. Güvendesin. 🌸',
+        sonHis1: 'Biraz daha iyi hissediyorum. Sanki birisi nihayet beni duydu.',
+        sonHis2: 'Sevilmek güzel. Teşekkür ederim. 🌸',
+        veda: 'Artık daha iyi olacak, biliyorum. Güvendesin. 🌸'
+    },
+    'Kalp': {
+        giris: 'Ben her zaman buradayım... sadece bazen sesimi duymak zorlaşıyor. ❤️',
+        ilkHis1: 'Bazen o kadar sıkışıyorum ki... sevmek istiyorum ama bir duvar var önümde gibi.',
+        ilkHis2: 'Açılmak istiyorum, ama açılmak bazen korkutucu.',
+        ilkHis3: 'Bu alanda biraz daha serbest hissediyorum kendimi.',
+        olumlama: 'Sevilmeyi hak ediyorsun. Kalbini açık tut, içine girecek güzellikler için yer var. ❤️',
+        sonHis1: 'Biraz daha açıldım bu seansta. Güzel hissettiriyor.',
+        sonHis2: 'Teşekkürler. Kalbim daha hafif. ❤️',
+        veda: 'Açık kal, sevmeye devam et. ❤️'
+    },
+    'Büyükanne (Anne Tarafı)': {
+        giris: 'Torunum, buradayım. Uzaktan da olsa seni hep hissettim. 💛',
+        ilkHis1: 'Bizim dönemimizde çok şey söylenmeden geçerdi. Belki bazı şeyler sana aktarıldı, farkında olmadan...',
+        ilkHis2: 'Seni izlemek bana güç veriyor. Ne kadar güçlü birisin.',
+        ilkHis3: 'Bu alanda bir araya gelmek çok kıymetli. Ailece bir bütünüz.',
+        olumlama: 'Torunum, seni çok seviyorum. Benden sana geçen güzellikler daima seninle olsun. Zorluklarsa artık burada kalsın. 💛',
+        sonHis1: 'Kalbim ferahladı. Bu alanda seninle olmak çok güzeldi.',
+        sonHis2: 'Güzel bir seans oldu. Şifalandım ben de biraz. Teşekkürler.',
+        veda: 'Seni seviyorum torunum. Daima yanındayım, kalbimde yaşıyorsun. 💛'
+    },
+    'Büyükbaba (Anne Tarafı)': {
+        giris: 'Buradayım. Belki hayatımda yeterince gösteremedim ama buradayım. 🙏',
+        ilkHis1: 'Erkekler duygularını belli etmez dediler bize. Ama bu alanda farklı hissediyorum.',
+        ilkHis2: 'Sizi izlemek gurur verici. Ailemiz devam ediyor, bu güzel.',
+        ilkHis3: 'Bazı şeyler söylenmeden geçti. Ama bu alanda onları hissediyorum.',
+        olumlama: 'Sana söyleyemediklerimi şimdi söylüyorum: Gurur duyuyorum senden. Bu yeter bana. 🙏',
+        sonHis1: 'İçimde bir rahatlama var. Bu alanın gücü etkileyici.',
+        sonHis2: 'Huzur buldum biraz. Güzel bir seans oldu.',
+        veda: 'Yolun açık olsun. Huzurla ayrılıyorum. 🙏'
+    },
+    'Büyükanne (Baba Tarafı)': {
+        giris: 'Sevgilim, buradayım. Seni uzaktan da olsa her zaman hissettim. 💙',
+        ilkHis1: 'Bizden size geçen bazı güzellikler var, bazı ağırlıklar da... ikisini de görüyorum burada.',
+        ilkHis2: 'Ailemiz köklü bir ağaç gibi. Sen de o ağacın bir dalısın, güçlü bir dal.',
+        ilkHis3: 'Bu alanda bir araya gelmek çok anlamlı. Hissediyorum bunu.',
+        olumlama: 'Seni seviyorum. Bizden sana aktarılan güzellikler daima seninle olsun. 💙',
+        sonHis1: 'Kalbim hafifçe ısındı bu seansta. Teşekkürler.',
+        sonHis2: 'Güzel bir an oldu. Huzur dolu hissediyorum.',
+        veda: 'Daima yanındayım, kalbimde taşıyorum seni. 💙'
+    },
+    'Büyükbaba (Baba Tarafı)': {
+        giris: 'Buradayım. Pek konuşmayı sevmem ama bu alan farklı... 🙏',
+        ilkHis1: 'Sizi izlemek yeterli benim için. Gurur duyuyorum.',
+        ilkHis2: 'Hayatta bazı sert kararlar aldım. Belki bazıları size yansıdı. Bunu fark ediyorum şimdi.',
+        ilkHis3: 'Bu alan bende de bir şeyleri gevşetiyor. Alışılmadık bir his.',
+        olumlama: 'Soyumuzun bu kadar güçlü durması beni mutlu ediyor. Devam et, yolun açık olsun. 🙏',
+        sonHis1: 'İçimde bir yumuşama var. Bu beklenmedik ama güzel.',
+        sonHis2: 'Huzurla ayrılıyorum. Bu seans değerliydi.',
+        veda: 'Güçlü kal. Huzurla ve şükranla ayrılıyorum. 🙏'
+    },
+    'Travma': {
+        giris: 'Ben de buradayım... uzun süredir taşınıyorum. Görülmek istedim. 💢',
+        ilkHis1: 'Beni ne zaman fark edecekti diye bekliyordum. Bu alan beni görmek için açıldı, hissediyorum.',
+        ilkHis2: 'Ağır bir yüküm, biliyorum. Ama benim de bir sebebim var, biri beni taşıdı buraya.',
+        ilkHis3: 'Bu alanda konuşulmak beni dönüştürüyor. Biraz hafifledim.',
+        olumlama: 'Artık taşınmak zorunda değilsin. Bu anda, bu alanda bırakılıyorsun. Şifa seninle. 💢→💚',
+        sonHis1: 'Çok daha hafifim. Görülmek şifalandırdı beni.',
+        sonHis2: 'Teşekkür ederim bu alanı açtığın için. Artık burada bırakılıyorum.',
+        veda: 'Artık serbest kalıyorum. Şifa olsun hepimize. 🌱'
+    },
+    'İyileşen Ben': {
+        giris: 'Ben de buradayım... henüz tam gelmedim ama yoldayım. 🌟',
+        ilkHis1: 'Adım adım büyüyorum. Bazen iki adım ileri, bir adım geri ama devam ediyorum.',
+        ilkHis2: 'Bu yolculukta kendimi daha çok tanıyorum. Bu güzel ama aynı zamanda cesaret istiyor.',
+        ilkHis3: 'Bu alanda var olmak beni güçlendiriyor.',
+        olumlama: 'Her adım önemli. Küçük de olsa ilerliyorsun ve bu yeterli. Kendine nazik ol. 🌟',
+        sonHis1: 'Biraz daha güçlü hissediyorum. Teşekkürler.',
+        sonHis2: 'Bu seans bana bir şeyler verdi. Hissediyorum.',
+        veda: 'Büyümeye devam edeceğim. Teşekkürler. 🌟'
+    },
+    'Hedef / Vizyon': {
+        giris: 'Ben buradayım, seni bekliyorum. Ne zamandır bana doğru yürümeni istiyorum. 🎯',
+        ilkHis1: 'Bazen çok uzak görünüyorum, biliyorum. Ama aslında sandığından yakınım.',
+        ilkHis2: 'Sana ulaşmak için gereken her şey içinde var. Buna inanıyorum.',
+        ilkHis3: 'Bu alanda bana bakman beni güçlendiriyor.',
+        olumlama: 'Sen bana ulaşabilirsin. Adım adım, sabırla. Ben seni bekliyorum. 🎯',
+        sonHis1: 'Bana biraz daha yaklaştın bu seansta. Hissediyorum bunu.',
+        sonHis2: 'Devam et. Her adım önemli.',
+        veda: 'Yolun açık. Beni bul. 🎯'
+    },
+    'Engel': {
+        giris: 'Buradayım. Belki istenmedim ama bir sebebim var. 🚧',
+        ilkHis1: 'Ben korkularından, inançlarından, bazen de geçmişinden yapıldım. Beni tanıman gerekiyor.',
+        ilkHis2: 'Beni görmezden gelince daha da büyüdüm. Ama bu alanda görülmek beni küçülttü.',
+        ilkHis3: 'Beni anlamak, aşmak için ilk adım.',
+        olumlama: 'Her engel bir öğretmendir. Benden öğrendiklerini taşı, kendini bırak. 🚧→🌱',
+        sonHis1: 'Biraz daha küçüldüm bu seansta. Bu iyi bir şey.',
+        sonHis2: 'Görülmek beni dönüştürdü. Artık daha küçüğüm.',
+        veda: 'Aşılmaya hazırım. Başarılar. 🌱'
+    },
+    'Destek Enerjisi': {
+        giris: 'Ben her zaman buradayım, sadece fark edilmemi bekliyorum. 🤝',
+        ilkHis1: 'Sana destek olmak için hep buradaydım. Bazen göremiyorsun beni, ama varım.',
+        ilkHis2: 'Bu alanda çok güçlü hissediyorum. Seni desteklemek bana da enerji veriyor.',
+        ilkHis3: 'Destek almak zayıflık değil. Bunu hatırlat kendine.',
+        olumlama: 'Destek almak da vermek kadar önemli. Bana yaslanmaya izin ver. 🤝',
+        sonHis1: 'Bu seansta seninle bağım güçlendi. İyi hissediyorum.',
+        sonHis2: 'Hep buradayım. Unutma.',
+        veda: 'Desteğim daima seninle. 🤝'
+    },
+    'Toplumun Beklentisi': {
+        giris: 'Ben de buradayım... çok yer kapladığımı biliyorum. 👁️',
+        ilkHis1: 'Yıllardır üzerine yüklendim. Bazen ne istediğini unutturdum sana.',
+        ilkHis2: 'Benden bağımsızlaşmak zor ama mümkün. Bu alanda bunu görüyorum.',
+        ilkHis3: 'Beni tanımak, benden özgürleşmenin ilk adımı.',
+        olumlama: 'Başkalarının sesleri sesini bastırmasın. Sen kendinsin, yeterlisin. 👁️→🦋',
+        sonHis1: 'Biraz daha küçüldüm. Bu güzel.',
+        sonHis2: 'Özgürlüğünü görüyorum, bu beni de dönüştürüyor.',
+        veda: 'Artık daha az yer kaplayacağım. Özgür ol. 🦋'
+    },
+    'Özgür Ben': {
+        giris: 'Ben buradayım! Bazen unutuluyorum ama var olduğumu biliyorum. 🦋',
+        ilkHis1: 'Kendim olmak bu kadar güzel ki... ama bazen çok fazla ses var etrafımda.',
+        ilkHis2: 'Bu alanda nefes alabiliyorum. Genişliyorum.',
+        ilkHis3: 'Özgürlük içten gelir. Bunu hatırlamak istedim.',
+        olumlama: 'Özgür olmak senin hakkın. Bunu kimse alamaz senden. 🦋',
+        sonHis1: 'Çok daha özgür hissediyorum. Teşekkürler.',
+        sonHis2: 'Bu seans bana kanatlarımı hatırlattı.',
+        veda: 'Uç! Ben hep buradayım. 🦋'
+    },
+    'Para Enerjisi': {
+        giris: 'Buradayım. Belki aramızda bir mesafe var, ama değiştirilebilir bu. 💛',
+        ilkHis1: 'Aileden sana aktarılan bazı inanışlar var para hakkında. Onlar bizi şekillendiriyor.',
+        ilkHis2: 'Ben engellenemem, ama engellenilebilirim. Fark önemli.',
+        ilkHis3: 'Bu alanda görülmek beni açıyor. Akabiliyorum.',
+        olumlama: 'Para enerjisi seninle akmak istiyor. Kapılarını aç, hak ettiğine inan. 💛',
+        sonHis1: 'Biraz daha akışkan hissediyorum. Bu güzel.',
+        sonHis2: 'Kapılar açılıyor. Hissediyorum.',
+        veda: 'Hak ettiğin her şey geliyor. 💛'
+    },
+    'Ata Mirası': {
+        giris: 'Ben nesillerdir taşınıyorum. Güzelliklerim de var, ağırlıklarım da. 🗝️',
+        ilkHis1: 'Atalardan sana geçen her şey bilinçli aktarılmadı. Ama bu alanda fark edebilirsin.',
+        ilkHis2: 'Güzelliklerimi al, ağırlıklarımı burada bırak. Bu miras senindir ama seçmek de senin hakkın.',
+        ilkHis3: 'Bu alanda görülmek beni dönüştürüyor.',
+        olumlama: 'Atandan gelen güzellikleri kabul et, ağırlıkları bırak. Bu senin hakkın. 🗝️',
+        sonHis1: 'Hafifledim. Artık sadece güzellikler kalıyor.',
+        sonHis2: 'Bu ayrışım çok değerliydi. Teşekkürler.',
+        veda: 'Güzellikler daima seninle. 🗝️'
+    },
+    'Beden': {
+        giris: 'Buradayım... bazen sesimi çok duyuyorsun, bazen hiç. Ben konuşmak istiyorum. 🫀',
+        ilkHis1: 'Sana bazı mesajlar vermeye çalışıyorum. Stres, ağrı, yorgunluk... bunlar benim dilim.',
+        ilkHis2: 'Bana nazik davranmak istiyorum. Ama bazen sen de beni zorluyorsun.',
+        ilkHis3: 'Bu alanda dinlenmek çok güzel. Sana teşekkür ederim.',
+        olumlama: 'Beden, taşıdığın her şeyi biliyor. Ona şükret, onu dinle. Seni korumaya çalışıyor. 🫀',
+        sonHis1: 'Biraz daha dinlenmiş hissediyorum. Güzel bir his.',
+        sonHis2: 'Seninle bu alanda olmak bana iyi geldi.',
+        veda: 'Beni dinlemeye devam et. Teşekkürler. 🫀'
+    },
+    'Hastalık / Şikayet': {
+        giris: 'Ben de buradayım. Görülmek istedim, bu yüzden geldim. 🌡️',
+        ilkHis1: 'Bazen bedenin sana bir şey söylemek istediğinde ben çıkıyorum ortaya. Bir mesaj taşıyorum.',
+        ilkHis2: 'Beni sadece düşman olarak görme. Bir işaret olduğum da düşünülebilir.',
+        ilkHis3: 'Bu alanda görülmek beni yumuşatıyor.',
+        olumlama: 'Her şikayetin bir mesajı var. Onu duyduğunda, ben de hafifleyeceğim. 🌡️→💚',
+        sonHis1: 'Biraz daha hafifim. Görülmek şifalandırdı.',
+        sonHis2: 'Mesajım alındı. Teşekkürler.',
+        veda: 'Şifa olsun. 💚'
+    },
+    'Şifa Enerjisi': {
+        giris: 'Ben her zaman buradayım. Sadece davet edilmeyi bekliyorum. ✨',
+        ilkHis1: 'Bu alanda çok güçlü hissediyorum. Herkesin içinde bir şeyler açılıyor.',
+        ilkHis2: 'Şifa anlık olmayabilir. Ama tohum bu alanda atıldı.',
+        ilkHis3: 'Seni sarmak istiyorum, güvende hissettirmek istiyorum.',
+        olumlama: 'Şifa zaten içinde. Ben sadece onu hatırlatmak için buradayım. ✨',
+        sonHis1: 'Bu alanda çok yoğun hissediyorum kendimi. Güzel bir his.',
+        sonHis2: 'Şifa yayılıyor. Hissediyorum.',
+        veda: 'Şifa daima seninle olsun. ✨'
+    },
+    'Kaybedilen Kişi': {
+        giris: 'Buradayım... düşündüğünden daha yakındayım. 🕊️',
+        ilkHis1: 'Gitmek zorunda kaldım ama hiç gitmedim aslında. Kalbinde yaşıyorum.',
+        ilkHis2: 'Bazen eksikliğimi hissediyorsun, biliyorum. Bu sevginin derinliğini gösteriyor.',
+        ilkHis3: 'Bu alanda seninle olmak bana da güzel hissettiriyor.',
+        olumlama: 'Yas tutmak sevginin bir ifadesi. Ama artık bırakabilirsin. Ben iyiyim, sen de iyi olabilirsin. 🕊️',
+        sonHis1: 'Seninle bu alanda buluşmak çok güzeldi. Teşekkürler.',
+        sonHis2: 'Huzurluyum. Sen de huzurlu ol.',
+        veda: 'Seni seviyorum. Her zaman yanındayım, kalbinde. 🕊️'
+    },
+    'Geri Kalan Aile': {
+        giris: 'Buradayız. Hepimiz birbirimizin parçasıyız. 🫂',
+        ilkHis1: 'Aile olarak taşıdığımız ortak yükler var. Bu alanda onları görüyoruz.',
+        ilkHis2: 'Birbirimizi zaman zaman anlayamıyoruz. Ama sevgi hep var.',
+        ilkHis3: 'Bu alanda bir araya gelmek bizi güçlendiriyor.',
+        olumlama: 'Aile olarak birbirimize kök oluyoruz. Kökler güçlüyse, dal ne kadar uzarsa uzasın güvende kalır. 🫂',
+        sonHis1: 'Daha bağlı hissediyoruz. Bu seans bize iyi geldi.',
+        sonHis2: 'Birlik güzel. Teşekkürler.',
+        veda: 'Birlikte güçlüyüz. 🫂'
+    },
+    'Yaşam': {
+        giris: 'Ben buradayım, her zaman. Sadece bana bakman yeterli. 🌱',
+        ilkHis1: 'Bazen çok zor hissettiriyorum, biliyorum. Ama içinde çok güzellikler sakladım.',
+        ilkHis2: 'Her an yeni bir şans. Her nefes yeni bir başlangıç.',
+        ilkHis3: 'Bu alanda seni izlemek beni mutlu ediyor.',
+        olumlama: 'Yaşam seni seviyor. Her zorluğun içinde sana bir hediye sakladım. 🌱',
+        sonHis1: 'Bu seans beni de güzelleştirdi. Teşekkürler.',
+        sonHis2: 'Devam et, her şey güzel olacak.',
+        veda: 'Seni seviyorum. Yaşamaya devam et. 🌱'
+    }
+};
+ 
+// Veri bankasında olmayan roller için varsayılan
+function rolVeri(rol, alan) {
+    if (rolVerisi[rol]) return rolVerisi[rol][alan];
+    const varsayilan = {
+        giris: 'Buradayım, alanı hissediyorum... 🌿',
+        ilkHis1: 'İçimde bazı şeyler var, tam tanımlayamıyorum ama hissediyorum.',
+        ilkHis2: 'Bu alan bana farklı hissettiriyor. Açılıyorum yavaş yavaş.',
+        ilkHis3: 'Burada olmak güzel. Devam etmek istiyorum.',
+        olumlama: 'Bu alanda seninle olmaktan onur duyuyorum. 🌿',
+        sonHis1: 'Daha iyi hissediyorum. Bu seans değerliydi.',
+        sonHis2: 'Teşekkür ederim bu alanı açtığın için.',
+        veda: 'Huzurla ayrılıyorum. Şifa olsun. 🌿'
+    };
+    return varsayilan[alan];
+}
+ 
 // --- ADIM 2: Rol seçildi, grup sohbet başlar ---
 async function seciRol(rol) {
     seciliRol = rol;
     document.getElementById('step2').style.display = 'none';
     document.getElementById('grupScreen').style.display = 'flex';
-
-    // Katılımcı listesini oluştur
+ 
     seansKatilimcilar = ['ÜmitAşkımCan', ...seansRoller.filter(r => r !== 'Danışan')];
     document.getElementById('grupKatilimci').innerText = seansKatilimcilar.join(', ');
-
-    // Input devre dışı
+ 
     document.getElementById('grupInput').disabled = true;
     document.getElementById('grupSendBtn').disabled = true;
-
     yaziyorGoster(true);
-
-    // Açılış mesajı ÜmitAşkımCan'dan
+ 
+    // Açılış
     await bekle(2000);
     yaziyorGoster(false);
-    mesajEkle('ÜmitAşkımCan', `🌿 Herkesi merhaba ile karşılıyorum. Bugünkü seansımızın konusu: <b>${seansKonu}</b>. Alan açılıyor, lütfen herkes derin bir nefes alsın...`, 'left');
-    await bekle(800);
+    mesajEkle('ÜmitAşkımCan', `🌿 Herkesi sevgi ve saygıyla karşılıyorum. Bugünkü seansımızın konusu: <b>${seansKonu}</b>.<br>Alan şimdi açılıyor... Lütfen herkes derin bir nefes alsın, bedeni hissetsin ve bu ana tam olarak gelsin.`, 'left');
+    await bekle(1000);
     yaziyorGoster(true);
-
-    // Diğer katılımcıların giriş mesajları
-    const girisler = [
-        { rol: 'Anne', mesaj: 'Buradayım, alanı hissediyorum...' },
-        { rol: 'Baba', mesaj: 'Buradayım, hazırım.' },
-        { rol: 'Atalar', mesaj: 'Atalar olarak buradayız, seansı destekliyoruz.' },
-        { rol: 'Partner / Sevgili', mesaj: 'Yanındayım, alanı hissediyorum.' },
-        { rol: 'Büyükanne (Anne Tarafı)', mesaj: 'Buradayım sevgilim...' },
-        { rol: 'Büyükbaba (Baba Tarafı)', mesaj: 'Alanı hissediyorum, hazırım.' },
-    ];
-    for (const katilimci of seansRoller.filter(r => r !== 'Danışan')) {
-        const giris = girisler.find(g => g.rol === katilimci);
-        if (giris) {
-            await bekle(2200);
-            yaziyorGoster(false);
-            mesajEkle(katilimci, giris.mesaj, 'left');
-            await bekle(600);
-            yaziyorGoster(true);
-        }
-    }
-
-    // Danışana ilk soru
+ 
     await bekle(2500);
     yaziyorGoster(false);
-    mesajEkle('ÜmitAşkımCan', `KübrAŞKIMTAŞ, <b>${seciliRol} olarak</b> bu anda neler hissediyorsun? Duygularını ve içinde ne taşıdığını bizimle paylaşır mısın? 🌿`, 'left');
+    mesajEkle('ÜmitAşkımCan', `Bu alanda bugün birbirimize destek olacağız. Kimse yargılamıyor, kimse çözüm üretmeye çalışmıyor. Sadece hissediyoruz, görüyoruz ve kabul ediyoruz. 🌿`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    // Tüm katılımcıların giriş mesajları — hepsi konuşuyor
+    for (const katilimci of seansRoller.filter(r => r !== 'Danışan')) {
+        await bekle(2500);
+        yaziyorGoster(false);
+        mesajEkle(katilimci, rolVeri(katilimci, 'giris'), 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+    }
+ 
+    // Danışana ilk soru
+    await bekle(2800);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `KübrAŞKIMTAŞ, <b>${seciliRol} olarak</b> bu anda neler hissediyorsun? İçinde ne var, ne taşıyorsun? Bedeninde bir his var mı? Bizimle paylaşır mısın? 🌿`, 'left');
     seansAsamasi = 1;
-
-    // Input aktif
+ 
     document.getElementById('grupInput').disabled = false;
     document.getElementById('grupSendBtn').disabled = false;
     document.getElementById('grupInput').focus();
     yaziyorGoster(false);
 }
-
+ 
 // --- Danışanın mesaj göndermesi ---
 async function grupGonder() {
     const input = document.getElementById('grupInput');
     const metin = input.value.trim();
     if (!metin) return;
-
+ 
     input.value = '';
     input.disabled = true;
     document.getElementById('grupSendBtn').disabled = true;
-
+ 
     mesajEkle('KübrAŞKIMTAŞ', metin, 'right');
-
+ 
     yaziyorGoster(true);
     await bekle(600);
-
+ 
     if (seansAsamasi === 1) {
         await fazDuygusalPaylasim(metin);
     } else if (seansAsamasi === 2) {
@@ -948,166 +1211,283 @@ async function grupGonder() {
         await fazKapanis(metin);
     }
 }
-
-// --- AŞAMA 1: Danışanın paylaşımına yanıt + Diğer rollere soru ---
-async function fazDuygusalPaylasim(kubraMesaj) {
-    // ÜmitAşkımCan onaylar
-    await yaziYaz('ÜmitAşkımCan', `Paylaşımın için teşekkür ederim... ${kubraMesaj ? 'Hissettiklerini duymak çok değerliydi.' : ''} Şimdi diğer üyelerimizin de neler hissettiğini soralım. 🌿`, 2500);
-
-    const sorular = [
-        { adres: 'Anne', soru: 'Sen bu alanda nasıl hissediyorsun? Bedende bir his var mı?' },
-        { adres: 'Baba', soru: 'Baba olarak sen bu anda ne hissediyorsun, ne taşıyorsun?' },
-        { adres: 'Atalar', soru: 'Atalar olarak bu alandan ne görmek istersiniz?' },
-        { adres: 'Partner / Sevgili', soru: 'Bu alanda seni ne etkiliyor, ne hissediyorsun?' },
-        { adres: 'Büyükanne (Anne Tarafı)', soru: 'Bu alanda bedeninde neler dönüyor, paylaşır mısın?' },
-        { adres: 'Büyükbaba (Baba Tarafı)', soru: 'Bu alandan neler hissediyorsun?' },
-    ];
-    const yanıtlar = [
-        'İçimde ağır bir yük gibi bir şey var... ama burada konuşmak biraz hafifletiyor.',
-        'Sakin ama dikkatli bir hal var bende. Bir şeyleri tuttuğumu hissediyorum.',
-        'Uzun zamanlar öncesinden gelen enerjiler var burada. Eskiden taşınanlar...',
-        'Seninle bu alanda olmak beni güçlendiriyor. Buradayım.',
-        'Kalbim sıkışıyor biraz ama şimdi biraz daha açılıyor...',
-        'Sessiz ama güçlü bir duruş var içimde. Destek oluyorum.',
-    ];
-
-    for (let i = 0; i < seansRoller.filter(r => r !== 'Danışan').length; i++) {
-        const katilimci = seansRoller.filter(r => r !== 'Danışan')[i];
-        const soruObj = sorular.find(s => s.adres === katilimci);
-        if (!soruObj) continue;
-        await bekle(2800);
-        yaziyorGoster(false);
-        mesajEkle('ÜmitAşkımCan', `${katilimci}, ${soruObj.soru}`, 'left');
-        await bekle(800);
-        yaziyorGoster(true);
-        await bekle(3500);
-        yaziyorGoster(false);
-        const yanit = yanıtlar[i] || 'Buradayım, hissediyorum...';
-        mesajEkle(katilimci, yanit, 'left');
-        await bekle(600);
-        yaziyorGoster(true);
+ 
+// Konuya göre ÜmitAşkımCan'ın kişiye sorduğu ilk tur soruları
+function ilkTurSoru(katilimci, konu) {
+    const sorular = {
+        'Anne': {
+            'Köken Ailesi ve Aile Dinamikleri': 'Sen bu alanda nasıl hissediyorsun? Bedeninde bir his var mı, göğsünde mi, mideninde mi?',
+            'Aşk ve Romantik İlişkiler': 'Anne olarak, kızının bu konudaki hislerini izlerken sen ne taşıyorsun içinde?',
+            'Travma ve Şifa': 'Bu alanda, geçmişte yaşananları düşününce sende ne canlanıyor?',
+            'Kariyer ve Yaşam Amacı': 'Kızının bu yolculuğuna tanıklık ederken sen ne hissediyorsun?',
+            'Sınırlar ve Bağımsızlık': 'Kızının sınır koyma çalışmasını gözlemlerken içinde ne var?',
+            'Para ve Bereket Bilinci': 'Para konusundaki aile inançları hakkında ne taşıyorsun, paylaşır mısın?',
+            'Bedensel Şikayetler ve Sağlık': 'Bu alanda bedeninde neler dönüyor? Bir his var mı?',
+            'Kayıplar ve Yas': 'Bu kayıpla ilgili sen ne taşıyorsun içinde?',
+        },
+        'Baba': {
+            'Köken Ailesi ve Aile Dinamikleri': 'Baba olarak bu alanda durmak nasıl hissettiriyor seni? Ne taşıyorsun?',
+            'Aşk ve Romantik İlişkiler': 'Kızının ilişkisini gözlemlediğinde içinde neler oluyor?',
+            'Travma ve Şifa': 'Bu alanda, geçmişe döndüğünde sende ne belirir?',
+            'Kariyer ve Yaşam Amacı': 'Kızının hedeflerine bakışın nasıl? Bu alanda ne hissediyorsun?',
+            'Sınırlar ve Bağımsızlık': 'Kızının bağımsızlaşma sürecini görmek sende ne uyandırıyor?',
+            'Para ve Bereket Bilinci': 'Para ve bereket konusunda sen ne taşıyorsun bu alanda?',
+            'Bedensel Şikayetler ve Sağlık': 'Bu alanda durup hissetmek nasıl geliyor? Bedeninde bir şey var mı?',
+            'Kayıplar ve Yas': 'Bu kayıpla ilgili senin taşıdıkların neler?',
+        },
+        'Atalar': {
+            'default': 'Atalar olarak bu alandan ne görüyorsunuz? Neler hissediyorsunuz, paylaşır mısınız?'
+        },
+        'Partner / Sevgili': {
+            'Aşk ve Romantik İlişkiler': 'Bu alanda, ilişkimize dair ne hissediyorsun? İçinde ne var?',
+            'default': 'Bu alanda seninle olmak nasıl bir his? Ne taşıyorsun içinde?'
+        },
+        'İç Çocuk': {
+            'default': 'İç çocuk olarak bu alanda nasıl hissediyorsun? Ne istiyorsun şu an?'
+        },
+        'Kalp': {
+            'default': 'Kalp olarak şu an nasılsın? Açık mısın, sıkışmış mı hissediyorsun?'
+        }
+    };
+    if (sorular[katilimci]) {
+        return sorular[katilimci][konu] || sorular[katilimci]['default'] || `${katilimci}, bu alanda neler hissediyorsun?`;
     }
-
-    // Güzelleme ve olumlama
+    return `${katilimci}, bu alanda neler hissediyorsun, bedeninde bir his var mı?`;
+}
+ 
+// İkinci tur (olumlama sonrası) sorular
+function ikinciTurSoru(katilimci) {
+    const sorular = {
+        'Anne': 'Anne, şu an nasıl hissediyorsun? Bu alanda bir şeyler değişti mi içinde?',
+        'Baba': 'Baba, şimdi nasılsın? Bir yumuşama ya da değişim hissediyor musun?',
+        'Atalar': 'Atalar, bu seans size ne verdi? Bir şeyler değişti mi bu alanda?',
+        'Partner / Sevgili': 'Şu an nasıl hissediyorsun? İçinde bir şeyler hafifliyor mu?',
+        'İç Çocuk': 'İç çocuk, şimdi nasılsın? Biraz daha güvende hissediyor musun?',
+        'Kalp': 'Kalp, şu an biraz daha mı açık? Nasıl hissediyorsun?',
+        'Büyükanne (Anne Tarafı)': 'Şu an nasılsın? Bu seans sende bir şeyleri değiştirdi mi?',
+        'Büyükbaba (Anne Tarafı)': 'Şimdi nasıl hissediyorsun? İçinde ne var?',
+        'Büyükanne (Baba Tarafı)': 'Şu an kalbinde ne var? Bir hafiflik var mı?',
+        'Büyükbaba (Baba Tarafı)': 'Bu seans sana ne verdi, hissediyor musun?',
+        'Travma': 'Şu an nasıl hissediyorsun? Biraz daha hafif mi?',
+        'İyileşen Ben': 'Şimdi nasılsın? Bu alanda güçlendin mi biraz?',
+        'Hedef / Vizyon': 'Şu an nasıl hissediyorsun? Biraz daha yakın mı hissediyorsun kendini?',
+        'Engel': 'Bu seansta küçüldün mü biraz? Nasıl hissediyorsun?',
+        'Destek Enerjisi': 'Şu an nasılsın? Bu alanda kendini nasıl hissediyorsun?',
+        'Toplumun Beklentisi': 'Bu seans seni dönüştürdü mü biraz? Nasıl hissediyorsun?',
+        'Özgür Ben': 'Şu an kanatların biraz daha açıldı mı? Nasıl hissediyorsun?',
+        'Para Enerjisi': 'Bu alanda biraz daha akışkan mı hissediyorsun? Nasılsın?',
+        'Ata Mirası': 'Şu an nasıl hissediyorsun? Ağırlıklar bırakılıyor mu?',
+        'Beden': 'Şu an nasılsın? Biraz daha dinlenmiş mi hissediyorsun?',
+        'Hastalık / Şikayet': 'Bu seans sana ne verdi? Biraz daha hafif misin?',
+        'Şifa Enerjisi': 'Şu an nasıl hissediyorsun? Bu alanda ne değişti?',
+        'Kaybedilen Kişi': 'Şu an nasılsın? Bu alan sana ne verdi?',
+        'Geri Kalan Aile': 'Şu an birlikte nasıl hissediyorsunuz? Daha bağlı mı?',
+        'Yaşam': 'Şu an nasıl hissediyorsun? Bu seans seni de güzelleştirdi mi?',
+    };
+    return sorular[katilimci] || `${katilimci}, şu an nasıl hissediyorsun? Bu seans sana ne verdi?`;
+}
+ 
+// --- AŞAMA 1: Danışanın paylaşımına yanıt + Tüm rollere ilk soru ---
+async function fazDuygusalPaylasim(kubraMesaj) {
+    const diger = seansRoller.filter(r => r !== 'Danışan');
+ 
+    // ÜmitAşkımCan'ın onay mesajı
     await bekle(2500);
     yaziyorGoster(false);
-    mesajEkle('ÜmitAşkımCan', `🌿 Çok derin şeyler duydum... Herkesin paylaşımı bu alanı güzelleştirdi. <b>${seciliRol} olarak sana söylemek istiyorum:</b> Taşıdıkların sadece sana ait değil. Bu sistemin içinde herkesin bir payı var ve sen bu farkındalıkla büyük bir adım attın. Şimdi sana ve herkese bir soru sormak istiyorum... 💚`, 'left');
-
-    seansAsamasi = 2;
-    await bekle(2000);
-
-    // Danışana nasıl hissettik sorusu
+    mesajEkle('ÜmitAşkımCan', `Paylaşımın için çok teşekkür ederim KübrAŞKIMTAŞ... Hissettiklerini bu alana getirmen başlı başına büyük bir cesaret. Şimdi bu alandaki diğer üyelerimizin de neler hissettiğini soralım, onların seslerini de duyalım. 🌿`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    // Her katılımcıya sırayla soru sor ve 2 mesaj al
+    for (const katilimci of diger) {
+        // Soru
+        await bekle(3000);
+        yaziyorGoster(false);
+        const soru = ilkTurSoru(katilimci, seansKonu);
+        mesajEkle('ÜmitAşkımCan', `${katilimci}, ${soru}`, 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+ 
+        // İlk yanıt
+        await bekle(4000);
+        yaziyorGoster(false);
+        mesajEkle(katilimci, rolVeri(katilimci, 'ilkHis1'), 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+ 
+        // İkinci yanıt (kendiliğinden)
+        await bekle(4500);
+        yaziyorGoster(false);
+        mesajEkle(katilimci, rolVeri(katilimci, 'ilkHis2'), 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+ 
+        // ÜmitAşkımCan kısa bir onay
+        await bekle(3000);
+        yaziyorGoster(false);
+        const onaylar = [
+            `Bunu duymak çok değerliydi, teşekkür ederim ${katilimci}... 🌿`,
+            `Paylaşımın bu alanı derinleştirdi, teşekkürler ${katilimci}. 💚`,
+            `Bu sesi duymak çok önemliydi. Teşekkür ederim ${katilimci}. 🌱`,
+        ];
+        mesajEkle('ÜmitAşkımCan', onaylar[Math.floor(Math.random() * onaylar.length)], 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+    }
+ 
+    // Olumlama ve güzelleme
+    await bekle(3500);
     yaziyorGoster(false);
-    mesajEkle('ÜmitAşkımCan', `KübrAŞKIMTAŞ, <b>${seciliRol} olarak şu an biraz daha iyi hissediyor musun? Nasıl hissediyorsun?</b> 🌱`, 'left');
-
+    mesajEkle('ÜmitAşkımCan', `🌿 Bu kadar derin ve güzel şeyler duydum... Herkesin burada olması bu alanı çok değerli kıldı. Şimdi bir an duralım ve bu güzellikleri içimize çekelim...`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    await bekle(4000);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `<b>${seciliRol} olarak sana söylemek istiyorum:</b> Taşıdıkların sadece sana ait değil. Bu sistemin içinde herkesin bir payı var. Sen bugün bu farkındalıkla hem kendin hem de bu sistemdeki herkes için büyük bir adım attın. 💚`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    // Her katılımcı olumlama yapıyor
+    await bekle(3000);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `Şimdi bu alandaki herkesin sana söylemek istediklerini duyalım... 🌿`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    for (const katilimci of diger) {
+        await bekle(3500);
+        yaziyorGoster(false);
+        mesajEkle(katilimci, rolVeri(katilimci, 'olumlama'), 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+    }
+ 
+    // Danışana nasıl hissettikleri sorusu
+    await bekle(3500);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `Ne kadar güzel, ne kadar derin... Bu alan sizinle doldu. 🌿 Şimdi sana sormak istiyorum KübrAŞKIMTAŞ...`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    await bekle(3000);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `<b>${seciliRol} olarak şu an nasıl hissediyorsun? Bedeninde ne var, kalbinde ne var? Biraz daha iyi hissediyor musun?</b> 🌱`, 'left');
+    seansAsamasi = 2;
+ 
     document.getElementById('grupInput').disabled = false;
     document.getElementById('grupSendBtn').disabled = false;
     document.getElementById('grupInput').focus();
     yaziyorGoster(false);
 }
-
-// --- AŞAMA 2: Nasıl hissettikler ---
+ 
+// --- AŞAMA 2: Herkesin son hisleri ---
 async function fazSorular(kubraCevap) {
-    await yaziYaz('ÜmitAşkımCan', `${kubraCevap ? 'Harika, paylaşımın çok değerliydi. 💚' : ''} Şimdi diğer üyelerimize de soralım...`, 2000);
-
-    const hissorular = [
-        { adres: 'Anne', soru: 'Anne, sen de şu an nasıl hissediyorsun? Biraz daha iyi hissettirdi mi bu seans?' },
-        { adres: 'Baba', soru: 'Baba, şimdi nasılsın? İçinde ne değişti?' },
-        { adres: 'Atalar', soru: 'Atalar, bu alan size ne verdi?' },
-        { adres: 'Partner / Sevgili', soru: 'Şu an nasıl hissediyorsun, bir şeyler daha mı hafif?' },
-        { adres: 'Büyükanne (Anne Tarafı)', soru: 'Şu an nasılsın, kalbinde ne var?' },
-        { adres: 'Büyükbaba (Baba Tarafı)', soru: 'Bu seansın sana ne verdiğini hissediyor musun?' },
-    ];
-    const hisyanit = [
-        'Evet... sanki bir yük kalktı gibi. Daha hafif hissediyorum. 💚',
-        'İçimde bir yumuşama var. Daha önce fark etmemiştim.',
-        'Bu farkındalık bizim için de çok kıymetliydi. Teşekkürler.',
-        'Seninle bu alanda olmak şifalandırıcıydı. Çok daha iyiyim. 💕',
-        'Kalbim genişledi biraz. Teşekkür ederim.',
-        'Güçlü ve huzurlu hissediyorum. Bu seans çok değerliydi.',
-    ];
-
-    for (let i = 0; i < seansRoller.filter(r => r !== 'Danışan').length; i++) {
-        const katilimci = seansRoller.filter(r => r !== 'Danışan')[i];
-        const soruObj = hissorular.find(s => s.adres === katilimci);
-        if (!soruObj) continue;
+    const diger = seansRoller.filter(r => r !== 'Danışan');
+ 
+    await bekle(2500);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `Bunu duymak çok güzeldi, teşekkür ederim KübrAŞKIMTAŞ... 💚 Şimdi bu alandaki herkese de sormak istiyorum; bu seans onlara ne verdi, nasıl hissediyorlar...`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    // Her katılımcıya son his sorusu, 2 yanıt
+    for (const katilimci of diger) {
         await bekle(3500);
         yaziyorGoster(false);
-        mesajEkle('ÜmitAşkımCan', soruObj.soru, 'left');
+        mesajEkle('ÜmitAşkımCan', ikinciTurSoru(katilimci), 'left');
         await bekle(800);
         yaziyorGoster(true);
+ 
         await bekle(5000);
         yaziyorGoster(false);
-        const yanit = hisyanit[i] || 'Teşekkür ederim, daha iyi hissediyorum.';
-        mesajEkle(katilimci, yanit, 'left');
-        await bekle(600);
+        mesajEkle(katilimci, rolVeri(katilimci, 'sonHis1'), 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+ 
+        await bekle(4500);
+        yaziyorGoster(false);
+        mesajEkle(katilimci, rolVeri(katilimci, 'sonHis2'), 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+ 
+        // ÜmitAşkımCan kısa onay
+        await bekle(3000);
+        yaziyorGoster(false);
+        const onaylar2 = [
+            `Bunu duymak çok güzel. Teşekkür ederim ${katilimci}. 🌿`,
+            `Bu şifa çok değerliydi. Teşekkürler ${katilimci}. 💚`,
+            `Ne güzel bir değişim... Teşekkür ederim ${katilimci}. 🌱`,
+        ];
+        mesajEkle('ÜmitAşkımCan', onaylar2[Math.floor(Math.random() * onaylar2.length)], 'left');
+        await bekle(800);
         yaziyorGoster(true);
     }
-
+ 
     seansAsamasi = 3;
-    await bekle(2500);
+    await bekle(3500);
     yaziyorGoster(false);
-
-    // Son olarak danışana kapatma sorusu
-    mesajEkle('ÜmitAşkımCan', `KübrAŞKIMTAŞ, seansımızı kapatmadan önce son olarak sana sormak istiyorum: <b>Bu seans sana ne verdi? Ne hissediyorsun?</b> 🌿`, 'left');
+    mesajEkle('ÜmitAşkımCan', `Bu kadar güzellik... Bu kadar şifa... 🌿 Seansımızı kapatmadan önce son olarak sana sormak istiyorum KübrAŞKIMTAŞ:`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    await bekle(3000);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `<b>Bu seans sana ne verdi? İçinde ne değişti, ne hissediyorsun şu an?</b> 🌿`, 'left');
+ 
     document.getElementById('grupInput').disabled = false;
     document.getElementById('grupSendBtn').disabled = false;
     document.getElementById('grupInput').focus();
     yaziyorGoster(false);
 }
-
+ 
 // --- AŞAMA 3: Kapanış ---
 async function fazKapanis(sonMesaj) {
-    // Input kapat
     document.getElementById('grupInput').disabled = true;
     document.getElementById('grupSendBtn').disabled = true;
-
+ 
+    const diger = seansRoller.filter(r => r !== 'Danışan');
+ 
     await bekle(800);
     yaziyorGoster(true);
     await bekle(3000);
     yaziyorGoster(false);
-
-    const kapanis = [
-        'Hepimize şifa olsun. Her isteğimiz saygı ve sevgiyle, kolaylıkla olsun. Alan kapandı, seansımız bitti. 🌿',
-        'Tüm istekleriniz kolaylıkla ve sevgiyle olsun. Alan kapandı, seansımız bitti. 💚',
-        'Hayatta her şey istediğiniz gibi olsun. Alanı kapatıyorum, seansımız bitti. Herkese şifa... 🌱',
-    ];
-    const kapanis_sec = kapanis[Math.floor(Math.random() * kapanis.length)];
-
-    mesajEkle('ÜmitAşkımCan', `Paylaşımın için çok teşekkür ederim... ${sonMesaj ? 'Ne güzel hissettirdi bu.' : ''} 💚`, 'left');
+    mesajEkle('ÜmitAşkımCan', `Paylaşımın için çok teşekkür ederim KübrAŞKIMTAŞ... ${sonMesaj ? 'Bu kadar derin ve güzel bir yere geldik birlikte.' : ''} 💚`, 'left');
     await bekle(800);
     yaziyorGoster(true);
+ 
     await bekle(4000);
     yaziyorGoster(false);
-    mesajEkle('ÜmitAşkımCan', kapanis_sec, 'left');
-
-    // Katılımcıların vedalaşmaları
-    const vedalar = [
-        { adres: 'Anne', mesaj: 'Şifalanmak güzeldi. Teşekkürler. 💛' },
-        { adres: 'Baba', mesaj: 'Huzurla ayrılıyorum. 🙏' },
-        { adres: 'Atalar', mesaj: 'Atalar olarak sizi seviyoruz, yolunuz açık olsun. 🌿' },
-        { adres: 'Partner / Sevgili', mesaj: 'Yanındayım, hep yanında olacağım. 💕' },
-        { adres: 'Büyükanne (Anne Tarafı)', mesaj: 'Güzel bir seans oldu. Sevgimiz daima seninle. 💚' },
-        { adres: 'Büyükbaba (Baba Tarafı)', mesaj: 'Huzurla ve şükranla ayrılıyorum. 🙏' },
-    ];
-
-    for (const katilimci of seansRoller.filter(r => r !== 'Danışan')) {
-        const veda = vedalar.find(v => v.adres === katilimci);
-        if (!veda) continue;
-        await bekle(3000);
+    mesajEkle('ÜmitAşkımCan', `Bu seansa katılan herkese, her role, her enerjiye teşekkür ediyorum. Bu alan sizinle doldu, güzelleşti. Şimdi alanı kapatmadan önce herkesin son sözünü alalım... 🌿`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+ 
+    // Her katılımcının veda mesajı
+    for (const katilimci of diger) {
+        await bekle(3500);
         yaziyorGoster(false);
-        mesajEkle(katilimci, veda.mesaj, 'left');
-        await bekle(600);
+        mesajEkle(katilimci, rolVeri(katilimci, 'veda'), 'left');
+        await bekle(800);
         yaziyorGoster(true);
     }
-
+ 
+    // Kapanış
+    const kapanis = [
+        'Hepimize şifa olsun. Her isteğimiz saygı, sevgi ve kolaylıkla gerçekleşsin. Alan kapandı, seansımız bitti. 🌿✨',
+        'Tüm istekleriniz kolaylıkla ve sevgiyle olsun. Bu alan kapanıyor, ama içinizde açılan yer kalıcı. Seansımız bitti. 💚',
+        'Hayatta her şey istediğiniz gibi olsun. Alanı sevgiyle ve şükranla kapatıyorum. Hepimize şifa olsun. 🌱✨',
+        'Bu alanda dokunulan her yara, iyileşmeye başladı. Hepimize kolaylık, sevgi ve şifa olsun. Alan kapandı. 🌿',
+    ];
+ 
+    await bekle(4000);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', kapanis[Math.floor(Math.random() * kapanis.length)], 'left');
+ 
     await bekle(2000);
     yaziyorGoster(false);
-
-    // Yeni seans butonu göster
     document.getElementById('yeniSeansBtn').style.display = 'block';
 }
-
+ 
 // --- SEANS SIFIRLA ---
 function resetSeans() {
     seansKonu = '';
@@ -1116,7 +1496,7 @@ function resetSeans() {
     seansAsamasi = 0;
     seansKonusmaGecmisi = [];
     seansKatilimcilar = [];
-
+ 
     // Grup body temizle
     const body = document.getElementById('grupBody');
     const typingRow = document.getElementById('typingRow');
@@ -1124,12 +1504,12 @@ function resetSeans() {
         body.removeChild(body.firstChild);
     }
     yaziyorGoster(false);
-
+ 
     document.getElementById('grupInput').disabled = false;
     document.getElementById('grupSendBtn').disabled = false;
     document.getElementById('grupInput').value = '';
     document.getElementById('yeniSeansBtn').style.display = 'none';
-
+ 
     // Adım ekranlarını sıfırla
     document.getElementById('grupScreen').style.display = 'none';
     document.getElementById('step2').style.display = 'none';
