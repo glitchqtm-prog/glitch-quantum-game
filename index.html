@@ -3,16 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aşkımızın Falları</title>
+    <title>KÜBRA ❤️ ÜMİT - Aşk Platformu</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
         body {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
@@ -53,7 +48,6 @@
             flex-direction: column;
         }
 
-        /* Navigasyon / Geri Tuşu */
         .back-btn {
             align-self: flex-start;
             background: rgba(255,255,255,0.5);
@@ -66,7 +60,6 @@
             display: none;
             transition: 0.3s;
         }
-        
         .back-btn:hover { background: rgba(255,255,255,0.8); }
 
         /* ANA MENÜ */
@@ -78,21 +71,18 @@
             flex: 1;
             text-align: center;
         }
-
         #menuScreen h1 {
             color: #333;
-            font-size: 32px;
+            font-size: 28px;
             margin-bottom: 40px;
             text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
         }
-
         .menu-options {
             display: flex;
             gap: 40px;
             flex-wrap: wrap;
             justify-content: center;
         }
-
         .option-card {
             background: white;
             width: 200px;
@@ -106,41 +96,20 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.15);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-
-        .option-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-        }
-
+        .option-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
         .option-card .icon { font-size: 80px; margin-bottom: 20px; }
         .option-card .title { font-size: 18px; font-weight: 800; color: #ff6b81; }
 
-        /* KART OYUNU EKRANI (Gizli Başlar) */
-        #cardScreen {
-            display: none;
-            flex: 1;
-            gap: 20px;
-        }
+        /* KART EKRANI */
+        #cardScreen { display: none; flex: 1; gap: 20px; }
 
-        /* KAHVE FALI EKRANI (Gizli Başlar) */
-        #coffeeScreen {
-            display: none;
-            flex: 1;
-            gap: 20px;
-            flex-direction: row;
-        }
+        /* KAHVE EKRANI */
+        #coffeeScreen { display: none; flex: 1; gap: 20px; flex-direction: row; }
 
-        /* ORTAK İÇERİK YAPISI (Sol oyun alanı, Sağ sohbet alanı) */
-        .play-area {
-            flex: 2;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+        .play-area { flex: 2; display: flex; flex-direction: column; position: relative; }
 
-        /* Kart Stilleri */
         .slots { display: flex; justify-content: center; gap: 20px; margin-top: 50px; }
-        .slot { width: 140px; height: 220px; border: 3px dashed rgba(255, 255, 255, 0.6); border-radius: 15px; display: flex; justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.1); transition: all 0.5s ease; }
+        .slot { width: 140px; height: 220px; border: 3px dashed rgba(255,255,255,0.6); border-radius: 15px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.1); transition: all 0.5s ease; }
         .deck-container { position: absolute; right: 20px; bottom: 20px; width: 140px; height: 220px; cursor: pointer; transition: transform 0.2s; }
         .deck-container:hover { transform: scale(1.05); }
         .card-back { width: 100%; height: 100%; background: linear-gradient(45deg, #2c3e50, #3498db); border: 4px solid #fff; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 40px; box-shadow: -5px 5px 15px rgba(0,0,0,0.3); position: absolute; backface-visibility: hidden; }
@@ -151,83 +120,24 @@
         .drawn-card.negative-card { border-color: #e74c3c; }
         .drawn-card .icon { font-size: 50px; margin-bottom: 10px; }
         .drawn-card .title { font-size: 14px; font-weight: 600; color: #333; }
-        
+
         @keyframes popIn { 0% { transform: scale(0) translateY(100px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
 
         .instruction { text-align: center; margin-top: 20px; color: #fff; font-size: 18px; font-weight: 600; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); }
 
-        /* KAHVE FALI ÖZEL STİLLERİ */
-        .coffee-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .photo-slot {
-            position: relative;
-            height: 150px;
-            border: 3px dashed rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: 0.3s;
-        }
-        
-        .photo-slot:hover { background: rgba(255, 255, 255, 0.5); }
-        .photo-slot span { font-size: 14px; font-weight: 600; color: #333; pointer-events: none; z-index: 2;}
-        .photo-slot.optional { border-color: rgba(255, 255, 255, 0.4); }
-        
-        /* Gizli dosya seçici */
-        .photo-slot input[type="file"] {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 3;
-        }
-
-        .submit-coffee-btn {
-            display: none;
-            margin: 30px auto 0;
-            padding: 15px 40px;
-            background: #ff6b81;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
-            transition: transform 0.2s;
-        }
+        /* KAHVE FALI */
+        .coffee-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .photo-slot { position: relative; height: 150px; border: 3px dashed rgba(255,255,255,0.8); border-radius: 15px; background: rgba(255,255,255,0.3); display: flex; justify-content: center; align-items: center; text-align: center; padding: 10px; cursor: pointer; overflow: hidden; transition: 0.3s; }
+        .photo-slot:hover { background: rgba(255,255,255,0.5); }
+        .photo-slot span { font-size: 14px; font-weight: 600; color: #333; pointer-events: none; z-index: 2; }
+        .photo-slot.optional { border-color: rgba(255,255,255,0.4); }
+        .photo-slot input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 3; }
+        .submit-coffee-btn { display: none; margin: 30px auto 0; padding: 15px 40px; background: #ff6b81; color: white; font-size: 18px; font-weight: bold; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,107,129,0.4); transition: transform 0.2s; }
         .submit-coffee-btn:hover { transform: scale(1.05); }
 
-        /* SOHBET EKRANI (Ortak yapı) */
-        .chat-container {
-            flex: 1;
-            background: #e5ddd5;
-            border-radius: 20px;
-            overflow: hidden;
-            display: none; 
-            flex-direction: column;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            animation: slideIn 0.5s ease forwards;
-            max-width: 400px;
-        }
-
+        /* SOHBET (ortak) */
+        .chat-container { flex: 1; background: #e5ddd5; border-radius: 20px; overflow: hidden; display: none; flex-direction: column; box-shadow: 0 15px 35px rgba(0,0,0,0.2); animation: slideIn 0.5s ease forwards; max-width: 400px; }
         @keyframes slideIn { 0% { transform: translateX(50px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-
         .chat-header { background: #075e54; color: white; padding: 15px; display: flex; align-items: center; gap: 15px; }
         .avatar { width: 45px; height: 45px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; }
         .chat-info h3 { font-size: 16px; margin-bottom: 2px; }
@@ -238,424 +148,993 @@
         .reset-btn { background: #128C7E; color: white; border: none; padding: 10px 25px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
         .reset-btn:hover { background: #075e54; }
 
+        /* ALİ DİZİLİMİ EKRANI */
+        #seansScreen { display: none; flex: 1; flex-direction: column; }
+
+        /* Adım ekranları */
+        .seans-step { display: none; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; padding: 20px; }
+        .seans-step h2 { color: #333; font-size: 22px; margin-bottom: 30px; text-shadow: 1px 1px 3px rgba(255,255,255,0.6); }
+        .seans-step p { color: #555; font-size: 15px; margin-bottom: 25px; }
+
+        .seans-grid { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; max-width: 750px; }
+        .seans-card {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 16px 22px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            color: #333;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.2s, color 0.2s;
+            text-align: left;
+            min-width: 200px;
+        }
+        .seans-card:hover { background: #ff6b81; color: white; transform: translateY(-4px); }
+        .seans-card .scard-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+        .seans-card .scard-title { font-size: 15px; font-weight: 800; }
+        .seans-card .scard-desc { font-size: 12px; font-weight: 400; margin-top: 4px; opacity: 0.75; }
+
+        .rol-grid { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; max-width: 700px; }
+        .rol-card {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 20px 30px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 16px;
+            color: #333;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.2s, color 0.2s;
+            min-width: 160px;
+            text-align: center;
+        }
+        .rol-card:hover { background: #ff6b81; color: white; transform: translateY(-4px); }
+        .rol-card .rol-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+
+        /* GRUP SOHBET */
+        #grupScreen { display: none; flex: 1; flex-direction: column; }
+
+        .grup-chat-wrap {
+            display: flex;
+            flex-direction: column;
+            background: #e5ddd5;
+            border-radius: 20px;
+            overflow: hidden;
+            flex: 1;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            max-height: 75vh;
+        }
+
+        .grup-header {
+            background: #075e54;
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .grup-avatar { width: 48px; height: 48px; background: #25D366; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0; }
+        .grup-info h3 { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+        .grup-katilimci { font-size: 11px; color: #b2dfdb; }
+
+        .grup-body {
+            flex: 1;
+            padding: 15px;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+        }
+
+        /* Mesaj baloncukları */
+        .gmsg-row { display: flex; flex-direction: column; max-width: 85%; animation: fadeUp 0.4s ease; }
+        .gmsg-row.right { align-self: flex-end; align-items: flex-end; }
+        .gmsg-row.left { align-self: flex-start; align-items: flex-start; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .gmsg-sender { font-size: 11px; font-weight: 700; margin-bottom: 3px; padding-left: 4px; }
+        .sender-umit { color: #075e54; }
+        .sender-kubra { color: #9c27b0; }
+        .sender-anne { color: #e65100; }
+        .sender-baba { color: #1565c0; }
+        .sender-atalar { color: #4a148c; }
+        .sender-diger { color: #2e7d32; }
+
+        .gmsg-bubble {
+            padding: 10px 14px;
+            border-radius: 0 14px 14px 14px;
+            font-size: 13.5px;
+            line-height: 1.55;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+            max-width: 100%;
+        }
+        .gmsg-row.right .gmsg-bubble { border-radius: 14px 0 14px 14px; }
+        .bubble-umit { background: #dcf8c6; }
+        .bubble-kubra { background: #e1bee7; }
+        .bubble-anne { background: #ffe0b2; }
+        .bubble-baba { background: #bbdefb; }
+        .bubble-atalar { background: #e8eaf6; }
+        .bubble-white { background: #ffffff; }
+
+        .gmsg-time { font-size: 10px; color: #999; margin-top: 3px; padding: 0 4px; }
+
+        /* Yazıyor göstergesi */
+        .typing-row { display: none; align-self: flex-start; }
+        .typing-bubble { background: white; border-radius: 0 14px 14px 14px; padding: 10px 16px; font-size: 13px; color: #888; font-style: italic; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        /* Input alanı */
+        .grup-footer {
+            background: #f0f0f0;
+            padding: 12px 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .grup-input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            background: white;
+        }
+        .grup-send-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .grup-send-btn:hover { background: #128C7E; }
+        .grup-send-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+        .yeni-seans-btn {
+            display: none;
+            margin: 15px auto 5px;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #ff6b81, #ff9a9e);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,107,129,0.4);
+            transition: transform 0.2s;
+        }
+        .yeni-seans-btn:hover { transform: scale(1.05); }
+
         @media (max-width: 768px) {
             #cardScreen, #coffeeScreen { flex-direction: column; }
             .chat-container { max-width: 100%; min-height: 300px; }
+            .seans-card { min-width: 150px; }
+            .option-card { width: 160px; height: 210px; }
+            .option-card .icon { font-size: 60px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-text">KÜBRA ❤️‍🔥 ÜMİT</div>
+<div class="bg-text">KÜBRA ❤️‍🔥 ÜMİT</div>
 
-    <div class="app-container">
-        
-        <button class="back-btn" id="backBtn" onclick="goHome()">🏠 Ana Menüye Dön</button>
+<div class="app-container">
 
-        <div id="menuScreen">
-            <h1>Bugün hangi falımıza bakacaksın HERŞEYİM❤️?</h1>
-            <div class="menu-options">
-                <div class="option-card" onclick="openScreen('cardScreen')">
-                    <div class="icon">🃏</div>
-                    <div class="title">Kart Falı</div>
+    <button class="back-btn" id="backBtn" onclick="goHome()">🏠 Ana Menüye Dön</button>
+
+    <!-- ANA MENÜ -->
+    <div id="menuScreen">
+        <h1>Bugün hangi falımıza bakacaksın HERŞEYİM ❤️?</h1>
+        <div class="menu-options">
+            <div class="option-card" onclick="openScreen('cardScreen')">
+                <div class="icon">🃏</div>
+                <div class="title">Kart Falı</div>
+            </div>
+            <div class="option-card" onclick="openScreen('coffeeScreen')">
+                <div class="icon">☕</div>
+                <div class="title">Kahve Falı</div>
+            </div>
+            <div class="option-card" onclick="openScreen('seansScreen')">
+                <div class="icon">🧘‍♀️</div>
+                <div class="title">Aile Dizilimi</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KART FALI EKRANI -->
+    <div id="cardScreen">
+        <div class="play-area">
+            <div class="slots">
+                <div class="slot" id="cardSlot0"></div>
+                <div class="slot" id="cardSlot1"></div>
+                <div class="slot" id="cardSlot2"></div>
+            </div>
+            <div class="instruction" id="cardInstruction">Aşkımızın destesine tıkla ve 3 kart seç hayatım...</div>
+            <div class="deck-container" id="deck" onclick="drawCard()">
+                <div class="card-back"></div>
+                <div class="deck-shadow1"></div>
+                <div class="deck-shadow2"></div>
+            </div>
+        </div>
+        <div class="chat-container" id="cardChat">
+            <div class="chat-header">
+                <div class="avatar">👩🏻‍❤️‍👨🏻</div>
+                <div class="chat-info">
+                    <h3>KübrAŞKIMTAŞ</h3>
+                    <div class="typing-indicator" id="cardTyping">yazıyor...</div>
                 </div>
-                <div class="option-card" onclick="openScreen('coffeeScreen')">
-                    <div class="icon">☕</div>
-                    <div class="title">Kahve Falı</div>
+            </div>
+            <div class="chat-body">
+                <div class="message" id="cardMessage"></div>
+            </div>
+            <div class="chat-footer">
+                <button class="reset-btn" onclick="resetCardGame()">Yeniden Kart Çek</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KAHVE FALI EKRANI -->
+    <div id="coffeeScreen">
+        <div class="play-area">
+            <div class="instruction" id="coffeeInstruction">Kahve fincanının fotoğraflarını çekip yükle sevgilim...</div>
+            <div class="coffee-grid">
+                <div class="photo-slot" id="cSlot1">
+                    <span id="cText1">Fincanın sağını çek aşkım 📸</span>
+                    <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this,'cSlot1','cText1',1)">
+                </div>
+                <div class="photo-slot" id="cSlot2">
+                    <span id="cText2">Fincanın solunu çek aşkım 📸</span>
+                    <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this,'cSlot2','cText2',2)">
+                </div>
+                <div class="photo-slot" id="cSlot3">
+                    <span id="cText3">Fincanı üstten çek herşeyim 📸</span>
+                    <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this,'cSlot3','cText3',3)">
+                </div>
+                <div class="photo-slot optional" id="cSlot4">
+                    <span id="cText4">Fincanın tabağını çek bitanemmm 📸<br><small>(İsteğe Bağlı)</small></span>
+                    <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this,'cSlot4','cText4',4)">
+                </div>
+            </div>
+            <button class="submit-coffee-btn" id="coffeeSubmitBtn" onclick="startCoffeeChat()">Falıma bak ÜmitAşkımCan</button>
+        </div>
+        <div class="chat-container" id="coffeeChat">
+            <div class="chat-header">
+                <div class="avatar">👨🏻‍❤️‍👩🏻</div>
+                <div class="chat-info">
+                    <h3>ÜmitAşkımCan</h3>
+                    <div class="typing-indicator" id="coffeeTyping">yazıyor...</div>
+                </div>
+            </div>
+            <div class="chat-body">
+                <div class="message" id="coffeeMessage"></div>
+            </div>
+            <div class="chat-footer">
+                <button class="reset-btn" onclick="resetCoffeeGame()">Yeni Fincan Yükle</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ALİ DİZİLİMİ ANA EKRANI -->
+    <div id="seansScreen">
+
+        <!-- ADIM 1: Konu Seçimi -->
+        <div class="seans-step" id="step1" style="display:flex;">
+            <h2>🌿 Hangi konuya bakmak istersin?</h2>
+            <p>Seansın konusunu seç, birlikte derinleşelim...</p>
+            <div class="seans-grid">
+                <div class="seans-card" onclick="seciKonu('Köken Ailesi ve Aile Dinamikleri', ['Danışan','Anne','Baba','Büyükanne (Anne Tarafı)','Büyükbaba (Anne Tarafı)','Büyükanne (Baba Tarafı)','Büyükbaba (Baba Tarafı)','Atalar'])">
+                    <span class="scard-icon">👨‍👩‍👧‍👦</span>
+                    <div class="scard-title">Köken Ailesi ve Aile Dinamikleri</div>
+                    <div class="scard-desc">Anne, baba, büyükanne/büyükbaba ile olan derin bağlar</div>
+                </div>
+                <div class="seans-card" onclick="seciKonu('Aşk ve Romantik İlişkiler', ['Danışan','Partner / Sevgili','İç Çocuk','Kalp'])">
+                    <span class="scard-icon">💕</span>
+                    <div class="scard-title">Aşk ve Romantik İlişkiler</div>
+                    <div class="scard-desc">Sevgi bağları, duygusal örüntüler ve ilişki kalıpları</div>
+                </div>
+                <div class="seans-card" onclick="seciKonu('Travma ve Şifa', ['Danışan','Travma','İyileşen Ben','Anne','Baba','Atalar'])">
+                    <span class="scard-icon">🌱</span>
+                    <div class="scard-title">Travma ve Şifa</div>
+                    <div class="scard-desc">Geçmişte yaşanan olayların ve kırılmaların iyileştirilmesi</div>
+                </div>
+                <div class="seans-card" onclick="seciKonu('Kariyer ve Yaşam Amacı', ['Danışan','Hedef / Vizyon','Engel','Destek Enerjisi','Atalar'])">
+                    <span class="scard-icon">🎯</span>
+                    <div class="scard-title">Kariyer ve Yaşam Amacı</div>
+                    <div class="scard-desc">İş hayatı, misyon, hayat amacı ve başarı enerjisi</div>
+                </div>
+                <div class="seans-card" onclick="seciKonu('Sınırlar ve Bağımsızlık', ['Danışan','Anne','Baba','Toplumun Beklentisi','Özgür Ben'])">
+                    <span class="scard-icon">🛡️</span>
+                    <div class="scard-title">Sınırlar ve Bağımsızlık</div>
+                    <div class="scard-desc">Kendi sınırlarını koymak, bağımsızlaşmak ve özgürleşmek</div>
+                </div>
+                <div class="seans-card" onclick="seciKonu('Para ve Bereket Bilinci', ['Danışan','Para Enerjisi','Anne','Baba','Ata Mirası','Engel'])">
+                    <span class="scard-icon">🌾</span>
+                    <div class="scard-title">Para ve Bereket Bilinci</div>
+                    <div class="scard-desc">Maddi engeller, aile para kalıpları ve bereket açılımı</div>
+                </div>
+                <div class="seans-card" onclick="seciKonu('Bedensel Şikayetler ve Sağlık', ['Danışan','Beden','Hastalık / Şikayet','Anne','Baba','Şifa Enerjisi'])">
+                    <span class="scard-icon">💚</span>
+                    <div class="scard-title">Bedensel Şikayetler ve Sağlık</div>
+                    <div class="scard-desc">Bedenin mesajları, stres ve sağlık örüntüleri</div>
+                </div>
+                <div class="seans-card" onclick="seciKonu('Kayıplar ve Yas', ['Danışan','Kaybedilen Kişi','Anne','Baba','Geri Kalan Aile','Yaşam'])">
+                    <span class="scard-icon">🕊️</span>
+                    <div class="scard-title">Kayıplar ve Yas</div>
+                    <div class="scard-desc">Vefat, ayrılık ve kayıpların aile sistemindeki etkisi</div>
                 </div>
             </div>
         </div>
 
-        <div id="cardScreen">
-            <div class="play-area">
-                <div class="slots">
-                    <div class="slot" id="cardSlot0"></div>
-                    <div class="slot" id="cardSlot1"></div>
-                    <div class="slot" id="cardSlot2"></div>
-                </div>
-                <div class="instruction" id="cardInstruction">Aşkımızın destesine tıkla ve 3 kart seç hayatım...</div>
-                <div class="deck-container" id="deck" onclick="drawCard()">
-                    <div class="card-back"></div>
-                    <div class="deck-shadow1"></div>
-                    <div class="deck-shadow2"></div>
-                </div>
-            </div>
-
-            <div class="chat-container" id="cardChat">
-                <div class="chat-header">
-                    <div class="avatar">👩🏻‍❤️‍👨🏻</div>
-                    <div class="chat-info">
-                        <h3>KübrAŞKIMTAŞ</h3>
-                        <div class="typing-indicator" id="cardTyping">yazıyor...</div>
-                    </div>
-                </div>
-                <div class="chat-body">
-                    <div class="message" id="cardMessage"></div>
-                </div>
-                <div class="chat-footer">
-                    <button class="reset-btn" onclick="resetCardGame()">Yeniden Kart Çek</button>
-                </div>
-            </div>
+        <!-- ADIM 2: Rol Seçimi -->
+        <div class="seans-step" id="step2">
+            <h2>🌀 Bu seansa hangi rolden katılmak istersin?</h2>
+            <p id="step2Konu" style="font-weight:700; color:#ff6b81; font-size:16px;"></p>
+            <p>Seçeceğin rol, seansın başlangıç noktası olacak...</p>
+            <div class="rol-grid" id="rolGrid"></div>
         </div>
 
-        <div id="coffeeScreen">
-            <div class="play-area">
-                <div class="instruction" id="coffeeInstruction">Kahve fincanının fotoğraflarını çekip yükle sevgilim...</div>
-                
-                <div class="coffee-grid">
-                    <div class="photo-slot" id="cSlot1">
-                        <span id="cText1">Fincanın sağını çek aşkım 📸</span>
-                        <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this, 'cSlot1', 'cText1', 1)">
-                    </div>
-                    <div class="photo-slot" id="cSlot2">
-                        <span id="cText2">Fincanın solunu çek aşkım 📸</span>
-                        <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this, 'cSlot2', 'cText2', 2)">
-                    </div>
-                    <div class="photo-slot" id="cSlot3">
-                        <span id="cText3">Fincanı üstten çek herşeyim 📸</span>
-                        <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this, 'cSlot3', 'cText3', 3)">
-                    </div>
-                    <div class="photo-slot optional" id="cSlot4">
-                        <span id="cText4">Fincanın tabağını çek bitanemmm 📸<br><small>(İsteğe Bağlı)</small></span>
-                        <input type="file" accept="image/*" capture="environment" onchange="previewCoffeeImage(this, 'cSlot4', 'cText4', 4)">
+        <!-- ADIM 3: Grup Sohbet Ekranı -->
+        <div id="grupScreen">
+            <div class="grup-chat-wrap">
+                <div class="grup-header">
+                    <div class="grup-avatar">🌿</div>
+                    <div class="grup-info">
+                        <h3>KübrAŞKIMTAŞ ile Aile Dizilimi Seansı</h3>
+                        <div class="grup-katilimci" id="grupKatilimci">ÜmitAşkımCan, yükleniyor...</div>
                     </div>
                 </div>
-
-                <button class="submit-coffee-btn" id="coffeeSubmitBtn" onclick="startCoffeeChat()">Falıma bak ÜmitAşkımCan</button>
-            </div>
-
-            <div class="chat-container" id="coffeeChat">
-                <div class="chat-header">
-                    <div class="avatar">👨🏻‍❤️‍👩🏻</div>
-                    <div class="chat-info">
-                        <h3>ÜmitAşkımCan</h3>
-                        <div class="typing-indicator" id="coffeeTyping">yazıyor...</div>
+                <div class="grup-body" id="grupBody">
+                    <div class="typing-row" id="typingRow">
+                        <div class="typing-bubble">✍️ yazıyor...</div>
                     </div>
                 </div>
-                <div class="chat-body">
-                    <div class="message" id="coffeeMessage"></div>
-                </div>
-                <div class="chat-footer">
-                    <button class="reset-btn" onclick="resetCoffeeGame()">Yeni Fincan Yükle</button>
+                <div class="grup-footer">
+                    <input class="grup-input" id="grupInput" type="text" placeholder="Duygularını paylaş..." onkeydown="if(event.key==='Enter')grupGonder()">
+                    <button class="grup-send-btn" id="grupSendBtn" onclick="grupGonder()">➤</button>
                 </div>
             </div>
+            <button class="yeni-seans-btn" id="yeniSeansBtn" onclick="resetSeans()">🌿 Yeni Seansa Başla</button>
         </div>
 
     </div>
 
-    <script>
-        // --- EKRAN KONTROLLERİ (Değiştirilmemiş Orijinal Çalışan Versiyon) ---
-        function openScreen(screenId) {
-            document.getElementById('menuScreen').style.display = 'none';
-            document.getElementById('cardScreen').style.display = 'none';
-            document.getElementById('coffeeScreen').style.display = 'none';
-            
-            document.getElementById(screenId).style.display = 'flex';
-            document.getElementById('backBtn').style.display = 'block';
-        }
+</div>
 
-        function goHome() {
-            document.getElementById('menuScreen').style.display = 'flex';
-            document.getElementById('cardScreen').style.display = 'none';
-            document.getElementById('coffeeScreen').style.display = 'none';
-            document.getElementById('backBtn').style.display = 'none';
-            
-            resetCardGame();
-            resetCoffeeGame();
-        }
+<script>
+// ====================================================
+// EKRAN KONTROL
+// ====================================================
+function openScreen(screenId) {
+    document.getElementById('menuScreen').style.display = 'none';
+    document.getElementById('cardScreen').style.display = 'none';
+    document.getElementById('coffeeScreen').style.display = 'none';
+    document.getElementById('seansScreen').style.display = 'none';
+    document.getElementById(screenId).style.display = 'flex';
+    document.getElementById('backBtn').style.display = 'block';
+}
 
-        // --- ORTAK BİTİŞ CÜMLELERİ ---
-        const finalEndings = [
-            "Falına göre Ümit seni çok seviyor.",
-            "Sonuca gelirsek; Ümit Sana çok aşık.",
-            "Fincan da, kartlar da aynı şeyi söylüyor: Ümit sana hayran.",
-            "Tüm bu işaretlerin tek bir ortak noktası var: Ümit ile evleneceksiniz.",
-            "Kısacası sevgilim, Ümit kocan olucak.",
-            "Bütün işaretlerin sonu şuraya çıkıyor: Ümit seni her gün daha çok seviyor.",
-            "Her şey çok net bebeğim, kalbi sadece senin için atıyor ve Ümit kocan olacak."
+function goHome() {
+    document.getElementById('menuScreen').style.display = 'flex';
+    document.getElementById('cardScreen').style.display = 'none';
+    document.getElementById('coffeeScreen').style.display = 'none';
+    document.getElementById('seansScreen').style.display = 'none';
+    document.getElementById('backBtn').style.display = 'none';
+    resetCardGame();
+    resetCoffeeGame();
+    resetSeans();
+}
+
+// ====================================================
+// ORTAK VERİ
+// ====================================================
+const finalEndings = [
+    "Falına göre Ümit seni çok seviyor.",
+    "Sonuca gelirsek; Ümit Sana çok aşık.",
+    "Fincan da, kartlar da aynı şeyi söylüyor: Ümit sana hayran.",
+    "Tüm bu işaretlerin tek bir ortak noktası var: Ümit ile evleneceksiniz.",
+    "Kısacası sevgilim, Ümit kocan olucak.",
+    "Bütün işaretlerin sonu şuraya çıkıyor: Ümit seni her gün daha çok seviyor.",
+    "Her şey çok net bebeğim, kalbi sadece senin için atıyor ve Ümit kocan olacak."
+];
+
+// ====================================================
+// 1. KART FALI
+// ====================================================
+const deck = [
+    { id:1, title:"Aşk", icon:"❤️", meaning:"tarifsiz bir bağla birbirimize kenetlendiğimizi", type:"positive" },
+    { id:2, title:"Sadakat", icon:"💍", meaning:"gözümüzün birbirinden başkasını görmeyeceğini", type:"positive" },
+    { id:3, title:"Güneş", icon:"☀️", meaning:"ilişkimizin her zaman sımsıcak ve aydınlık kalacağını", type:"positive" },
+    { id:4, title:"Gelecek", icon:"🔮", meaning:"birlikte yaşlanacağımız harika yılların bizi beklediğini", type:"positive" },
+    { id:5, title:"Tutku", icon:"🔥", meaning:"aradaki çekimin hiçbir zaman sönmeyeceğini", type:"positive" },
+    { id:6, title:"Huzur", icon:"🕊️", meaning:"kollarımda her zaman güvende ve huzurlu olacağını", type:"positive" },
+    { id:7, title:"Sonsuzluk", icon:"♾️", meaning:"bu aşkın bir ömür boyu, sonsuza dek süreceğini", type:"positive" },
+    { id:8, title:"Yıldız", icon:"⭐", meaning:"dileklerimizin ve hayallerimizin bir bir gerçek olacağını", type:"positive" },
+    { id:9, title:"Şans", icon:"🍀", meaning:"hayatımdaki en büyük şansımın sen olduğunu", type:"positive" },
+    { id:10, title:"Kader", icon:"🌌", meaning:"yollarımızın ilahi bir şekilde sonsuza dek birleştiğini", type:"positive" },
+    { id:11, title:"Neşe", icon:"🎭", meaning:"birlikte her zaman çocuk gibi eğlenip güleceğimizi", type:"positive" },
+    { id:12, title:"Ev", icon:"🏡", meaning:"yakında sıcacık yuvamızı kuracağımızı", type:"positive" },
+    { id:13, title:"Güven", icon:"🤝", meaning:"birbirimize gözü kapalı güvenebileceğimiz bir sığınağımız olduğunu", type:"positive" },
+    { id:14, title:"Şefkat", icon:"🧸", meaning:"her anımızda birbirimize pamuk gibi yumuşacık davranacağımızı", type:"positive" },
+    { id:15, title:"Macera", icon:"🌍", meaning:"dünyayı el ele gezip harika anılar biriktireceğimizi", type:"positive" },
+    { id:16, title:"Büyü", icon:"🪄", meaning:"aramızdaki bu tılsımlı bağın kimse tarafından bozulamayacağını", type:"positive" },
+    { id:17, title:"Bereket", icon:"🌾", meaning:"yuvamızın her zaman bolluk ve bereket içinde olacağını", type:"positive" },
+    { id:18, title:"Sabır", icon:"⏳", meaning:"birbirimizi her halimizle kabul edip sevgiyle büyüteceğimizi", type:"positive" },
+    { id:19, title:"Tutulma", icon:"🌒", meaning:"senin o güzel yüzün karşısında her gün yeniden tutulacağımı", type:"positive" },
+    { id:20, title:"Mucize", icon:"✨", meaning:"bu dünyada başıma gelen en güzel mucizenin sen olduğunu", type:"positive" },
+    { id:21, title:"Başarı", icon:"🏆", meaning:"birbirimize destek olarak hayattaki tüm hedeflerimize ulaşacağımızı", type:"positive" },
+    { id:22, title:"Fırtına", icon:"⛈️", meaning:"zaman zaman ufak tartışmalar ve fırtınalar kopabileceğini", type:"negative" },
+    { id:23, title:"Engel", icon:"🧱", meaning:"bazen yolumuza beklenmedik tümseklerin çıkabileceğini", type:"negative" },
+    { id:24, title:"Mesafe", icon:"🛤️", meaning:"bazen araya fiziksel ya da duygusal mesafeler girmeye çalışacağını", type:"negative" },
+    { id:25, title:"Kule", icon:"🏰", meaning:"yaptığımız planların bazen aniden yıkılıp değişebileceğini", type:"negative" },
+    { id:26, title:"Kıskançlık", icon:"🧿", meaning:"birbirimizi çok sevdiğimizden bazen deliler gibi kıskanacağımızı", type:"negative" }
+];
+const cardNegativeResolutions = [
+    "Ama hiç merak etme, karşımıza ne tür engeller çıkarsa çıksın tüm bu zorlukları birlikte atlatıp ömür boyu mutlu olacağız.",
+    "Fakat sakın unutma, aşkımız tüm bu zorlukları yenecek kadar kudretli. Biz el ele verdiğimiz sürece hiçbir şey bizi yıkamaz.",
+    "Yine de hiç korkma bebeğim, ne olursa olsun tüm bunları omuz omuza verip atlatacağız ve çok mutlu olacağız."
+];
+let drawnCards = [], availableCards = [...deck], cardCanDraw = true;
+
+function drawCard() {
+    if (drawnCards.length >= 3 || !cardCanDraw) return;
+    const randomIndex = Math.floor(Math.random() * availableCards.length);
+    const card = availableCards[randomIndex];
+    availableCards.splice(randomIndex, 1);
+    drawnCards.push(card);
+    const slotIndex = drawnCards.length - 1;
+    const slot = document.getElementById(`cardSlot${slotIndex}`);
+    const cardClass = card.type === 'negative' ? 'drawn-card negative-card' : 'drawn-card';
+    slot.innerHTML = `<div class="${cardClass}"><div class="icon">${card.icon}</div><div class="title">${card.title}</div></div>`;
+    slot.style.border = 'none';
+    slot.style.background = 'transparent';
+    if (drawnCards.length === 3) {
+        cardCanDraw = false;
+        document.getElementById('deck').style.opacity = '0.5';
+        document.getElementById('deck').style.cursor = 'not-allowed';
+        document.getElementById('cardInstruction').innerText = 'Kartların okunuyor bebeğim...';
+        setTimeout(startCardChatProcess, 1000);
+    }
+}
+function startCardChatProcess() {
+    const chatContainer = document.getElementById('cardChat');
+    chatContainer.style.display = 'flex';
+    document.getElementById('cardTyping').style.display = 'block';
+    setTimeout(() => { document.getElementById('cardTyping').style.display = 'none'; generateCardMessage(); }, 5000);
+}
+function generateCardMessage() {
+    const msgEl = document.getElementById('cardMessage');
+    const c1 = drawnCards[0], c2 = drawnCards[1], c3 = drawnCards[2];
+    const hasNegative = drawnCards.some(c => c.type === 'negative');
+    const randomEnding = finalEndings[Math.floor(Math.random() * finalEndings.length)];
+    let finalText = '';
+    if (hasNegative) {
+        const res = cardNegativeResolutions[Math.floor(Math.random() * cardNegativeResolutions.length)];
+        finalText = `Aşkım çektiğin ${c1.title}, ${c2.title} ve ${c3.title} kartları çok güçlü bir mesaj veriyor. Kartlar bize; ${c1.meaning}, ${c2.meaning} ve ${c3.meaning} söylüyor. ${res} ${randomEnding} ❤️`;
+    } else {
+        finalText = `Aşkım çektiğin ${c1.title}, ${c2.title} ve ${c3.title} kartları harika bir anlama çıkıyor. Bu kombinasyon bize; ${c1.meaning}, ${c2.meaning} ve ${c3.meaning} fısıldıyor. ${randomEnding} ❤️`;
+    }
+    msgEl.innerText = finalText;
+    msgEl.style.display = 'inline-block';
+    document.getElementById('cardInstruction').innerText = 'Mesajın geldi!';
+}
+function resetCardGame() {
+    drawnCards = []; availableCards = [...deck]; cardCanDraw = true;
+    for (let i = 0; i < 3; i++) {
+        const slot = document.getElementById(`cardSlot${i}`);
+        slot.innerHTML = '';
+        slot.style.border = '3px dashed rgba(255,255,255,0.6)';
+        slot.style.background = 'rgba(255,255,255,0.1)';
+    }
+    document.getElementById('deck').style.opacity = '1';
+    document.getElementById('deck').style.cursor = 'pointer';
+    document.getElementById('cardInstruction').innerText = 'Aşkımızın destesine tıkla ve 3 kart seç hayatım...';
+    document.getElementById('cardChat').style.display = 'none';
+    document.getElementById('cardMessage').style.display = 'none';
+    document.getElementById('cardMessage').innerText = '';
+}
+
+// ====================================================
+// 2. KAHVE FALI
+// ====================================================
+let uploadedPhotos = { 1:false, 2:false, 3:false, 4:false };
+function previewCoffeeImage(input, slotId, textId, posId) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const slot = document.getElementById(slotId);
+            slot.style.backgroundImage = `url(${e.target.result})`;
+            slot.style.backgroundSize = 'cover';
+            slot.style.backgroundPosition = 'center';
+            document.getElementById(textId).style.display = 'none';
+            uploadedPhotos[posId] = true;
+            checkCoffeeUploads();
+        };
+        reader.readAsDataURL(file);
+    }
+}
+function checkCoffeeUploads() {
+    if (uploadedPhotos[1] && uploadedPhotos[2] && uploadedPhotos[3]) {
+        document.getElementById('coffeeSubmitBtn').style.display = 'block';
+    }
+}
+function startCoffeeChat() {
+    document.getElementById('coffeeSubmitBtn').style.display = 'none';
+    document.getElementById('coffeeInstruction').innerText = 'Fincanın içindeki gizli şekiller inceleniyor bebeğim...';
+    document.getElementById('coffeeChat').style.display = 'flex';
+    document.getElementById('coffeeTyping').style.display = 'block';
+    setTimeout(() => { document.getElementById('coffeeTyping').style.display = 'none'; generateCoffeeReading(); }, 9000);
+}
+const coffeeIntros = [
+    "Aşkım fincanının fotoğraflarına baktım ve inanılmaz şeyler gördüm!",
+    "Bitanem, kahvenin telveleri resmen aşkımızı çizmiş, çok güzel şekiller var...",
+    "Her şeyim, fincanına o kadar güzel niyetler etmişsin ki, yansımasını hemen hissettim.",
+    "Sevgilim, bu fincan tamamen ikimiz için konuşuyor, bak neler çıkmış neler...",
+    "Aşkım gözlerime inanamadım, fincanın o kadar aydınlık ki içi resmen sevgimizle parlıyor!"
+];
+const goodShapes = [
+    { name:"büyük bir kalp", meaning:"sana olan sevgimin ne kadar kocaman olduğunu ve kalbimin sadece senin için attığını" },
+    { name:"uzun bir yol", meaning:"önümüzde birlikte yürüyeceğimiz, çok mutlu ve uzun bir ömür olduğunu" },
+    { name:"kanat çırpan bir kuş", meaning:"yakın zamanda ilişkimizle ilgili havalara uçacağımız harika bir haber alacağımızı" },
+    { name:"birbirine sarılmış iki insan silueti", meaning:"ne olursa olsun birbirimize hep sımsıkı kenetli kalacağımızı" },
+    { name:"bir güvercin", meaning:"aşkımızın bize her zaman huzur ve güven getireceğini" },
+    { name:"balık", meaning:"aşkımızın hanemize hep şans, bereket ve mutluluk getireceğini" },
+    { name:"kocaman bir güneş", meaning:"geleceğimizin apaydınlık ve sımsıcak olacağını" },
+    { name:"açmış bir gül", meaning:"aşkımızın her gün daha da güzelleşip çiçek açacağını" },
+    { name:"bir anahtar", meaning:"kalplerimizin kilitlerinin sonsuza dek birbirine açıldığını ve tüm engellerin kilidini açacağımızı" },
+    { name:"şahlanan bir at", meaning:"muradımıza çok kısa sürede doludizgin ulaşacağımızı" },
+    { name:"bir taç", meaning:"benim kalbimin kraliçesi olduğunu ve hayatımız boyunca el üstünde tutulacağını" },
+    { name:"bir yüzük", meaning:"bağlılığımızın taçlanıp çok güzel bir yola gireceğini" },
+    { name:"bir gemi", meaning:"birlikte çok huzurlu, dalgasız ve güvenli bir hayata yelken açacağımızı" },
+    { name:"bir ağaç ve sağlam kökleri", meaning:"ilişkimizin yıllandıkça kökleneceğini ve sarsılmaz bir hale geleceğini" },
+    { name:"bir kelebek", meaning:"aşkımızın midemizde hep o ilk günkü tatlı heyecanı yaratacağını" },
+    { name:"bir ay hilali", meaning:"gecelerimizi aydınlatan, çok romantik ve huzurlu zamanların bizi beklediğini" },
+    { name:"bir yıldız kayması", meaning:"ettiğimiz tüm o güzel duaların ve dileklerin bir bir gerçekleşeceğini" },
+    { name:"bir pusula", meaning:"hayat boyu birbirimizin en doğru yönü olacağımızı, hiç kaybolmayacağımızı" },
+    { name:"bir çapa", meaning:"ne olursa olsun birbirimize sımsıkı tutunup, en güvenli limanımız olacağımızı" },
+    { name:"bir sonsuzluk işareti", meaning:"bu hikayenin bu dünyada bitmeyeceğini, sonsuza kadar süreceğini" }
+];
+const badShapes = [
+    { name:"ufak bir dağ", meaning:"önümüzde aşmamız gereken bazı ufak tefek zorluklar veya sınavlar olabileceğini" },
+    { name:"bir göz", meaning:"ilişkimizi çok kıskanan, nazarı değen bazı insanların etrafımızda dolaştığını" },
+    { name:"dalgalı bir deniz", meaning:"bazen duygusal olarak çalkantılı veya stresli anlar yaşayabileceğimizi" },
+    { name:"kopuk bir çizgi", meaning:"araya bazen küçük iletişim kopuklukları girmeye çalışacağını" },
+    { name:"dikeni olan bir çiçek", meaning:"bazen istemeden birbirimizi ufak tefek kırabileceğimiz anlar olacağını" },
+    { name:"kara bir bulut", meaning:"kısa süreli can sıkıcı bazı dış etkenlerin gölgesinin düşebileceğini" },
+    { name:"küçük bir taş", meaning:"yolumuzda ayağımıza takılmak isteyen, bizi yavaşlatmaya çalışan durumlar olabileceğini" },
+    { name:"bir duvar", meaning:"bazen birbirimize karşı anlamsız duvarlar örebileceğimiz anlar yaşanabileceğini" },
+    { name:"karmaşık bir yumak", meaning:"kafamızın karışacağı, çözmemiz gereken ufak kafa karışıklıkları olabileceğini" },
+    { name:"eski bir kilit", meaning:"geçmişten gelen ufak tefek pürüzlerin bazen önümüze çıkabileceğini" }
+];
+const coffeeResolutions = [
+    "Ama sen sakın içini karartma. Ben senin yanında olduğum sürece hiçbir pürüz bize zarar veremez. Her şeyi el ele aşıp geçeceğiz.",
+    "Ancak oradaki karanlık gölgeler hiç önemli değil. İkimizin arasındaki güçlü bağ her türlü zorluğu yenecek kuvvette.",
+    "Yine de hiç korkma bebeğim. Biz birbirimize o kadar bağlıyız ki karşımıza çıkan her engeli sevgimizle ezip geçeceğiz.",
+    "Fakat bunların hiçbiri beni korkutmuyor. Çünkü senin elini tuttuğum sürece tüm zorlukları kolayca aşarız.",
+    "Ama hiç canını sıkma güzelim, bizim aşkımızın ışığı bu ufak karanlıkları dağıtmaya fazlasıyla yeter."
+];
+function generateCoffeeReading() {
+    const msgEl = document.getElementById('coffeeMessage');
+    const intro = coffeeIntros[Math.floor(Math.random() * coffeeIntros.length)];
+    const shape1 = goodShapes[Math.floor(Math.random() * goodShapes.length)];
+    let shape2 = goodShapes[Math.floor(Math.random() * goodShapes.length)];
+    while (shape2.name === shape1.name) { shape2 = goodShapes[Math.floor(Math.random() * goodShapes.length)]; }
+    const hasBadShape = Math.random() > 0.4;
+    let reading = `${intro} Sağ tarafta çok net bir şekilde <b>${shape1.name}</b> çıkmış. Bu bize; ${shape1.meaning} gösteriyor.<br><br>`;
+    if (hasBadShape) {
+        const bad = badShapes[Math.floor(Math.random() * badShapes.length)];
+        const res = coffeeResolutions[Math.floor(Math.random() * coffeeResolutions.length)];
+        reading += `Sol tarafta ise maalesef <b>${bad.name}</b> şekli belirmiş, sanki ${bad.meaning} işaret ediyor... ${res}<br><br>`;
+    }
+    reading += `Fincanın üst kısmında ise parlayan <b>${shape2.name}</b> var. Bu da kesinlikle ${shape2.meaning} fısıldıyor...<br><br>`;
+    if (uploadedPhotos[4]) {
+        const plateSayings = [
+            "Tabağına da baktım, için çok ferahlamış, dileklerin resmen kabul oluyor!<br><br>",
+            "Tabağın o kadar ferah açılmış ki, hayalini kurduğumuz o güzel yuvaya adım adım yaklaşıyoruz...<br><br>",
+            "Tabağından da resmen pırıl pırıl bir enerji yayılıyor, geleceğimiz çok aydınlık!<br><br>"
         ];
+        reading += plateSayings[Math.floor(Math.random() * plateSayings.length)];
+    }
+    const randomEnding = finalEndings[Math.floor(Math.random() * finalEndings.length)];
+    reading += `<b>${randomEnding} ❤️</b>`;
+    msgEl.innerHTML = reading;
+    msgEl.style.display = 'inline-block';
+    document.getElementById('coffeeInstruction').innerText = 'Fincanının yorumu geldi!';
+}
+function resetCoffeeGame() {
+    uploadedPhotos = { 1:false, 2:false, 3:false, 4:false };
+    for (let i = 1; i <= 4; i++) {
+        const slot = document.getElementById(`cSlot${i}`);
+        const text = document.getElementById(`cText${i}`);
+        const input = slot.querySelector('input');
+        slot.style.backgroundImage = 'none';
+        text.style.display = 'block';
+        if (input) input.value = '';
+    }
+    document.getElementById('coffeeInstruction').innerText = 'Kahve fincanının fotoğraflarını çekip yükle sevgilim...';
+    document.getElementById('coffeeSubmitBtn').style.display = 'none';
+    document.getElementById('coffeeChat').style.display = 'none';
+    document.getElementById('coffeeMessage').style.display = 'none';
+    document.getElementById('coffeeMessage').innerHTML = '';
+}
 
+// ====================================================
+// 3. ALİ DİZİLİMİ SEANS MODÜLü
+// ====================================================
+let seansKonu = '';
+let seansRoller = [];
+let seciliRol = '';
+let seansAsamasi = 0;
+let seansKonusmaGecmisi = [];
+let seansKatilimcilar = [];
 
-        // ==========================================
-        // 1. KART FALI KODLARI
-        // ==========================================
-        const deck = [
-            { id: 1, title: "Aşk", icon: "❤️", meaning: "tarifsiz bir bağla birbirimize kenetlendiğimizi", type: "positive" },
-            { id: 2, title: "Sadakat", icon: "💍", meaning: "gözümüzün birbirinden başkasını görmeyeceğini", type: "positive" },
-            { id: 3, title: "Güneş", icon: "☀️", meaning: "ilişkimizin her zaman sımsıcak ve aydınlık kalacağını", type: "positive" },
-            { id: 4, title: "Gelecek", icon: "🔮", meaning: "birlikte yaşlanacağımız harika yılların bizi beklediğini", type: "positive" },
-            { id: 5, title: "Tutku", icon: "🔥", meaning: "aradaki çekimin hiçbir zaman sönmeyeceğini", type: "positive" },
-            { id: 6, title: "Huzur", icon: "🕊️", meaning: "kollarımda her zaman güvende ve huzurlu olacağını", type: "positive" },
-            { id: 7, title: "Sonsuzluk", icon: "♾️", meaning: "bu aşkın bir ömür boyu, sonsuza dek süreceğini", type: "positive" },
-            { id: 8, title: "Yıldız", icon: "⭐", meaning: "dileklerimizin ve hayallerimizin bir bir gerçek olacağını", type: "positive" },
-            { id: 9, title: "Şans", icon: "🍀", meaning: "hayatımdaki en büyük şansımın sen olduğunu", type: "positive" },
-            { id: 10, title: "Kader", icon: "🌌", meaning: "yollarımızın ilahi bir şekilde sonsuza dek birleştiğini", type: "positive" },
-            { id: 11, title: "Neşe", icon: "🎭", meaning: "birlikte her zaman çocuk gibi eğlenip güleceğimizi", type: "positive" },
-            { id: 12, title: "Ev", icon: "🏡", meaning: "yakında sıcacık yuvamızı kuracağımızı", type: "positive" },
-            { id: 13, title: "Güven", icon: "🤝", meaning: "birbirimize gözü kapalı güvenebileceğimiz bir sığınağımız olduğunu", type: "positive" },
-            { id: 14, title: "Şefkat", icon: "🧸", meaning: "her anımızda birbirimize pamuk gibi yumuşacık davranacağımızı", type: "positive" },
-            { id: 15, title: "Macera", icon: "🌍", meaning: "dünyayı el ele gezip harika anılar biriktireceğimizi", type: "positive" },
-            { id: 16, title: "Büyü", icon: "🪄", meaning: "aramızdaki bu tılsımlı bağın kimse tarafından bozulamayacağını", type: "positive" },
-            { id: 17, title: "Bereket", icon: "🌾", meaning: "yuvamızın her zaman bolluk ve bereket içinde olacağını", type: "positive" },
-            { id: 18, title: "Sabır", icon: "⏳", meaning: "birbirimizi her halimizle kabul edip sevgiyle büyüteceğimizi", type: "positive" },
-            { id: 19, title: "Tutulma", icon: "🌒", meaning: "senin o güzel yüzün karşısında her gün yeniden tutulacağımı", type: "positive" },
-            { id: 20, title: "Mucize", icon: "✨", meaning: "bu dünyada başıma gelen en güzel mucizenin sen olduğunu", type: "positive" },
-            { id: 21, title: "Başarı", icon: "🏆", meaning: "birbirimize destek olarak hayattaki tüm hedeflerimize ulaşacağımızı", type: "positive" },
-            { id: 22, title: "Fırtına", icon: "⛈️", meaning: "zaman zaman ufak tartışmalar ve fırtınalar kopabileceğini", type: "negative" },
-            { id: 23, title: "Engel", icon: "🧱", meaning: "bazen yolumuza beklenmedik tümseklerin çıkabileceğini", type: "negative" },
-            { id: 24, title: "Mesafe", icon: "🛤️", meaning: "bazen araya fiziksel ya da duygusal mesafeler girmeye çalışacağını", type: "negative" },
-            { id: 25, title: "Kule", icon: "🏰", meaning: "yaptığımız planların bazen aniden yıkılıp değişebileceğini", type: "negative" },
-            { id: 26, title: "Kıskançlık", icon: "🧿", meaning: "birbirimizi çok sevdiğimizden bazen deliler gibi kıskanacağımızı", type: "negative" }
-        ];
+// Şu anki saat
+function simdiSaat() {
+    const now = new Date();
+    return now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
 
-        const cardNegativeResolutions = [
-            "Ama hiç merak etme, karşımıza ne tür engeller çıkarsa çıksın tüm bu zorlukları birlikte atlatıp ömür boyu mutlu olacağız.",
-            "Fakat sakın unutma, aşkımız tüm bu zorlukları yenecek kadar kudretli. Biz el ele verdiğimiz sürece hiçbir şey bizi yıkamaz.",
-            "Yine de hiç korkma bebeğim, ne olursa olsun tüm bunları omuz omuza verip atlatacağız ve çok mutlu olacağız."
-        ];
+// Rol -> Renk/Stil eşleştirmesi
+function rolStil(rol) {
+    const r = rol.toLowerCase();
+    if (r.includes('ümit') || r.includes('umit')) return { sender:'sender-umit', bubble:'bubble-umit' };
+    if (r.includes('danışan') || r.includes('danisan') || r.includes('kübra') || r.includes('kubra')) return { sender:'sender-kubra', bubble:'bubble-kubra' };
+    if (r.includes('anne')) return { sender:'sender-anne', bubble:'bubble-anne' };
+    if (r.includes('baba')) return { sender:'sender-baba', bubble:'bubble-baba' };
+    if (r.includes('ata') || r.includes('büyük')) return { sender:'sender-atalar', bubble:'bubble-atalar' };
+    return { sender:'sender-diger', bubble:'bubble-white' };
+}
 
-        let drawnCards = [];
-        let availableCards = [...deck];
-        let cardCanDraw = true;
+// Mesaj ekleme
+function mesajEkle(gonderen, metin, taraf) {
+    const body = document.getElementById('grupBody');
+    const typingRow = document.getElementById('typingRow');
+    const stil = rolStil(gonderen);
+    const div = document.createElement('div');
+    div.className = `gmsg-row ${taraf}`;
+    div.innerHTML = `
+        <div class="gmsg-sender ${stil.sender}">${gonderen}</div>
+        <div class="gmsg-bubble ${stil.bubble}">${metin}</div>
+        <div class="gmsg-time">${simdiSaat()}</div>
+    `;
+    body.insertBefore(div, typingRow);
+    body.scrollTop = body.scrollHeight;
+    seansKonusmaGecmisi.push({ rol: gonderen, metin: metin });
+}
 
-        function drawCard() {
-            if (drawnCards.length >= 3 || !cardCanDraw) return;
+// Yazıyor... göster/gizle
+function yaziyorGoster(goster) {
+    document.getElementById('typingRow').style.display = goster ? 'flex' : 'none';
+    if (goster) document.getElementById('grupBody').scrollTop = document.getElementById('grupBody').scrollHeight;
+}
 
-            const randomIndex = Math.floor(Math.random() * availableCards.length);
-            const card = availableCards[randomIndex];
-            availableCards.splice(randomIndex, 1);
-            drawnCards.push(card);
+// Gecikmeyle mesaj gönder
+function yaziYaz(gonderen, metin, gecikme, taraf) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            yaziyorGoster(false);
+            mesajEkle(gonderen, metin, taraf || 'left');
+            setTimeout(() => { yaziyorGoster(true); resolve(); }, 600);
+        }, gecikme);
+    });
+}
 
-            const slotIndex = drawnCards.length - 1;
-            const slot = document.getElementById(`cardSlot${slotIndex}`);
-            
-            const cardClass = card.type === 'negative' ? 'drawn-card negative-card' : 'drawn-card';
-            slot.innerHTML = `<div class="${cardClass}"><div class="icon">${card.icon}</div><div class="title">${card.title}</div></div>`;
-            slot.style.border = "none";
-            slot.style.background = "transparent";
+function bekle(ms) {
+    return new Promise(r => setTimeout(r, ms));
+}
 
-            if (drawnCards.length === 3) {
-                cardCanDraw = false;
-                document.getElementById('deck').style.opacity = '0.5';
-                document.getElementById('deck').style.cursor = 'not-allowed';
-                document.getElementById('cardInstruction').innerText = "Kartların okunuyor bebeğim...";
-                setTimeout(startCardChatProcess, 1000);
-            }
+// --- ADIM 1: Konu seçildi ---
+function seciKonu(konu, roller) {
+    seansKonu = konu;
+    seansRoller = roller;
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'flex';
+    document.getElementById('step2Konu').innerText = '📌 Konu: ' + konu;
+    const rolGrid = document.getElementById('rolGrid');
+    rolGrid.innerHTML = '';
+    const rolIkonlar = {
+        'Danışan': '🙋‍♀️', 'Anne': '👩', 'Baba': '👨', 'Partner / Sevgili': '💑',
+        'İç Çocuk': '👧', 'Kalp': '💖',
+        'Büyükanne (Anne Tarafı)': '👵', 'Büyükbaba (Anne Tarafı)': '👴',
+        'Büyükanne (Baba Tarafı)': '👵', 'Büyükbaba (Baba Tarafı)': '👴',
+        'Atalar': '🌿', 'Travma': '💢', 'İyileşen Ben': '🌟',
+        'Hedef / Vizyon': '🎯', 'Engel': '🚧', 'Destek Enerjisi': '🤝',
+        'Toplumun Beklentisi': '👁️', 'Özgür Ben': '🦋',
+        'Para Enerjisi': '💛', 'Ata Mirası': '🗝️',
+        'Beden': '🫀', 'Hastalık / Şikayet': '🌡️', 'Şifa Enerjisi': '✨',
+        'Kaybedilen Kişi': '🕊️', 'Geri Kalan Aile': '🫂', 'Yaşam': '🌱',
+        'Şikayet / Sorun': '💬'
+    };
+    roller.forEach(rol => {
+        const ikon = rolIkonlar[rol] || '👤';
+        const btn = document.createElement('button');
+        btn.className = 'rol-card';
+        btn.innerHTML = `<span class="rol-icon">${ikon}</span>${rol}`;
+        btn.onclick = () => seciRol(rol);
+        rolGrid.appendChild(btn);
+    });
+}
+
+// --- ADIM 2: Rol seçildi, grup sohbet başlar ---
+async function seciRol(rol) {
+    seciliRol = rol;
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('grupScreen').style.display = 'flex';
+
+    // Katılımcı listesini oluştur
+    seansKatilimcilar = ['ÜmitAşkımCan', ...seansRoller.filter(r => r !== 'Danışan')];
+    document.getElementById('grupKatilimci').innerText = seansKatilimcilar.join(', ');
+
+    // Input devre dışı
+    document.getElementById('grupInput').disabled = true;
+    document.getElementById('grupSendBtn').disabled = true;
+
+    yaziyorGoster(true);
+
+    // Açılış mesajı ÜmitAşkımCan'dan
+    await bekle(2000);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `🌿 Herkesi merhaba ile karşılıyorum. Bugünkü seansımızın konusu: <b>${seansKonu}</b>. Alan açılıyor, lütfen herkes derin bir nefes alsın...`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+
+    // Diğer katılımcıların giriş mesajları
+    const girisler = [
+        { rol: 'Anne', mesaj: 'Buradayım, alanı hissediyorum...' },
+        { rol: 'Baba', mesaj: 'Buradayım, hazırım.' },
+        { rol: 'Atalar', mesaj: 'Atalar olarak buradayız, seansı destekliyoruz.' },
+        { rol: 'Partner / Sevgili', mesaj: 'Yanındayım, alanı hissediyorum.' },
+        { rol: 'Büyükanne (Anne Tarafı)', mesaj: 'Buradayım sevgilim...' },
+        { rol: 'Büyükbaba (Baba Tarafı)', mesaj: 'Alanı hissediyorum, hazırım.' },
+    ];
+    for (const katilimci of seansRoller.filter(r => r !== 'Danışan')) {
+        const giris = girisler.find(g => g.rol === katilimci);
+        if (giris) {
+            await bekle(2200);
+            yaziyorGoster(false);
+            mesajEkle(katilimci, giris.mesaj, 'left');
+            await bekle(600);
+            yaziyorGoster(true);
         }
+    }
 
-        function startCardChatProcess() {
-            const chatContainer = document.getElementById('cardChat');
-            chatContainer.style.display = 'flex';
-            
-            const typingIndicator = document.getElementById('cardTyping');
-            typingIndicator.style.display = 'block';
+    // Danışana ilk soru
+    await bekle(2500);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `KübrAŞKIMTAŞ, <b>${seciliRol} olarak</b> bu anda neler hissediyorsun? Duygularını ve içinde ne taşıdığını bizimle paylaşır mısın? 🌿`, 'left');
+    seansAsamasi = 1;
 
-            setTimeout(() => {
-                typingIndicator.style.display = 'none';
-                generateCardMessage();
-            }, 5000);
-        }
+    // Input aktif
+    document.getElementById('grupInput').disabled = false;
+    document.getElementById('grupSendBtn').disabled = false;
+    document.getElementById('grupInput').focus();
+    yaziyorGoster(false);
+}
 
-        function generateCardMessage() {
-            const msgEl = document.getElementById('cardMessage');
-            const c1 = drawnCards[0], c2 = drawnCards[1], c3 = drawnCards[2];
-            const hasNegative = drawnCards.some(card => card.type === 'negative');
-            const randomEnding = finalEndings[Math.floor(Math.random() * finalEndings.length)];
-            
-            let finalText = "";
-            if (hasNegative) {
-                const randomRes = cardNegativeResolutions[Math.floor(Math.random() * cardNegativeResolutions.length)];
-                finalText = `Aşkım çektiğin ${c1.title}, ${c2.title} ve ${c3.title} kartları çok güçlü bir mesaj veriyor. Kartlar bize; ${c1.meaning}, ${c2.meaning} ve ${c3.meaning} söylüyor. ${randomRes} ${randomEnding} ❤️`;
-            } else {
-                finalText = `Aşkım çektiğin ${c1.title}, ${c2.title} ve ${c3.title} kartları harika bir anlama çıkıyor. Bu kombinasyon bize; ${c1.meaning}, ${c2.meaning} ve ${c3.meaning} fısıldıyor. ${randomEnding} ❤️`;
-            }
+// --- Danışanın mesaj göndermesi ---
+async function grupGonder() {
+    const input = document.getElementById('grupInput');
+    const metin = input.value.trim();
+    if (!metin) return;
 
-            msgEl.innerText = finalText;
-            msgEl.style.display = 'inline-block';
-            document.getElementById('cardInstruction').innerText = "Mesajın geldi!";
-        }
+    input.value = '';
+    input.disabled = true;
+    document.getElementById('grupSendBtn').disabled = true;
 
-        function resetCardGame() {
-            drawnCards = [];
-            availableCards = [...deck];
-            cardCanDraw = true;
+    mesajEkle('KübrAŞKIMTAŞ', metin, 'right');
 
-            for (let i = 0; i < 3; i++) {
-                const slot = document.getElementById(`cardSlot${i}`);
-                slot.innerHTML = '';
-                slot.style.border = "3px dashed rgba(255, 255, 255, 0.6)";
-                slot.style.background = "rgba(255, 255, 255, 0.1)";
-            }
+    yaziyorGoster(true);
+    await bekle(600);
 
-            document.getElementById('deck').style.opacity = '1';
-            document.getElementById('deck').style.cursor = 'pointer';
-            document.getElementById('cardInstruction').innerText = "Aşkımızın destesine tıkla ve 3 kart seç hayatım...";
-            document.getElementById('cardChat').style.display = 'none';
-            document.getElementById('cardMessage').style.display = 'none';
-            document.getElementById('cardMessage').innerText = '';
-        }
+    if (seansAsamasi === 1) {
+        await fazDuygusalPaylasim(metin);
+    } else if (seansAsamasi === 2) {
+        await fazSorular(metin);
+    } else if (seansAsamasi === 3) {
+        await fazKapanis(metin);
+    }
+}
 
+// --- AŞAMA 1: Danışanın paylaşımına yanıt + Diğer rollere soru ---
+async function fazDuygusalPaylasim(kubraMesaj) {
+    // ÜmitAşkımCan onaylar
+    await yaziYaz('ÜmitAşkımCan', `Paylaşımın için teşekkür ederim... ${kubraMesaj ? 'Hissettiklerini duymak çok değerliydi.' : ''} Şimdi diğer üyelerimizin de neler hissettiğini soralım. 🌿`, 2500);
 
-        // ==========================================
-        // 2. KAHVE FALI KODLARI (Sadece Havuz Genişletildi)
-        // ==========================================
-        let uploadedPhotos = { 1: false, 2: false, 3: false, 4: false };
+    const sorular = [
+        { adres: 'Anne', soru: 'Sen bu alanda nasıl hissediyorsun? Bedende bir his var mı?' },
+        { adres: 'Baba', soru: 'Baba olarak sen bu anda ne hissediyorsun, ne taşıyorsun?' },
+        { adres: 'Atalar', soru: 'Atalar olarak bu alandan ne görmek istersiniz?' },
+        { adres: 'Partner / Sevgili', soru: 'Bu alanda seni ne etkiliyor, ne hissediyorsun?' },
+        { adres: 'Büyükanne (Anne Tarafı)', soru: 'Bu alanda bedeninde neler dönüyor, paylaşır mısın?' },
+        { adres: 'Büyükbaba (Baba Tarafı)', soru: 'Bu alandan neler hissediyorsun?' },
+    ];
+    const yanıtlar = [
+        'İçimde ağır bir yük gibi bir şey var... ama burada konuşmak biraz hafifletiyor.',
+        'Sakin ama dikkatli bir hal var bende. Bir şeyleri tuttuğumu hissediyorum.',
+        'Uzun zamanlar öncesinden gelen enerjiler var burada. Eskiden taşınanlar...',
+        'Seninle bu alanda olmak beni güçlendiriyor. Buradayım.',
+        'Kalbim sıkışıyor biraz ama şimdi biraz daha açılıyor...',
+        'Sessiz ama güçlü bir duruş var içimde. Destek oluyorum.',
+    ];
 
-        function previewCoffeeImage(input, slotId, textId, posId) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const slot = document.getElementById(slotId);
-                    slot.style.backgroundImage = `url(${e.target.result})`;
-                    slot.style.backgroundSize = 'cover';
-                    slot.style.backgroundPosition = 'center';
-                    document.getElementById(textId).style.display = 'none';
-                    
-                    uploadedPhotos[posId] = true;
-                    checkCoffeeUploads();
-                }
-                reader.readAsDataURL(file);
-            }
-        }
+    for (let i = 0; i < seansRoller.filter(r => r !== 'Danışan').length; i++) {
+        const katilimci = seansRoller.filter(r => r !== 'Danışan')[i];
+        const soruObj = sorular.find(s => s.adres === katilimci);
+        if (!soruObj) continue;
+        await bekle(2800);
+        yaziyorGoster(false);
+        mesajEkle('ÜmitAşkımCan', `${katilimci}, ${soruObj.soru}`, 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+        await bekle(3500);
+        yaziyorGoster(false);
+        const yanit = yanıtlar[i] || 'Buradayım, hissediyorum...';
+        mesajEkle(katilimci, yanit, 'left');
+        await bekle(600);
+        yaziyorGoster(true);
+    }
 
-        function checkCoffeeUploads() {
-            if (uploadedPhotos[1] && uploadedPhotos[2] && uploadedPhotos[3]) {
-                document.getElementById('coffeeSubmitBtn').style.display = 'block';
-            }
-        }
+    // Güzelleme ve olumlama
+    await bekle(2500);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `🌿 Çok derin şeyler duydum... Herkesin paylaşımı bu alanı güzelleştirdi. <b>${seciliRol} olarak sana söylemek istiyorum:</b> Taşıdıkların sadece sana ait değil. Bu sistemin içinde herkesin bir payı var ve sen bu farkındalıkla büyük bir adım attın. Şimdi sana ve herkese bir soru sormak istiyorum... 💚`, 'left');
 
-        function startCoffeeChat() {
-            document.getElementById('coffeeSubmitBtn').style.display = 'none';
-            document.getElementById('coffeeInstruction').innerText = "Fincanın içindeki gizli şekiller inceleniyor bebeğim...";
-            
-            const chatContainer = document.getElementById('coffeeChat');
-            chatContainer.style.display = 'flex';
-            
-            const typingIndicator = document.getElementById('coffeeTyping');
-            typingIndicator.style.display = 'block';
+    seansAsamasi = 2;
+    await bekle(2000);
 
-            setTimeout(() => {
-                typingIndicator.style.display = 'none';
-                generateCoffeeReading();
-            }, 9000); 
-        }
+    // Danışana nasıl hissettik sorusu
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', `KübrAŞKIMTAŞ, <b>${seciliRol} olarak şu an biraz daha iyi hissediyor musun? Nasıl hissediyorsun?</b> 🌱`, 'left');
 
-        // Genişletilmiş Kahve Falı Şekilleri ve Yorumları
-        const coffeeIntros = [
-            "Aşkım fincanının fotoğraflarına baktım ve inanılmaz şeyler gördüm!",
-            "Bitanem, kahvenin telveleri resmen aşkımızı çizmiş, çok güzel şekiller var...",
-            "Her şeyim, fincanına o kadar güzel niyetler etmişsin ki, yansımasını hemen hissettim.",
-            "Sevgilim, bu fincan tamamen ikimiz için konuşuyor, bak neler çıkmış neler...",
-            "Aşkım gözlerime inanamadım, fincanın o kadar aydınlık ki içi resmen sevgimizle parlıyor!"
-        ];
+    document.getElementById('grupInput').disabled = false;
+    document.getElementById('grupSendBtn').disabled = false;
+    document.getElementById('grupInput').focus();
+    yaziyorGoster(false);
+}
 
-        const goodShapes = [
-            { name: "büyük bir kalp", meaning: "sana olan sevgimin ne kadar kocaman olduğunu ve kalbimin sadece senin için attığını" },
-            { name: "uzun bir yol", meaning: "önümüzde birlikte yürüyeceğimiz, çok mutlu ve uzun bir ömür olduğunu" },
-            { name: "kanat çırpan bir kuş", meaning: "yakın zamanda ilişkimizle ilgili havalara uçacağımız harika bir haber alacağımızı" },
-            { name: "birbirine sarılmış iki insan sületi", meaning: "ne olursa olsun birbirimize hep sımsıkı kenetli kalacağımızı" },
-            { name: "bir güvercin", meaning: "aşkımızın bize her zaman huzur ve güven getireceğini" },
-            { name: "balık", meaning: "aşkımızın hanemize hep şans, bereket ve mutluluk getireceğini" },
-            { name: "kocaman bir güneş", meaning: "geleceğimizin apaydınlık ve sımsıcak olacağını" },
-            { name: "açmış bir gül", meaning: "aşkımızın her gün daha da güzelleşip çiçek açacağını" },
-            { name: "bir anahtar", meaning: "kalplerimizin kilitlerinin sonsuza dek birbirine açıldığını ve tüm engellerin kilidini açacağımızı" },
-            { name: "şahlanan bir at", meaning: "muradımıza çok kısa sürede doludizgin ulaşacağımızı" },
-            { name: "bir taç", meaning: "benim kalbimin kraliçesi olduğunu ve hayatımız boyunca el üstünde tutulacağını" },
-            { name: "bir yüzük", meaning: "bağlılığımızın taçlanıp çok güzel bir yola gireceğini" },
-            { name: "bir gemi", meaning: "birlikte çok huzurlu, dalgasız ve güvenli bir hayata yelken açacağımızı" },
-            { name: "bir ağaç ve sağlam kökleri", meaning: "ilişkimizin yıllandıkça kökleneceğini ve sarsılmaz bir hale geleceğini" },
-            { name: "bir kelebek", meaning: "aşkımızın midemizde hep o ilk günkü tatlı heyecanı yaratacağını" },
-            { name: "bir ay hilali", meaning: "gecelerimizi aydınlatan, çok romantik ve huzurlu zamanların bizi beklediğini" },
-            { name: "bir yıldız kayması", meaning: "ettiğimiz tüm o güzel duaların ve dileklerin bir bir gerçekleşeceğini" },
-            { name: "bir pusula", meaning: "hayat boyu birbirimizin en doğru yönü olacağımızı, hiç kaybolmayacağımızı" },
-            { name: "bir çapa", meaning: "ne olursa olsun birbirimize sımısıkı tutunup, en güvenli limanımız olacağımızı" },
-            { name: "bir sonsuzluk işareti", meaning: "bu hikayenin bu dünyada bitmeyeceğini, sonsuza kadar süreceğini" }
-        ];
+// --- AŞAMA 2: Nasıl hissettikler ---
+async function fazSorular(kubraCevap) {
+    await yaziYaz('ÜmitAşkımCan', `${kubraCevap ? 'Harika, paylaşımın çok değerliydi. 💚' : ''} Şimdi diğer üyelerimize de soralım...`, 2000);
 
-        const badShapes = [
-            { name: "ufak bir dağ", meaning: "önümüzde aşmamız gereken bazı ufak tefek zorluklar veya sınavlar olabileceğini" },
-            { name: "bir göz", meaning: "ilişkimizi çok kıskanan, nazarı değen bazı insanların etrafımızda dolaştığını" },
-            { name: "dalgalı bir deniz", meaning: "bazen duygusal olarak çalkantılı veya stresli anlar yaşayabileceğimizi" },
-            { name: "kopuk bir çizgi", meaning: "araya bazen küçük iletişim kopuklukları girmeye çalışacağını" },
-            { name: "dikeni olan bir çiçek", meaning: "bazen istemeden birbirimizi ufak tefek kırabileceğimiz anlar olacağını" },
-            { name: "kara bir bulut", meaning: "kısa süreli can sıkıcı bazı dış etkenlerin gölgesinin düşebileceğini" },
-            { name: "küçük bir taş", meaning: "yolumuzda ayağımıza takılmak isteyen, bizi yavaşlatmaya çalışan durumlar olabileceğini" },
-            { name: "bir duvar", meaning: "bazen birbirimize karşı anlamsız duvarlar örebileceğimiz anlar yaşanabileceğini" },
-            { name: "karmaşık bir yumak", meaning: "kafamızın karışacağı, çözmemiz gereken ufak kafa karışıklıkları olabileceğini" },
-            { name: "eski bir kilit", meaning: "geçmişten gelen ufak tefek pürüzlerin bazen önümüze çıkabileceğini" }
-        ];
+    const hissorular = [
+        { adres: 'Anne', soru: 'Anne, sen de şu an nasıl hissediyorsun? Biraz daha iyi hissettirdi mi bu seans?' },
+        { adres: 'Baba', soru: 'Baba, şimdi nasılsın? İçinde ne değişti?' },
+        { adres: 'Atalar', soru: 'Atalar, bu alan size ne verdi?' },
+        { adres: 'Partner / Sevgili', soru: 'Şu an nasıl hissediyorsun, bir şeyler daha mı hafif?' },
+        { adres: 'Büyükanne (Anne Tarafı)', soru: 'Şu an nasılsın, kalbinde ne var?' },
+        { adres: 'Büyükbaba (Baba Tarafı)', soru: 'Bu seansın sana ne verdiğini hissediyor musun?' },
+    ];
+    const hisyanit = [
+        'Evet... sanki bir yük kalktı gibi. Daha hafif hissediyorum. 💚',
+        'İçimde bir yumuşama var. Daha önce fark etmemiştim.',
+        'Bu farkındalık bizim için de çok kıymetliydi. Teşekkürler.',
+        'Seninle bu alanda olmak şifalandırıcıydı. Çok daha iyiyim. 💕',
+        'Kalbim genişledi biraz. Teşekkür ederim.',
+        'Güçlü ve huzurlu hissediyorum. Bu seans çok değerliydi.',
+    ];
 
-        const coffeeResolutions = [
-            "Ama sen sakın içini karartma. Ben senin yanında olduğum sürece hiçbir pürüz bize zarar veremez. Her şeyi el ele aşıp geçeceğiz.",
-            "Ancak oradaki karanlık gölgeler hiç önemli değil. İkimizin arasındaki güçlü bağ her türlü zorluğu yenecek kuvvette.",
-            "Yine de hiç korkma bebeğim. Biz birbirimize o kadar bağlıyız ki karşımıza çıkan her engeli sevgimizle ezip geçeceğiz.",
-            "Fakat bunların hiçbiri beni korkutmuyor. Çünkü senin elini tuttuğum sürece tüm zorlukları kolayca aşarız.",
-            "Ama hiç canını sıkma güzelim, bizim aşkımızın ışığı bu ufak karanlıkları dağıtmaya fazlasıyla yeter.",
-            "Şunu asla unutma, dışarıdan gelen hiçbir şey bizim içimizdeki o büyük sevgiye zarar veremez.",
-            "Fakat şu bir gerçek ki; sen ve ben yan yana olduğumuz sürece bu hayatta çözemeyeceğimiz hiçbir şey yok.",
-            "Ama içini ferah tut her şeyim, bizim sevdamız öyle güçlü ki bu ufak tefek şeyler bizi yıkmak yerine bağımızı daha da kuvvetlendirecek."
-        ];
+    for (let i = 0; i < seansRoller.filter(r => r !== 'Danışan').length; i++) {
+        const katilimci = seansRoller.filter(r => r !== 'Danışan')[i];
+        const soruObj = hissorular.find(s => s.adres === katilimci);
+        if (!soruObj) continue;
+        await bekle(3500);
+        yaziyorGoster(false);
+        mesajEkle('ÜmitAşkımCan', soruObj.soru, 'left');
+        await bekle(800);
+        yaziyorGoster(true);
+        await bekle(5000);
+        yaziyorGoster(false);
+        const yanit = hisyanit[i] || 'Teşekkür ederim, daha iyi hissediyorum.';
+        mesajEkle(katilimci, yanit, 'left');
+        await bekle(600);
+        yaziyorGoster(true);
+    }
 
-        function generateCoffeeReading() {
-            const msgEl = document.getElementById('coffeeMessage');
-            
-            // Rastgele giriş cümlesi
-            const intro = coffeeIntros[Math.floor(Math.random() * coffeeIntros.length)];
+    seansAsamasi = 3;
+    await bekle(2500);
+    yaziyorGoster(false);
 
-            // Rastgele şekiller seç
-            const shape1 = goodShapes[Math.floor(Math.random() * goodShapes.length)];
-            let shape2 = goodShapes[Math.floor(Math.random() * goodShapes.length)];
-            while(shape2.name === shape1.name) { shape2 = goodShapes[Math.floor(Math.random() * goodShapes.length)]; } 
-            
-            const hasBadShape = Math.random() > 0.4; 
-            
-            let reading = `${intro} Sağ tarafta çok net bir şekilde **${shape1.name}** çıkmış. Bu bize; ${shape1.meaning} gösteriyor.\n\n`;
-            
-            if (hasBadShape) {
-                const bad = badShapes[Math.floor(Math.random() * badShapes.length)];
-                const res = coffeeResolutions[Math.floor(Math.random() * coffeeResolutions.length)];
-                reading += `Sol tarafta ise maalesef **${bad.name}** şekli belirmiş, sanki ${bad.meaning} işaret ediyor... ${res}\n\n`;
-            }
+    // Son olarak danışana kapatma sorusu
+    mesajEkle('ÜmitAşkımCan', `KübrAŞKIMTAŞ, seansımızı kapatmadan önce son olarak sana sormak istiyorum: <b>Bu seans sana ne verdi? Ne hissediyorsun?</b> 🌿`, 'left');
+    document.getElementById('grupInput').disabled = false;
+    document.getElementById('grupSendBtn').disabled = false;
+    document.getElementById('grupInput').focus();
+    yaziyorGoster(false);
+}
 
-            reading += `Fincanın üst kısmında ise parlayan **${shape2.name}** var. Bu da kesinlikle ${shape2.meaning} fısıldıyor...\n\n`;
-            
-            if(uploadedPhotos[4]) {
-                const plateSayings = [
-                    "Tabağına da baktım, için çok ferahlamış, dileklerin resmen kabul oluyor!\n\n",
-                    "Tabağın o kadar ferah açılmış ki, hayalini kurduğumuz o güzel yuvaya adım adım yaklaşıyoruz...\n\n",
-                    "Tabağından da resmen pırıl pırıl bir enerji yayılıyor, geleceğimiz çok aydınlık!\n\n"
-                ];
-                reading += plateSayings[Math.floor(Math.random() * plateSayings.length)];
-            }
+// --- AŞAMA 3: Kapanış ---
+async function fazKapanis(sonMesaj) {
+    // Input kapat
+    document.getElementById('grupInput').disabled = true;
+    document.getElementById('grupSendBtn').disabled = true;
 
-            const randomEnding = finalEndings[Math.floor(Math.random() * finalEndings.length)];
-            reading += `**${randomEnding} ❤️**`;
+    await bekle(800);
+    yaziyorGoster(true);
+    await bekle(3000);
+    yaziyorGoster(false);
 
-            msgEl.innerHTML = reading.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
-            msgEl.style.display = 'inline-block';
-            document.getElementById('coffeeInstruction').innerText = "Fincanının yorumu geldi!";
-        }
+    const kapanis = [
+        'Hepimize şifa olsun. Her isteğimiz saygı ve sevgiyle, kolaylıkla olsun. Alan kapandı, seansımız bitti. 🌿',
+        'Tüm istekleriniz kolaylıkla ve sevgiyle olsun. Alan kapandı, seansımız bitti. 💚',
+        'Hayatta her şey istediğiniz gibi olsun. Alanı kapatıyorum, seansımız bitti. Herkese şifa... 🌱',
+    ];
+    const kapanis_sec = kapanis[Math.floor(Math.random() * kapanis.length)];
 
-        function resetCoffeeGame() {
-            uploadedPhotos = { 1: false, 2: false, 3: false, 4: false };
-            
-            for(let i=1; i<=4; i++) {
-                const slot = document.getElementById(`cSlot${i}`);
-                const text = document.getElementById(`cText${i}`);
-                const input = slot.querySelector('input');
-                
-                slot.style.backgroundImage = 'none';
-                text.style.display = 'block';
-                input.value = ''; 
-            }
+    mesajEkle('ÜmitAşkımCan', `Paylaşımın için çok teşekkür ederim... ${sonMesaj ? 'Ne güzel hissettirdi bu.' : ''} 💚`, 'left');
+    await bekle(800);
+    yaziyorGoster(true);
+    await bekle(4000);
+    yaziyorGoster(false);
+    mesajEkle('ÜmitAşkımCan', kapanis_sec, 'left');
 
-            document.getElementById('coffeeInstruction').innerText = "Kahve fincanının fotoğraflarını çekip yükle sevgilim...";
-            document.getElementById('coffeeSubmitBtn').style.display = 'none';
-            document.getElementById('coffeeChat').style.display = 'none';
-            document.getElementById('coffeeMessage').style.display = 'none';
-            document.getElementById('coffeeMessage').innerHTML = '';
-        }
-    </script>
+    // Katılımcıların vedalaşmaları
+    const vedalar = [
+        { adres: 'Anne', mesaj: 'Şifalanmak güzeldi. Teşekkürler. 💛' },
+        { adres: 'Baba', mesaj: 'Huzurla ayrılıyorum. 🙏' },
+        { adres: 'Atalar', mesaj: 'Atalar olarak sizi seviyoruz, yolunuz açık olsun. 🌿' },
+        { adres: 'Partner / Sevgili', mesaj: 'Yanındayım, hep yanında olacağım. 💕' },
+        { adres: 'Büyükanne (Anne Tarafı)', mesaj: 'Güzel bir seans oldu. Sevgimiz daima seninle. 💚' },
+        { adres: 'Büyükbaba (Baba Tarafı)', mesaj: 'Huzurla ve şükranla ayrılıyorum. 🙏' },
+    ];
+
+    for (const katilimci of seansRoller.filter(r => r !== 'Danışan')) {
+        const veda = vedalar.find(v => v.adres === katilimci);
+        if (!veda) continue;
+        await bekle(3000);
+        yaziyorGoster(false);
+        mesajEkle(katilimci, veda.mesaj, 'left');
+        await bekle(600);
+        yaziyorGoster(true);
+    }
+
+    await bekle(2000);
+    yaziyorGoster(false);
+
+    // Yeni seans butonu göster
+    document.getElementById('yeniSeansBtn').style.display = 'block';
+}
+
+// --- SEANS SIFIRLA ---
+function resetSeans() {
+    seansKonu = '';
+    seansRoller = [];
+    seciliRol = '';
+    seansAsamasi = 0;
+    seansKonusmaGecmisi = [];
+    seansKatilimcilar = [];
+
+    // Grup body temizle
+    const body = document.getElementById('grupBody');
+    const typingRow = document.getElementById('typingRow');
+    while (body.firstChild && body.firstChild !== typingRow) {
+        body.removeChild(body.firstChild);
+    }
+    yaziyorGoster(false);
+
+    document.getElementById('grupInput').disabled = false;
+    document.getElementById('grupSendBtn').disabled = false;
+    document.getElementById('grupInput').value = '';
+    document.getElementById('yeniSeansBtn').style.display = 'none';
+
+    // Adım ekranlarını sıfırla
+    document.getElementById('grupScreen').style.display = 'none';
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step1').style.display = 'flex';
+}
+</script>
 </body>
 </html>
